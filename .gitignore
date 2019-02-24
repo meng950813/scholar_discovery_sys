@@ -1,0 +1,12 @@
+﻿# 此文件用于标注不需上传的内容，一般是指 不想上传的文件(夹) 及 各种依赖库：例如 venv 中的内容；
+
+# “#” 表示注释， 
+
+# /xxx/*  意为 忽略上传 xxx文件夹下的所有文件
+
+# *.a  意为 忽略所有 .a 结尾的文件
+# !lib.a 但 lib.a 除外
+
+
+# ignore all .txt files in the doc/ directory
+# doc/**/*.txt  
