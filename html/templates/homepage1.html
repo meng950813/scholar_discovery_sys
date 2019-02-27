@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>首页</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 百度地图api -->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=CfqPIGHwjopureKeQ9lBqjHSuBR37A13"></script>
+    <link rel="stylesheet" type=text/css href="{{ url_for('static',filename='css/base.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body >
+    <div class="top">
+        <div class="logo"><img src="static/seu.jpg" style="width: 90%" /></div>
+        <div class="topic">专家发现系统</div>
+    </div>
+
+    <div class = "middle1"></div>
+
+    <div class="main" style="">
+
+        <div class="r-result">
+            <div class="search">
+                <div class="select">
+                    <select id="kind" name="kind" >
+                        <option value="985" selected>985</option>
+                        <option value="211">211</option>
+                    </select>
+                </div>
+                <div class="s-search">
+                    <form id="search">
+                        <div><input type="text" id="searchkey" class="searchkey" placeholder="请输入关键字：(例：数据挖掘)" style="font-size: 22px;font-family: Arial"/></div>
+                        <div><input type="button"  class="btn btn-info"  style="width:100px;height: 50px;font-size: 22px;font-weight: 400;color: white" onclick="bdGEO()" value="搜索"/></div>
+                    </form>
+                </div>
+             </div>
+        </div>
+
+        <div id="map" class="map"></div>
+
+        <div class="result" >
+            <span  class="result1">&nbsp;&nbsp;&nbsp;&nbsp;符合条件的学院</span>
+            <div class="result2"><a href="homepage1.html" ><i class="glyphicon glyphicon-refresh"></i>换一批</a></div>
+            <div class="showresult">
+                <ul>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="{{ url_for('detail') }}"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="college-group">
+                            <div class="college-name"><a href="homepage1.html" ><i class="glyphicon glyphicon-map-marker"></i>&nbsp;&nbsp;材料学院</a></div>
+                            <div class="college-school"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;东南大学</div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="middle2"></div>
+
+    <div class="websiteinfo">网站信息</div>
+
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+
+	var map = new BMap.Map("map");
+	map.centerAndZoom(new BMap.Point(120.63,31.86713), 6);
+		var geolocation = new BMap.Geolocation();
+	geolocation.getCurrentPosition(function(r){
+		if(this.getStatus() == BMAP_STATUS_SUCCESS){
+			var mk = new BMap.Marker(r.point);
+			var centerPoint = new BMap.Point(r.point.lng, r.point.lat);
+            map.panTo(centerPoint);
+			var address = new BMap.Point(r.point.lng, r.point.lat);
+			var label = new BMap.Label("您的位置",{offset:new BMap.Size(20,-10)});
+			addMarker(address,label);
+		}
+	},{enableHighAccuracy: true})
+
+
+	map.enableScrollWheelZoom(true);
+
+	/*自定义地图样式http://lbsyun.baidu.com/customv2/index.html
+	var styleJson = [{
+    "featureType": "background",
+    "elementType": "geometry",
+    "stylers": {
+        "color": "#89bbdcff"
+    }
+}]
+	map.setMapStyle({styleJson:styleJson});*/
+	var index = 0;
+	var myGeo = new BMap.Geocoder();
+	var adds = [
+	"北京市海淀区颐和园路5号(北京大学)",　　
+    "北京市海淀区清华大学(清华大学)",
+　　"北京市海淀区中关村大街59号(中国人民大学)",
+　　"北京市海淀区学院路37号(北京航空航天大学)",
+　　"北京海淀区中关村南大街5号(北京理工大学)",
+　　"北京市新街口外大街19号(北京师范大学)",
+　　"海淀区中关村南大街27号(中央民族大学)",
+    "北京市海淀区清华东路17号(中国农业大学)",
+　　"上海市杨浦区邯郸路220号(复旦大学)",
+　　"上海市东川路800号(上海交通大学)",
+　　"上海市四平路1239号	(同济大学)",
+　　"上海市普陀区中山北路3663号(华东师范大学)",
+　　"天津市卫津路94号(南开大学)",
+　　"天津市南开区卫津路92号(天津大学)",
+　　"重庆市沙坪坝区沙正街174号(重庆大学)",
+　　"浙江省杭州市西湖区余杭塘路866号(浙江大学)",
+　　"南京鼓楼区汉口路22号(南京大学)",
+　　"南京市东南大学路2号(东南大学)",
+　　"福建省厦门市思明区思明南路422号(厦门大学)",
+    "广东省广州市天河区五山路381号(华南理工大学)",
+　　"安徽省合肥市金寨路96号(中国科学技术大学)",
+　　"西安市友谊西路127号(西北工业大学)",
+    "咸阳市杨陵区西北农林科大(西北农林科技大学)",
+　　"成都市高新区（西区）西源大道2006号(电子科技大学)",
+　　"成都市一环路南一段24号(四川大学)",
+　　"中国山东省济南市山大南路27号(山东大学)",
+　　"青岛市崂山区松岭路238号(中国海洋大学)",
+　　"辽宁省沈阳市和平区文化路三巷11号(东北大学)",
+    "辽宁省大连市甘井子区凌工路2号(大连理工大学)",
+　　"哈尔滨市南岗区西大直街92号(哈尔滨工业大学)",
+　　"广州市新港西路135号(中山大学)",
+　　"湖北省武汉市武昌区八一路299号(武汉大学)",
+　　"湖北省武汉市洪山区珞喻路1037号(华中科技大学)",
+　　"湖南省长沙市麓山南路932号(中南大学)",
+　　"湖南省长沙市岳麓区麓山南路麓山门(湖南大学)",
+　　"湖南省长沙市开福区德雅路(国防科技大学)",
+　　"吉林省长春市前进大街2699号(吉林大学)",
+　　"兰州市天水南路222号(兰州大学)"
+	];
+	var gg = 1;
+	var onoff = 985;
+	var adds1 = [
+	    "北京市海淀区颐和园路5号(北京大学)",　　
+        "北京市海淀区清华大学(清华大学)"
+	];
+	function bdGEO(){
+            if(gg == 1)
+            {
+                var select = document.getElementById("kind");
+                var value = select.value;
+                if (value == "985")
+                {
+                    if(onoff == 211){
+                        deletePoint();
+                        onoff = 985;
+                    }
+                    else {
+                        var adda = adds[index];
+                        geocodeSearch(adda);
+                        index++;
+                    }
+                    //if (index == adds.length)
+                    //{gg = 0;}
+                }
+                else
+                {
+                    if(onoff == 985)
+                    {
+                        deletePoint();
+                        onoff = 211;
+                    }
+                    else {
+                        var addb = adds1[index];
+                        geocodeSearch(addb);
+                        index++;
+                    }
+                    //if(index == adds1.length)
+                    //{gg = 0;}
+                }
+            }
+
+    }
+
+
+	function geocodeSearch(add){
+		    //显示标签速度
+		setTimeout(window.bdGEO,0);
+		myGeo.getPoint(add, function(point){
+			if (point) {
+			    //输出点信息
+				//document.getElementById("result").innerHTML +=  index + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
+				var address = new BMap.Point(point.lng, point.lat);
+				var label = new BMap.Label(add,{offset:new BMap.Size(20,-10)});
+				addMarker(address,label);
+			}
+		},)
+	}
+	// 编写自定义函数,创建标注
+    //label为标签框里的信息，在addMarker函数中体现
+	function addMarker(point,label){
+		var marker = new BMap.Marker(point);
+		//标签跳动
+        map.addOverlay(marker);
+		//marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+		//设置点说明
+		marker.setLabel(label);
+	}
+
+	function deletePoint() {
+        var allOverlay = map.getOverlays();
+		for (var i = 0; i < allOverlay.length; i++)
+		{
+			        map.removeOverlay(allOverlay[i]);
+        }
+            index = 0;
+		    gg = 1;
+		}
+
+
+</script>
