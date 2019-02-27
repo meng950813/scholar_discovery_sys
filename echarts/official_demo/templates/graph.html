@@ -10,108 +10,146 @@
 <body>
     <div id="main" style="width:900px;height:600px;">
     </div>
+    <label hidden="hidden" id="base_url" value="{{ url_for('user_homepage', user_id=1)}}"></label>
     <script type="text/javascript">
-    var myChart = echarts.init(document.getElementById('main'));
+    var myChart = echarts.init(document.getElementById('main'), 'macarons');
     myChart.showLoading();
-    // 尝试获取数据
-    $.get('data/les.gexf', function (xml) {
-        // 关闭加载动画
-        myChart.hideLoading();
 
-        var graph = echarts.dataTool.gexf.parse(xml);
-        var categories = [];
-        for (var i =0 ; i < 9; i++){
-            categories[i] = {
-                name: '类目' + i
-            };
-        }
-        //对节点进行遍历
-        graph.nodes.forEach(function (node) {
-            node.itemStyle = null;
-            node.value = node.symbolSize;
-            node.symbolSize /= 1.5;
-            //是否显示名称的条件
-            node.label = {
-                normal: {
-                    show: node.symbolSize > 30
-                }
-            };
-            // 读取学长的数据后出错，改为
-            if ('attributes' in node) {
-                 node.category = node.attributes.modularity_class;
-                //node.category = node.attributes[0]
-            }
+    /*
+        获取所需要的option
+     */
+    function getOption(graphInfo, emphasisLineWidth) {
+        graphInfo.nodes.forEach(function (node) {
+            node.x = node.y = null;
+            node.draggable = true;
         });
+        title = graphInfo['title'];
+        nodes = graphInfo['nodes'];
+        links = graphInfo['links'];
+        // 确定每条边的宽度
+        //获取最大权值
+        maxWeight = 0;
+        links.forEach(function (edge) {
+            if (maxWeight < edge.weight)
+                maxWeight = edge.weight;
+        });
+        links.forEach(function (edge) {
+            edge.lineStyle = {};
+            // 等比例缩放行宽度
+            edge.lineStyle.width = edge.weight / maxWeight * (emphasisLineWidth - 4);
+        });
+        categories = graphInfo['categories'];
+        color = graphInfo['color'];
+        //设置option样式
         option = {
             title: {
-                text: 'Les Mis',
-                subtext: 'Default Layout',
-                top: 'bottom',
-                left: 'right'
+                text: title,
+                x: "right",
+                y: "bottom"
             },
-            tooltip: {},
-            legend: [{
-                data: categories.map(function (value) {
-                    return value.name;
+            // 弹框
+            tooltip: {
+                trigger: 'item',
+                formatter: function (param) {
+                    if (param.dataType == 'edge'){
+                        //console.log(param);
+                        return "合作次数" + param.data.weight + "次";
+                    }
+                    //悬浮在节点上时显示的内容,目前仅仅显示名称
+                    else if (param.dataType == 'node'){
+                        return param.name;
+                    }
+                    return param.name;
+                }
+            },
+            color: color,
+            toolbox: {
+                show: true,
+                feature: {
+                    restore: {show: true},
+                    magicType: {show: true, type: ['force', 'chord']},
+                    saveAsImage: {show:true}
+                }
+            },
+            legend: {
+                x: 'left',
+                data: categories.map(function (a) {
+                    return a.name;
                 })
-            }],
-            animationDuration: 1500,
-            animationEasingUpdate: 'quinticInOut',
+            },
             series: [
                 {
-                    name: 'Les Mis2',
                     type: 'graph',
-                    layout: 'none',
-                    data: graph.nodes,
-                    links: graph.links,
+                    layout: 'force',
+                    name: title,
+                    ribbonType: false,
                     categories: categories,
+                    useWorker: false,
+                    minRadius: 15,
+                    maxRadius: 25,
+                    gravity: 1.1,
+                    scaling: 1.1,
                     roam: true,
+                    nodes: nodes,
+                    links: links,
+                    // 鼠标移动到节点上时突出显示节点
                     focusNodeAdjacency: true,
-                    itemStyle: {
-                        normal: {
-                            borderColor: '#fff',
-                            borderWidth: 1,
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(0,0,0,0.3)'
-                        }
+                    hoverAnimation: true,
+                    force: {
+                        repulsion: 100,
+                        gravity: 0.03,
+                        edgeLength: 80,
+                        layoutAnimation: true
+                    },
+                    // 节点大小 可以是数值或者函数
+                    symbolSize: function (value, params){
+                        return value[0] * 5;
                     },
                     label: {
-                        position: 'right',
-                        formatter: '{b}'
+                        show: true
+                    },
+                    nodeStyle: {
+                        brushType: 'both',
+                        borderColor: 'rgba(255,215,0,0.4)',
+                        borderWidth: 1
                     },
                     lineStyle: {
-                        color: 'source',
+                        //线的弯度
                         curveness: 0.3
                     },
                     emphasis: {
+                        itemStyle: {
+                            borderWidth: 4
+                        },
+                        label: {
+                            show: false
+                        },
                         lineStyle: {
-                            width: 10
+                            width: emphasisLineWidth
                         }
                     }
                 }
             ]
         };
+        return option;
+    }
+    // 添加点击事件
+    myChart.on('click', {dataType: 'node'}, function (param) {
+        //获取链接
+        var base_url_element = $('#base_url');
+        var value = base_url_element.attr('value');
+        var lastIndex = value.lastIndexOf('/');
+        var base_url = value.slice(0, lastIndex);
+        //TODO:跳转 需要视图函数和id
+        //var id = param.value[1];
+        //window.open(base_url + '/' + id);
+    });
+    // 尝试获取数据
+    $.get('data/teacher.json', function (jsondata) {
+        myChart.hideLoading();
+        option = getOption(jsondata, 10);
         myChart.setOption(option);
-        // 添加点击事件
-        myChart.on('click', function (params) {
-            console.log('componentType:' + params.componentType);
-            if (params.componentType == 'series'){
-                console.log('seriesType:' + params.seriesType);
-                console.log('seriesIndex:' + params.seriesIndex);
-                console.log('seriesName:' + params.seriesName);
-            }
-            console.log('name:' + params.name);
-            console.log('dataIndex:' + params.dataIndex);
-            console.log('dataType:' + params.dataType);
-            console.log('value:' + params.value);
-            console.log('data:' + params.data);
-            console.log('');
-        });
-        //悬浮事件
-        myChart.on('mouseover', function (params) {
-            //console.log('mouseover');
-        });
-    }, 'xml');
+    }, 'json');
     </script>
 </body>
 </html>
