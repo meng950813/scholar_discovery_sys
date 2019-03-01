@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="{{ url_for('static', filename='echarts.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery-3.3.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='dataTool.js') }}"></script>
+</head>
+
+<body>
+    <div id="main" style="width:900px;height:600px;">
+    </div>
+    <script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    myChart.showLoading();
+    // 尝试获取数据
+    $.get('data/les.gexf', function (xml) {
+        // 关闭加载动画
+        myChart.hideLoading();
+
+        var graph = echarts.dataTool.gexf.parse(xml);
+        var categories = [];
+        for (var i =0 ; i < 9; i++){
+            categories[i] = {
+                name: '类目' + i
+            };
+        }
+        //对节点进行遍历
+        graph.nodes.forEach(function (node) {
+            node.itemStyle = null;
+            node.value = node.symbolSize;
+            node.symbolSize /= 1.5;
+            //是否显示名称的条件
+            node.label = {
+                normal: {
+                    show: node.symbolSize > 30
+                }
+            };
+            // 读取学长的数据后出错，改为
+            if ('attributes' in node) {
+                 node.category = node.attributes.modularity_class;
+                //node.category = node.attributes[0]
+            }
+        });
+        option = {
+            title: {
+                text: 'Les Mis',
+                subtext: 'Default Layout',
+                top: 'bottom',
+                left: 'right'
+            },
+            tooltip: {},
+            legend: [{
+                data: categories.map(function (value) {
+                    return value.name;
+                })
+            }],
+            animationDuration: 1500,
+            animationEasingUpdate: 'quinticInOut',
+            series: [
+                {
+                    name: 'Les Mis2',
+                    type: 'graph',
+                    layout: 'none',
+                    data: graph.nodes,
+                    links: graph.links,
+                    categories: categories,
+                    roam: true,
+                    focusNodeAdjacency: true,
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#fff',
+                            borderWidth: 1,
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0,0,0,0.3)'
+                        }
+                    },
+                    label: {
+                        position: 'right',
+                        formatter: '{b}'
+                    },
+                    lineStyle: {
+                        color: 'source',
+                        curveness: 0.3
+                    },
+                    emphasis: {
+                        lineStyle: {
+                            width: 10
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+        // 添加点击事件
+        myChart.on('click', function (params) {
+            console.log('componentType:' + params.componentType);
+            if (params.componentType == 'series'){
+                console.log('seriesType:' + params.seriesType);
+                console.log('seriesIndex:' + params.seriesIndex);
+                console.log('seriesName:' + params.seriesName);
+            }
+            console.log('name:' + params.name);
+            console.log('dataIndex:' + params.dataIndex);
+            console.log('dataType:' + params.dataType);
+            console.log('value:' + params.value);
+            console.log('data:' + params.data);
+            console.log('');
+        });
+        //悬浮事件
+        myChart.on('mouseover', function (params) {
+            //console.log('mouseover');
+        });
+    }, 'xml');
+    </script>
+</body>
+</html>
