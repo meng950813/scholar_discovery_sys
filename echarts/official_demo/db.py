@@ -12,6 +12,7 @@ with connection():
     sql语句执行
 examples:
 sql = 'select * from teacher where id=? and school=?'
+sql语句内部不需要加单引号/双引号
 select(sql, 102, '清华大学')
 
 TODO:注意：本内容中的SQL语句占位符为? 目前暂时未添加事务的相关处理
@@ -168,6 +169,29 @@ def connection():
     return _ConnectionCtx()
 
 
+def with_select(sql, *args):
+    """
+    with_select 需要和connection配合使用
+    :param sql:
+    :param args:
+    :return:
+    """
+    global _dbContext
+    cursor = None
+    sql = sql.replace('?', '%s')
+    logging.info('SQL: %s %s' % (sql, args if len(args) > 0 else ""))
+
+    try:
+        cursor = _dbContext.connection.cursor()
+        # 执行语句
+        cursor.execute(sql, args)
+
+        results = cursor.fetchall()
+        return results
+    except Exception as e:
+        print(e)
+
+
 def with_connection(func):
     """
     装饰器 内部调用了_ConnectionCtx对象 即返回一个可用的cursor
@@ -252,9 +276,9 @@ if __name__ == '__main__':
 
     with connection() as conn:
         # 注意:conn 的类型为_LazyConnection
-        cursor = conn.cursor()
-        cursor.execute('select * from %s limit 0, 1' % table_names[1])
-        result = cursor.fetchone()
+        cursor1 = conn.cursor()
+        cursor1.execute('select * from %s limit 0, 1' % table_names[1])
+        result = cursor1.fetchone()
         print(result)
 
         print(_select('select * from %s limit 0,1' % table_names[1], True))
