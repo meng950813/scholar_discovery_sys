@@ -1,4 +1,4 @@
- .main{
+﻿ .main{
      background-color: white;
  }
 
@@ -39,209 +39,43 @@
 
 .main{
     width: 100%;
-    height: 920px;
-    border: 0px solid saddlebrown;
+    height: 1000px;
+    border: 2px solid saddlebrown;
     margin-top: -10px;
     background-image:url('/static/backimg.jpg');
     background-size: cover;
 }
 
- .r-result{
-     width:100%;
-     height: 150px;
-     border: 1px solid #70aed7;
-     margin-top: 20px;
- }
 
-.search{
-    width:673px;
-    height: 50px;
-    border: 0px solid #3A7734;
-    margin-left: 610px;
-    margin-top: 50px;
-}
-
-.select{
-    width: 118px;
-    height: 50px;
-    border: 0px solid #9C1A1C;
-    float: left;
-    border-radius: 5px;
-    //盒子阴影修饰作用,自己随意
-    box-shadow: 0 0 5px #ccc;
-}
-
-.select select{
-    width: 115px;
-    height: 50px;
-    //将select的宽高等于div的宽高
-    line-height: 40px;
-    //通过padding-left的值让文字居中
-    padding-left: 60px;
-    text-align: center;
-    font-size: 22px;
-    line-height: 50px;
-    cursor: pointer;
-}
-
- .s-search{
-     float: right;
-     width:550px;
+ #select{
+     width: 200px;
      height: 50px;
-     border: 0px solid black;
+     margin-left: 350px;
+     margin-top: 50px;
+     position:absolute;
+     opacity: 0;
+     z-index: 2;
 
  }
-
-  .searchkey{
-      width:448px;
-      height: 50px;
-      float: left;
- }
-
- .searchbutton{
-     float: right;
-     width: 99px;
-     height: 46px;
-     font-size: 22px;
-     /*下面是bootstrap样式，与百度地图api有冲突*/
-     background-color: #5bc0de;
-     display: inline-block;
-    margin-bottom: 0;
-    font-weight: 400;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    color: #eeeeee;
- }
-
-.searchbutton:hover{
-     background-color: #46b8da;
- }
+#select:hover{
+    opacity: 1;
+}
 
  .map{
-     width: 1175px;
-     height: 700px;
-     margin-left: 200px;
+     width: 1200px;
+     height: 900px;
+     margin-left: 350px;
+     margin-top: 50px;
+     position:absolute;
      border: 2px solid #cccccc;
+     z-index: 1;
  }
 
  .map label{
      max-width: none;
  }
 
- .result{
-     width: 320px;
-     height: 700px;
-     float: right;
-     border: 2px solid #c5cbcc;
-     margin-top: -700px;
-     margin-right: 185px;
-     background-color: #fff6ed;
- }
 
- .result1 {
-     width: 156px;
-     height: 40px;
-     float: left;
-     border: 0px solid blue;
-     color: black;
-     font-size: 18px;
-     line-height: 45px;
-     font-weight: bold;
- }
-
- .result2{
-     width: 70px;
-     height: 40px;
-     margin-left: 240px;
-     border: 0px solid #ff0300;
-     padding-top: 10px;
- }
-
- .result2 a{
-     text-decoration: none;
- }
-
-  .result2 a:hover{
-     text-decoration: none;
-      color: #ff9b54;
- }
-
- .showresult{
-     width: 320px;
-     height: 650px;
-     border: 0px solid pink;
-     margin-top: 15px;
-     overflow: hidden;
- }
-
-.teacher-group{
-    width: 319px;
-    height: 120px;
-    border: 0px solid #4e11ff;
-    border-bottom: 1px dotted #7d3f98;
-}
-
-.college-group{
-    width: 316px;
-    height: 80px;
-    border: 1px solid #fff6ed;
-    border-bottom: 1px dotted #7e3698;
-}
-
-ul{
-    width: 319px;
-    list-style: none;
-    height: 80px;
-    padding-left: 0;
-    margin-top: 0px;
-}
-
-ul li{
-     overflow: hidden;
-     padding-bottom: 5px;
-     height: 80px;
-     font-family: 微软雅黑;
-}
-
- .college-name{
-     width: auto;
-     height: 25px;
-     float: left;
-     margin-left:30px;
-     margin-top: 10px;
-     font-size: 18px;
-     border: 0px solid #00adcc;
-     line-height: 20px;
-     font-weight: bold;
-     cursor: pointer;
- }
-
- .college-name a{
-     text-decoration: none;
- }
-
- .college-name:hover a{
-     color: #ff9b54;
- }
-
- .college-school{
-     width: auto;
-     height: 25px;
-     margin-top: 40px;
-     margin-left: 30px;
-     font-size: 18px;
-     font-weight: normal;
-     border: 0px solid #cc009b;
-     line-height: 20px;
-     color: black;
- }
 
  .middle2{
         width:100%;
