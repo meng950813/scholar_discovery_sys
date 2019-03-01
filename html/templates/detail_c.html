@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=1" />
+    <title>个人信息</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/normalize.css">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <!-- <link rel="stylesheet" type=text/css href="../static/css/detail.css"> -->
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <style type="text/css">
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        body{
+            background: url("../static/backimg.jpg") no-repeat;
+            background-size: 100% 100%;
+            padding-bottom: 30px;
+        }
+        #map{
+            height: 700px;
+            min-height: 100%;
+            background: #777;
+            cursor: pointer;
+        }
+        .container{
+            background: #fafaf8;
+            /*background: transparent;*/
+        }
+        .navbar-me{
+            border-bottom: 1px solid grey;
+            background: #fafaf8;
+            margin-bottom: 0;
+        }
+        .logo{
+            font-size: 30px;
+            margin: 0 15px;
+        }
+        a:hover{
+            text-decoration: none;
+        }
+        .lead p{
+            color: #000;
+            font-size: 16px;
+            text-indent: 30px;
+        }
+        .page-footer {
+            border-top: 1px solid grey;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-me">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="logo" href="javascript:void(0)">
+                    <img src="../static/seu-logo.jpg">专家发现系统</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div id="map" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                map
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div id="show_info" class="container model">
+            <button type="button" class="close"  data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            
+            <div class="page-header">
+              <h2>学院名 <small>学校名</small></h2>
+            </div>
+            
+            <div class="lead">
+
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p> 
+
+
+            </div>
+            
+            <div class="text-center ">
+                <img class="img-responsive" src="https://i.loli.net/2019/02/28/5c779fe822188.png">
+            </div>
+            <div class="text-right">
+                <button type="button" class="btn btn-warning btn-block" data-dismiss="modal"> 关闭 </button>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="show-btn btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+       Show Informations
+    </button>
+
+
+    <footer class="container page-footer navbar-fixed-bottom ">
+        <!-- Copyright -->
+        <div class=" text-center">&copy;2019 Copyright:
+          <a href="javascript:void(0)"> Five五</a>
+        </div>
+    </footer>
+
+</body>
+
+<script type="text/javascript">
+    $('.show-btn').on('click',function(e){
+        $("#show_info .page-header").html("<h2>机械工程学院 <small>清华大学</small></h2>")
+
+
+        $("#show_info .lead").html(` 
+            <p>清华大学机械工程学科建设始于1932年，机械工程学科在国际上享有盛誉，连续多年在QS世界大学排名的机械学科中位列全球前20。</p>  
+            <p>清华大学机械工程学院拥有一支杰出的人才队伍，其中包括院士13名、千人（含青千）28名、长江学者（含青年长江）23名、杰青/优青21名、万人计划人才2名。</p>
+            <p>学院现有多个国家和部委级科研和教学平台，包括5个国家重点实验室：电力系统及发电设备控制和仿真国家重点实验室、水沙科学与水利水电工程国家重点实验室、精密测试技术及仪器国家重点实验室（清华分室）、摩擦学国家重点实验室、汽车安全与节能国家重点实验室。   
+            </p><p>清华大学机械工程学科建设始于1932年，机械工程学科在国际上享有盛誉，连续多年在QS世界大学排名的机械学科中位列全球前20。</p>  
+            <p>清华大学机械工程学院拥有一支杰出的人才队伍，其中包括院士13名、千人（含青千）28名、长江学者（含青年长江）23名、杰青/优青21名、万人计划人才2名。</p>
+            <p>学院现有多个国家和部委级科研和教学平台，包括5个国家重点实验室：电力系统及发电设备控制和仿真国家重点实验室、水沙科学与水利水电工程国家重点实验室、精密测试技术及仪器国家重点实验室（清华分室）、摩擦学国家重点实验室、汽车安全与节能国家重点实验室。</p>
+        `)
+    })
+
+
+
+</script> 
+
+</html>
