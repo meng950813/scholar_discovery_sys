@@ -1,50 +1,56 @@
-// °Ù¶ÈµØÍ¼API¹¦ÄÜ
-	var map = new BMap.Map("map");
-    map.centerAndZoom(new BMap.Point(120.63,31.86713), 6);
-	var geolocation = new BMap.Geolocation();
-	var user_location
-	position();
-    function position() {
-        if(user_location){
-            console.log("user_location:" ,user_location)
-            var label = new BMap.Label("ÄúµÄÎ»ÖÃ",{offset:new BMap.Size(20,-10)});
-			addMarker(user_location,label);
-			return;
+// ç™¾åº¦åœ°å›¾APIåŠŸèƒ½
+  var map = new BMap.Map("map");
+  map.centerAndZoom(new BMap.Point(120.63,31.86713), 6);
+  var geolocation = new BMap.Geolocation();
+  var user_location;
+  position();
+  
+  /* å®šä½åŠŸèƒ½ */
+  function position() {
+      if(user_location){
+          console.log("user_location:" ,user_location)
+          var label = new BMap.Label("æ‚¨çš„ä½ç½®",{offset:new BMap.Size(20,-10)});
+          addMarker(user_location,label);
+          return;
+      }
+      geolocation.getCurrentPosition(function(r){
+          console.log("getCurrentPosition")
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+          //var mk = new BMap.Marker(r.point);
+          //var centerPoint = new BMap.Point(r.point.lng, r.point.lat);
+                //map.panTo(centerPoint);
+          user_location = new BMap.Point(r.point.lng, r.point.lat);
+          var label = new BMap.Label("æ‚¨çš„ä½ç½®",{offset:new BMap.Size(20,-10)});
+          addMarker(user_location,label);
         }
-        geolocation.getCurrentPosition(function(r){
-            console.log("getCurrentPosition")
-		if(this.getStatus() == BMAP_STATUS_SUCCESS){
-			//var mk = new BMap.Marker(r.point);
-			//var centerPoint = new BMap.Point(r.point.lng, r.point.lat);
-            //map.panTo(centerPoint);
-			user_location = new BMap.Point(r.point.lng, r.point.lat);
-			var label = new BMap.Label("ÄúµÄÎ»ÖÃ",{offset:new BMap.Size(20,-10)});
-			addMarker(user_location,label);
-		}
-	},{enableHighAccuracy: true})
-    }
-    //ÆôÓÃ¹öÂÖ
-	//map.enableScrollWheelZoom(true);
-    //½ûÓÃË«»÷
-    map.disableDoubleClickZoom();
-	/*×Ô¶¨ÒåµØÍ¼ÑùÊ½http://lbsyun.baidu.com/customv2/index.html
-	var styleJson = []
-	map.setMapStyle({styleJson:styleJson});*/
+      },{enableHighAccuracy: true})
+  }
+  
+  //å¯ç”¨æ»šè½®
+  //map.enableScrollWheelZoom(true);
+  //ç¦ç”¨åŒå‡»
+  map.disableDoubleClickZoom();
+ 
+
+  /*è‡ªå®šä¹‰åœ°å›¾æ ·å¼http://lbsyun.baidu.com/customv2/index.html
+  var styleJson = []
+  map.setMapStyle({styleJson:styleJson});*/
 
     var points =[
         {"lng":116.314214,"lat":39.996322,"count":50444}
     ];
 
     if(!isSupportCanvas()){
-    	alert('ÈÈÁ¦Í¼Ä¿Ç°Ö»Ö§³ÖÓĞcanvasÖ§³ÖµÄä¯ÀÀÆ÷,ÄúËùÊ¹ÓÃµÄä¯ÀÀÆ÷²»ÄÜÊ¹ÓÃÈÈÁ¦Í¼¹¦ÄÜ~')
+      alert('çƒ­åŠ›å›¾ç›®å‰åªæ”¯æŒæœ‰canvasæ”¯æŒçš„æµè§ˆå™¨,æ‚¨æ‰€ä½¿ç”¨çš„æµè§ˆå™¨ä¸èƒ½ä½¿ç”¨çƒ­åŠ›å›¾åŠŸèƒ½~')
     }
+    
     heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
-	map.addOverlay(heatmapOverlay);
-	heatmapOverlay.setDataSet({data:points,max:100});
-	console.log("heatmapOverlay: ",heatmapOverlay)
+    map.addOverlay(heatmapOverlay);
+    heatmapOverlay.setDataSet({data:points,max:100});
+    console.log("heatmapOverlay: ",heatmapOverlay)
     heatmapOverlay.show();
 
-	//ÊÇ·ñÏÔÊ¾ÈÈÁ¦Í¼
+  //æ˜¯å¦æ˜¾ç¤ºçƒ­åŠ›å›¾
     function openHeatmap(){
         map.clearOverlays();
         heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
@@ -55,18 +61,21 @@
         map.centerAndZoom(new BMap.Point(120.63,31.86713), 6);
         //console.log(map.getOverlays());
     }
-	function closeHeatmap(){
+  function closeHeatmap(){
         heatmapOverlay.hide();
     }
-	closeHeatmap();
-	//ÅĞ¶Ïä¯ÀÀÇøÊÇ·ñÖ§³Öcanvas
+
+  closeHeatmap();
+
+
+  //åˆ¤æ–­æµè§ˆåŒºæ˜¯å¦æ”¯æŒcanvas
     function isSupportCanvas(){
         var elem = document.createElement('canvas');
         return !!(elem.getContext && elem.getContext('2d'));
     }
 
 
-    //Êó±êµ¥»÷·Å´ó
+    //é¼ æ ‡å•å‡»æ”¾å¤§
     function showInfo(e){
           map.setCenter(new BMap.Point(e.point.lng, e.point.lat));
           map.setZoom(map.getZoom() + 2);
@@ -82,9 +91,9 @@
                 geocodeSearch(collegeadds[i]);
               }
           }
-	}
-	//ÓÒ»÷ËõĞ¡
-	function showInfo1(e){
+  }
+  //å³å‡»ç¼©å°
+  function showInfo1(e){
           map.setCenter(new BMap.Point(e.point.lng, e.point.lat));
           map.setZoom(map.getZoom() - 3);
           if(map.getZoom() >10 && map.getZoom() < 17){
@@ -102,70 +111,70 @@
                 position();
           }
 
-	}
-	map.addEventListener("click", showInfo);
+  }
+  map.addEventListener("click", showInfo);
     map.addEventListener("rightclick", showInfo1);
     var index = 0;
     var myGeo = new BMap.Geocoder();
-	var adds = [
-        "±±¾©ÊĞº£µíÇøÒÃºÍÔ°Â·5ºÅ(±±¾©´óÑ§)",
-        "±±¾©ÊĞº£µíÇøÇå»ª´óÑ§(Çå»ª´óÑ§)",
-        "±±¾©ÊĞº£µíÇøÖĞ¹Ø´å´ó½Ö59ºÅ"
-	];
-	var collegeadds = [
-        "ÀîÕ×»ùÈËÎÄÑ§Ô·5ºÅÂ¥",
-        "±±¾©ÊĞº£µíÇøÒÃºÍÔ°Â·5ºÅ±±¾©´óÑ§(Î´Ãûºş±±²à)",
-        "±±¾©´óÑ§¼°ÖØÂ¥"
+  var adds = [
+        "åŒ—äº¬å¸‚æµ·æ·€åŒºé¢å’Œå›­è·¯5å·(åŒ—äº¬å¤§å­¦)",
+        "åŒ—äº¬å¸‚æµ·æ·€åŒºæ¸…åå¤§å­¦(æ¸…åå¤§å­¦)",
+        "åŒ—äº¬å¸‚æµ·æ·€åŒºä¸­å…³æ‘å¤§è¡—59å·"
+  ];
+  var collegeadds = [
+        "æå…†åŸºäººæ–‡å­¦è‹‘5å·æ¥¼",
+        "åŒ—äº¬å¸‚æµ·æ·€åŒºé¢å’Œå›­è·¯5å·åŒ—äº¬å¤§å­¦(æœªåæ¹–åŒ—ä¾§)",
+        "åŒ—äº¬å¤§å­¦åŠé‡æ¥¼"
     ];
 
-	function bdGEO(){
+  function bdGEO(){
         var adda = adds[index];
         geocodeSearch(adda);
         index++;
     }
 
 
-	function geocodeSearch(add){
-        //ÏÔÊ¾±êÇ©ËÙ¶È
+  function geocodeSearch(add){
+        //æ˜¾ç¤ºæ ‡ç­¾é€Ÿåº¦
         if(index < adds.length){
-		    setTimeout(window.bdGEO,0);
+        setTimeout(window.bdGEO,0);
         }
 
-		myGeo.getPoint(add, function(point){
-			if (point) {
-			    //Êä³öµãĞÅÏ¢
-				//document.getElementById("result").innerHTML +=  index + "¡¢" + add + ":" + point.lng + "," + point.lat + "</br>";
-				var address = new BMap.Point(point.lng, point.lat);
-				var label = new BMap.Label(add,{offset:new BMap.Size(20,-10)});
-				addMarker(address,label);
-			}
-		},)
-	}
+    myGeo.getPoint(add, function(point){
+      if (point) {
+          //è¾“å‡ºç‚¹ä¿¡æ¯
+        //document.getElementById("result").innerHTML +=  index + "ã€" + add + ":" + point.lng + "," + point.lat + "</br>";
+        var address = new BMap.Point(point.lng, point.lat);
+        var label = new BMap.Label(add,{offset:new BMap.Size(20,-10)});
+        addMarker(address,label);
+      }
+    },)
+  }
 
     function  attribute(e) {
-		map.centerAndZoom(new BMap.Point(e.point.lng, e.point.lat), 18);
-		map.setZoom(map.getZoom() + 2);
+    map.centerAndZoom(new BMap.Point(e.point.lng, e.point.lat), 18);
+    map.setZoom(map.getZoom() + 2);
     }
 
-	//Ìí¼ÓµØÍ¼±êÇ©
-	function addMarker(point,label){
-		var marker = new BMap.Marker(point);
-		//marker.addEventListener("click",attribute);
-		map.addOverlay(marker);
-		//±êÇ©Ìø¶¯
-		//marker.setAnimation(BMAP_ANIMATION_BOUNCE);
-		marker.setLabel(label);
-	}
+  //æ·»åŠ åœ°å›¾æ ‡ç­¾
+  function addMarker(point,label){
+    var marker = new BMap.Marker(point);
+    //marker.addEventListener("click",attribute);
+    map.addOverlay(marker);
+    //æ ‡ç­¾è·³åŠ¨
+    //marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+    marker.setLabel(label);
+  }
 
-	//±êÇ©µã»÷ÊÂ¼ş
+  //æ ‡ç­¾ç‚¹å‡»äº‹ä»¶
 
-	
-	//É¾³ıµØÍ¼ËùÓĞ±êÇ©
-	function delPoint() {
+  
+  //åˆ é™¤åœ°å›¾æ‰€æœ‰æ ‡ç­¾
+  function delPoint() {
         var allOverlay = map.getOverlays();
         console.log("delPoint: ",allOverlay)
-		for (var i = 0; i < allOverlay.length; i++)
-		    {
-		        map.removeOverlay(allOverlay[i]);
+    for (var i = 0; i < allOverlay.length; i++)
+        {
+            map.removeOverlay(allOverlay[i]);
             }
     }

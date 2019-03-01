@@ -1,512 +1,73 @@
- .top{
-     width: 100%;
-     height: 160px;
-     border: 0px solid green;
-
- }
-
- .logo{
-     width: 160px;
-     height: 160px;
-     border: 0px solid darkgreen;
-     margin-left: 209px;
-     margin-bottom: 100px;
-     float: left;
-     overflow: hidden;
- }
-
-.topic{
-        width:1000px;
-        height:160px;
-        text-align: center;
-        line-height: 190px;
-        font-size: 75px;
-        margin-left: 450px;
-        padding-right: 40px;
-        font-family: 华文楷体;
-        border: 0px solid darkgreen;
-        }
-
-.middle1{
-        width:100%;
-        height:1px;
-        border: 1px solid black;
-        background-color: black;
+/*---created by chen---*/
+html,body{
+    width: 100%;
+    height: 100%;
+}
+body{
+    background: url("../backimg.jpg") no-repeat;
+    background-size: 100% 100%;
+    padding-bottom: 30px;
+}
+.container{
+    background: #fafaf8;
 }
 
+/*header*/
+.navbar-me{
+    border-bottom: 1px solid grey;
+    background: #fafaf8;
+    /*margin-bottom: 0;*/
+}
+.nav-logo{
+    font-size: 30px;
+    margin: 0 15px;
+}
+a:hover{
+    text-decoration: none;
+}
+/* end of header  */
 
-.per-info{
-    width: 1050px;
-    height: 450px;
-    margin-left: 435px;
-    margin-top: 20px;
-    border: 2px solid darkgray;
-    background-color: #ffffff;
+
+/* map */
+.map-box{
+    position: relative;
 }
 
-.per-info-title{
-    width: 233px;
-    height: 80px;
-    text-align: center;
-    font-size: 40px;
-    font-weight: 500;
-    border-bottom: 1px dotted #7d3f98;
-    margin: 0 auto 1em;
-    margin-top: 10px;
-    line-height: 115px;
-    text-transform: uppercase;
-    color: #7d3f98;
-    font-family: "PT Sans", sans-serif;
-}
-
-.per-info-content{
-    width: 890px;
-    height: 335px;
-    margin: 0 auto 1em;
-    margin-top: -25px;
-    border: 0px solid #000000;
-    background-color: white;
-}
-
-.per-info-content-title{
-    width:140px;
-    height:30px;
-    font-size: 25px;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: 20px;
-    margin-left: 90px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 5px;
-    color: #14a6ff;
-}
-
-.teacher-name{
-    width:100px;
-    height:30px;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: 20px;
-    margin-left: 90px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 5px;
-    color: #2f2f2f;
-}
-
-.teacher-name-c{
-    width:200px;
-    height:30px;
-    font-size: 20px;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -30px;
-    margin-left: 200px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 5px;
-}
-
-
-.teacher-title{
-    width:100px;
-    height:30px;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -30px;
-    margin-left: 520px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 5px;
-}
-
-.teacher-title-c{
-    width:200px;
-    height:30px;
-    font-size: 20px;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -30px;
-    margin-left: 630px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 1px;
-}
-
-.teacher-name{
-    width:100px;
-    height:30px;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: 20px;
-    margin-left: 90px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 5px;
-    color: #2f2f2f;
-}
-
-.teacher-name-c{
-    width:200px;
-    height:30px;
-    font-size: 18px;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -30px;
-    margin-left: 200px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 1px;
-}
-
-
-.teacher-school{
-    width:100px;
-    height:30px;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -30px;
-    margin-left: 520px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 5px;
-}
-
-.teacher-school-c{
-    width:200px;
-    height:30px;
-    font-size: 18px;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -30px;
-    margin-left: 630px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 1px;
-}
-
-.teacher-title{
-    width:100px;
-    height:30px;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: 20px;
-    margin-left: 90px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 5px;
-    color: #2f2f2f;
-}
-
-.teacher-title-c{
-    width:200px;
-    height:30px;
-    font-size: 18px;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -30px;
-    margin-left: 200px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 1px;
-}
-
-.teacher-email{
-    width:100px;
-    height:30px;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -30px;
-    margin-left: 520px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 5px;
-}
-
-.teacher-email-c{
-    width:200px;
-    height:30px;
-    font-size: 18px;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -30px;
-    margin-left: 630px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 0px;
-}
-
-
-.teacher-url{
-    width:100px;
-    height:30px;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: 20px;
-    margin-left: 90px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 4px;
-    color: #2f2f2f;
-}
-
-.teacher-url-c{
-    width:670px;
-    height:30px;
-    font-size: 15px;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -30px;
-    margin-left: 200px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 1px;
-}
-
- .teacher-url-c a{
-     text-decoration: none;
-     color: #0d14ff;
- }
-
- .teacher-url-c:hover a{
-
-     color: #ff9b54;
- }
-
-.teacher-field{
-    width:100px;
-    height:30px;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: 35px;
-    margin-left: 90px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 4px;
-    color: #2f2f2f;
-}
-
-.teacher-field-c{
-    width:670px;
-    height:90px;
-    font-size: 15px;
-    font-family: "PT Sans", sans-serif;
-    line-height: 30px;
-    margin-top: -33px;
-    margin-left: 200px;
-    border: 0px solid #cc0b0a;
-    letter-spacing: 1px;
-}
-
-.social-net{
-    width: 1050px;
-    height: 600px;
-    border: 1px solid darkgray;
-    margin-top: 10px;
-    margin-left: 435px;
-    background-color: #f3f3f3;
-}
-
-.social-net-title{
-    width: 233px;
-    height: 80px;
-    text-align: center;
-    font-size: 35px;
-    font-weight: 500;
-    border-bottom: 1px dotted #7d3f98;
-    margin: 0 auto 1em;
-    margin-top: 10px;
-    line-height: 115px;
-    text-transform: uppercase;
-    color: #7d3f98;
-    font-family: "PT Sans", sans-serif;
-}
-
-.little1{
-    width: 105px;
-    height: 33px;
-    border: 0px solid #cccccc;
-    font-size: 22px;
-    font-family: 新宋体;
-    font-weight: bold;
-    margin-top: 20px;
-    margin-left: 79px;
-}
-
-
-
-.social-net-image{
-    width:500px;
-    height: 400px;
-    margin-left: 78px;
-    margin-top: 15px;
-    border: 2px solid #cccccc;
-    float: left;
-    background-image: url("/static/seu.jpg");
-    background-size:contain;
-}
-
-.little2{
-    width: 105px;
-    height: 33px;
-    border: 0px solid #cccccc;
-    font-size: 22px;
-    font-family: 新宋体;
-    font-weight: bold;
-    margin-top: -35px;
-    margin-left: 667px;
-}
-
- .refresh{
-     width: 80px;
-     height: 20px;
-     margin-left: 900px;
-     margin-top: -28px;
-     border: 0px solid #00adcc;
- }
-
-
- .refresh a:hover{
-     cursor: pointer;
-     text-decoration: none;
-     color: #cc8916;
- }
-
-.recommend{
-    width: 300px;
-    height:400px;
-    margin-top: 15px;
-    border: 2px solid #cccccc;
-    float: right;
-    margin-right: 81px;
-    overflow: hidden;
-}
-
-.close-tea-group{
-    width: auto;
-    height: 118px;
-    margin-bottom: 10px;
-    border: 0px solid #4e11ff;
-    border-bottom: 1px dotted #7d3f98;
-}
-
-ul{
-    list-style: none;
-    padding-left: 0;
-    margin-top: auto;
-}
-ul li{
-     overflow: hidden;
-     padding-bottom: 5px;
-     font-family: 微软雅黑;
-}
-
-.close-tea-image{
-    width: 40px;
-    height: 40px;
-    margin-top:7px;
-    margin-left: 10px;
-    border-radius:50%;
-    border: 0px solid #9C1A1C;
-}
-
- .close-tea-name{
-     width: auto;
-     height: 20px;
-     float: left;
-     margin-left:60px;
-     margin-top: -40px;
-     font-size: 16px;
-     border: 0px solid #00adcc;
-     line-height: 20px;
- }
-
- .close-tea-name a{
-     text-decoration: none;
-     color: #0d14ff;
- }
-
- .close-tea-name:hover a{
-     font-weight: bold;
-     color: #ff9b54;
- }
-
- .close-tea-school{
-     width: 240px;
-     height: 20px;
-     margin-top: -10px;
-     margin-left: 60px;
-     font-size: 14px;
-     border: 0px solid #cc009b;
-     line-height: 20px;
-     color: black;
- }
-
- .close-tea-field{
-     width: 219px;
+#select{
+     width: 200px;
      height: 40px;
-     border: 0px solid #ff0300;
-     font-size: 14px;
-     margin-left: 60px;
-     margin-top: 10px;
-     color: black;
-     overflow: hidden;
-     word-break:break-all;
-     word-wrap: break-word;
-	display:-webkit-box;
-	-webkit-line-clamp:2;
-	-webkit-box-orient:vertical;
+     position:absolute;
+     top: 0;
+     left: 0;
+     opacity: 0.7;
+     z-index: 200;
+
+ }
+#select:hover{
+    opacity: 1;
+}
+#map{
+    height: 700px;
+    min-height: 100%;
+    background: #777;
+    cursor: pointer;
+    z-index: 100;
+}
+
+#map label{
+     max-width: none;
+     cursor: pointer;
  }
 
-.ach{
-    width: 1050px;
-    border: 1px solid darkgray;
-    margin-top: 10px;
-    margin-left: 435px;
-    background-color: #f3f3f3;
+/* 显示弹出窗中学院简介信息的样式 */
+.lead p{
+    color: #000;
+    font-size: 16px;
+    text-indent: 30px;
 }
 
-.ach-title{
-    width: 300px;
-    height: 80px;
-    text-align: center;
-    font-size: 35px;
-    font-weight: 500;
-    border-bottom: 1px dotted #7d3f98;
-    /*border: 1px solid #ff0300;*/
-    margin: 0 auto 1em;
-    margin-top: 10px;
-    line-height: 115px;
-    text-transform: uppercase;
-    color: #7d3f98;
-    font-family: "PT Sans", sans-serif;
+/* footer */
+.page-footer {
+    border-top: 1px solid grey;
+    padding: 5px;
 }
-
-.ach-total{
-    width:600px;
-    height: 50px;
-    margin-left: 80px;
-    font-size: 18px;
-}
-.ach-total td{
-    width: 75px;
-
-}
-
-
-
- .middle2{
-        width:100%;
-        height:1px;
-        border: 1px solid black;
-        background-color: black;
-        margin-top: 10px;
-}
-
-  .websiteinfo{
-     width: 1900px;
-     height: 200px;
-     border: 0px solid #00adcc;
-     text-align: center;
- }

@@ -5,55 +5,22 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf8" />
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=1" />
     <title>个人信息</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/normalize.css">
+
+     <!-- 百度地图api -->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=CfqPIGHwjopureKeQ9lBqjHSuBR37A13"></script>
+
+
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
-    <!-- <link rel="stylesheet" type=text/css href="../static/css/detail.css"> -->
+    
+
+    <link rel="stylesheet" type=text/css href="../static/css/detail.css">
     <link rel="shortcut icon" href="../static/favicon.ico">
-    <style type="text/css">
-        html,body{
-            width: 100%;
-            height: 100%;
-        }
-        body{
-            background: url("../static/backimg.jpg") no-repeat;
-            background-size: 100% 100%;
-            padding-bottom: 30px;
-        }
-        #map{
-            height: 700px;
-            min-height: 100%;
-            background: #777;
-            cursor: pointer;
-        }
-        .container{
-            background: #fafaf8;
-            /*background: transparent;*/
-        }
-        .navbar-me{
-            border-bottom: 1px solid grey;
-            background: #fafaf8;
-            margin-bottom: 0;
-        }
-        .logo{
-            font-size: 30px;
-            margin: 0 15px;
-        }
-        a:hover{
-            text-decoration: none;
-        }
-        .lead p{
-            color: #000;
-            font-size: 16px;
-            text-indent: 30px;
-        }
-        .page-footer {
-            border-top: 1px solid grey;
-            padding: 5px;
-        }
-    </style>
 </head>
 
 <body>
@@ -61,20 +28,30 @@
     <nav class="navbar navbar-me">
         <div class="container">
             <div class="navbar-header">
-                <a class="logo" href="javascript:void(0)">
+                <a class="nav-logo" href="javascript:void(0)">
                     <img src="../static/seu-logo.jpg">专家发现系统</a>
             </div>
         </div>
     </nav>
 
     <div class="container">
-        <div class="row">
-            <div id="map" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                map
-            </div>
+        <div class="row map-box">
+            <!-- <div class="main" > -->
+                <select class="form-control" id="select" onchange="openHeatmap()">
+                    <option>--选择搜索内容--</option>
+                    <option>计算机</option>
+                    <option>自动化</option>
+                    <option>材料</option>
+                    <option>建筑</option>
+                    <option>机械</option>
+                </select>
+                <div id="map" class="map"></div>
+            <!-- </div> -->
         </div>
     </div>
 
+
+    <!-- 弹出窗 -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div id="show_info" class="container model">
             <button type="button" class="close"  data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
@@ -87,11 +64,11 @@
 
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 </p> 
 
 
@@ -121,6 +98,9 @@
     </footer>
 
 </body>
+
+
+<script src="../static/js/map.js"></script>
 
 <script type="text/javascript">
     $('.show-btn').on('click',function(e){
