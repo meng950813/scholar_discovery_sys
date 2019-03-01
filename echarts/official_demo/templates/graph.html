@@ -141,13 +141,15 @@
         var lastIndex = value.lastIndexOf('/');
         var base_url = value.slice(0, lastIndex);
         //TODO:跳转 需要视图函数和id
-        //var id = param.value[1];
-        //window.open(base_url + '/' + id);
+        var id = param.value[1];
+        window.open(base_url + '/' + id);
     });
     // 尝试获取数据
-    $.get('data/teacher.json', function (jsondata) {
+    //测试数据 data/teacher.json
+    $.get('database/1', function (jsondata) {
         myChart.hideLoading();
         option = getOption(jsondata, 10);
+        console.log(jsondata);
         myChart.setOption(option);
     }, 'json');
     </script>
