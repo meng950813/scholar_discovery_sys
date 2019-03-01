@@ -37,6 +37,5 @@
     {"source": "比尔-盖茨", "target": "奥巴马", "weight": 6},
     {"source": "比尔-盖茨", "target": "克拉拉乔布斯", "weight": 1},
     {"source": "提姆-库克", "target": "奥巴马", "weight": 1}
-
   ]
 }
