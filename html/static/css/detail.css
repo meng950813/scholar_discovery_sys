@@ -8,6 +8,9 @@ body{
     background-size: 100% 100%;
     padding-bottom: 30px;
 }
+html,body,div,p,button,a,h1,h2,h3,h4,h5,h6{
+    box-sizing: border-box;
+}
 .container{
     background: #fafaf8;
 }
@@ -60,6 +63,11 @@ a:hover{
  }
 
 /* 显示弹出窗中学院简介信息的样式 */
+#myModal{
+
+}
+
+
 .lead p{
     color: #000;
     font-size: 16px;

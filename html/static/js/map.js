@@ -3,6 +3,10 @@
   map.centerAndZoom(new BMap.Point(120.63,31.86713), 6);
   var geolocation = new BMap.Geolocation();
   var user_location;
+
+  // 记录当前地图缩放等级是否到达需要显示学院地址的程度
+  var isZoomMoreThen14 = false;
+
   position();
   
   /* 定位功能 */
@@ -86,6 +90,13 @@
               }
           }
           if(map.getZoom()>14){
+              /*若当前缩放等级 > 14 ，则不需再次搜素定位点，以减少对百度地图的请求次数*/
+              if (isZoomMoreThen14) 
+                  return;
+
+              // 否则意味着初次将地图放大到14等级，
+              isZoomMoreThen14 = true;
+
               delPoint();
               for(var i=0;i<collegeadds.length;i++){
                 geocodeSearch(collegeadds[i]);
@@ -96,13 +107,19 @@
   function showInfo1(e){
           map.setCenter(new BMap.Point(e.point.lng, e.point.lat));
           map.setZoom(map.getZoom() - 3);
-          if(map.getZoom() >10 && map.getZoom() < 17){
+          if(map.getZoom() >10 && map.getZoom() < 14){
+              
+              isZoomMoreThen14 = false;
+              
               delPoint();
               for(var i=0;i<adds.length;i++){
                 geocodeSearch(adds[i]);
               }
           }
           if(map.getZoom() < 10 ){
+              
+              isZoomMoreThen14 = false;
+              
               delPoint();
               heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
                 map.addOverlay(heatmapOverlay);
@@ -171,8 +188,8 @@
   
   //删除地图所有标签
   function delPoint() {
-        var allOverlay = map.getOverlays();
-        console.log("delPoint: ",allOverlay)
+    var allOverlay = map.getOverlays();
+    console.log("delPoint: ",allOverlay)
     for (var i = 0; i < allOverlay.length; i++)
         {
             map.removeOverlay(allOverlay[i]);
