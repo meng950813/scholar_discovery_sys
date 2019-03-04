@@ -55,6 +55,7 @@ a:hover{
     background: #777;
     cursor: pointer;
     z-index: 100;
+    border: 1px solid #000000;
 }
 
 #map label{
