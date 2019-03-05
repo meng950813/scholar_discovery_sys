@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="{{ url_for('static', filename='echarts.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery-3.3.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='dataTool.js') }}"></script>
+    <script src="{{ url_for('static', filename='echarts_draw.js') }}"></script>
+</head>
+
+<body>
+    <div id="main" style="width:900px;height:600px;">
+    </div>
+    <label hidden="hidden" id="base_url" value="{{ url_for('user_homepage', user_id=1)}}"></label>
+    <script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'), 'macarons');
+    myChart.showLoading();
+    // 添加点击事件
+    myChart.on('click', {dataType: 'node'}, function (param) {
+        //获取链接
+        var base_url_element = $('#base_url');
+        var value = base_url_element.attr('value');
+        var lastIndex = value.lastIndexOf('/');
+        var base_url = value.slice(0, lastIndex);
+        //TODO:跳转 需要视图函数和id
+        var id = param.value[1];
+        window.open(base_url + '/' + id);
+    });
+    // 老师id
+    user_id = "{{user_id}}";
+    url = '/api/person/relation/' + user_id;
+    $.get(url, function (jsondata) {
+        myChart.hideLoading();
+        option = getOption(jsondata, true);
+        myChart.setOption(option);
+    }, 'json');
+    </script>
+</body>
+</html>
