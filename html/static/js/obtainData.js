@@ -20,7 +20,7 @@ var addressInfo = packageAddress();
  * 		"school":[
  * 			{
  * 				"name":'清华大学',
- * 				"address":"北京市海淀区双清路30号"
+ * 			'position' : "123.123456,123.123456"
  * 			},
  * 			...
  * 		],
@@ -78,12 +78,12 @@ function formatAddress(adds_info){
 		var oneSchool = adds_info.school[i];
 		
 		// 此处信任后端数据 ==> 学校名唯一 ==> 不再判断，直接添加
-		school_add.push(`${oneSchool.address}(${oneSchool.name})`);
+		school_add.push(`${oneSchool.position};${oneSchool.name}`);
 	}
 
 	for(var i in adds_info.college){
 		var oneCollege = adds_info.college[i];
-		
+
 		college_add.push(`${oneCollege.address}(${oneCollege.school},${oneCollege.institution});${oneCollege.position}`);
 	}
 	
@@ -101,7 +101,7 @@ function formatAddress(adds_info){
  */
 function packageAddress() { 
 	var school_address = [];
-	var college_address = []
+	var college_address = [];
 	
 	return {
 		setAddress : function (schoolAddress_info,collegeAddress_info) { 
@@ -130,23 +130,19 @@ var egdata = {
 	"school":[
 		{
 			"name":'清华大学',
-			"address":"北京市海淀区双清路30号"
+			"position":"116.337975,40.004456"
 		},
 		{
 			"name":'北京大学',
-			"address":"北京市海淀区颐和园路5号"
+			"position":"116.328847,40.0119"
 		},
 		{
 			"name":'中国人民大学',
-			"address":"北京市海淀区中关村大街59号"
+			"position":"116.313809,40.001671"
 		},
 		{
 			"name":'北京理工大学',
-			"address":"北京海淀区中关村南大街5号"
-		},
-		{
-			"name":'北京航空航天大学',
-			"address":"北京市海淀区学院路37号"
+			"position":"116.289819,40.030484"
 		}
 	],
 
@@ -185,7 +181,6 @@ var egdata = {
 }
 
 formatAddress(egdata);
-
 SCHOOL_ADDRESS = addressInfo.getSchoolAdd();
 COLLEGE_ADDRESS = addressInfo.getCollegeAdd();
-addToPoint(SCHOOL_ADDRESS);
+addToPoint(COLLEGE_ADDRESS);
