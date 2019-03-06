@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="{{ url_for('static', filename='echarts.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery-3.3.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='dataTool.js') }}"></script>
+    <script src="{{ url_for('static', filename='echarts_draw.js') }}"></script>
+</head>
+
+<body>
+    <div>
+        <input type="text" id="school_name" value="东南大学">
+        <input type="text" id="institution_name" value="计算机科学与工程学院">
+        <button onclick="institution_relation()">学院关系</button>
+        <button onclick="toggleName()" id="toggle_btn">显示名字</button>
+    </div>
+    <div id="main" style="width:900px;height:600px;">
+    </div>
+    <label hidden="hidden" id="base_url" value="{{ url_for('user_homepage', user_id=1)}}"></label>
+    <script type="text/javascript">
+    //是否显示名称
+    var isShowingName = false;
+
+    var myChart = echarts.init(document.getElementById('main'), 'macarons');
+    // 添加点击事件
+    myChart.on('click', {dataType: 'node'}, function (param) {
+        //获取链接
+        var base_url_element = $('#base_url');
+        var value = base_url_element.attr('value');
+        var lastIndex = value.lastIndexOf('/');
+        var base_url = value.slice(0, lastIndex);
+        //TODO:跳转 需要视图函数和id
+        var id = param.value[1];
+        window.open(base_url + '/' + id);
+    });
+    // 显示关系图
+    function institution_relation() {
+        var school_input = $("#school_name");
+        var institution_input = $("#institution_name");
+        url ='/api/institution/relation?school=' + school_input.val() + '&institution=' + institution_input.val();
+
+        $.get(url, function (jsondata) {
+            myChart.hideLoading();
+            var option = getOption(jsondata);
+            myChart.setOption(option);
+        }, 'json');
+        myChart.showLoading();
+        //默认不显示名字
+        if (isShowingName)
+            toggleName();
+    }
+    function toggleName() {
+        var btn = $('#toggle_btn');
+        isShowingName = !isShowingName;
+        //隐藏名字
+        var text = isShowingName? '隐藏名字': '显示名字';
+        btn.text(text);
+        //节点上是否显示名字
+        setNameVisibile(myChart, isShowingName);
+    }
+    </script>
+</body>
+</html>
