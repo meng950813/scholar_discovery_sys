@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for
-import os, os.path, json, logging
-from dao import db
+import logging
+from utils import db
 from controllers.api import api_blueprint
 
 app = Flask(__name__)
