@@ -36,9 +36,11 @@
         var option = getOption(jsondata, true);
         myChart.setOption(option);
     }, 'json');
-    //test
+    //test 地址
     $.post('/api/institution/address', {keyword: '哈哈'}, function (jsondata) {
-        console.log(jsondata);
+    });
+    //test2 学院信息
+    $.post('/api/institution/introduction', {school: '学校', institution: '学院名'}, function (jsondata) {
     });
     </script>
 </body>
