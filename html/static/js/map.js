@@ -19,7 +19,7 @@
 	var points =[
     ];
 	var adds = [
-        "北京市海淀区颐和园路5号(北京大学)",　　
+    "北京市海淀区颐和园路5号(北京大学)",　　
     "北京市海淀区清华大学(清华大学)",
 　　"北京市海淀区中关村大街59号(中国人民大学)",
 　　"北京市海淀区学院路37号(北京航空航天大学)",
@@ -42,7 +42,7 @@
 　　"安徽省合肥市金寨路96号(中国科学技术大学)",
 　　"西安市友谊西路127号(西北工业大学)",
     "咸阳市杨陵区西北农林科大(西北农林科技大学)",
-　　"成都市高新区（西区）西源大道2006号(电子科技大学)",
+　　"成都市高新区西源大道2006号(电子科技大学)",
 　　"成都市一环路南一段24号(四川大学)",
 　　"中国山东省济南市山大南路27号(山东大学)",
 　　"青岛市崂山区松岭路238号(中国海洋大学)",
@@ -130,20 +130,20 @@
           if(map.getZoom()>11&&map.getZoom()<15){
               closeHeatmap();
               for(var i=0;i<adds.length;i++){
-                  var index1 = adds[i].indexOf("(");
+                  var index1 = adds[i].lastIndexOf("(");
                   var string1 = adds[i].substring(0,index1+1);
-                  var string2 = adds[i].substring(index+1,adds[i].length+1);
-                  console.log(string2);
-                  // var string3 = string1 + i +":" + string2;
-                  // console.log(string3);
-                 geocodeSearch(adds[i]);
+                  var string2 = adds[i].substring(index1+1,adds[i].length+1);
+                  var no = i + 1;
+                  var string3 = string1 + no +":" + string2;
+                  geocodeSearch(string3);
               }
           }
           if(map.getZoom()>14){
               delPoint();
 
               for(var i=0;i<collegeadds.length;i++){
-                collegegeocodeSearch(collegeadds[i]);
+                  var no1 = i + 1;
+                collegegeocodeSearch(no1 +":"+collegeadds[i]);
               }
           }
 	}
@@ -155,7 +155,12 @@
           if(map.getZoom() >10 && map.getZoom() < 17){
               delPoint();
               for(var i=0;i<adds.length;i++){
-                geocodeSearch(adds[i]);
+                  var index1 = adds[i].lastIndexOf("(");
+                  var string1 = adds[i].substring(0,index1+1);
+                  var string2 = adds[i].substring(index1+1,adds[i].length+1);
+                  var no = i + 1;
+                  var string3 = string1 + no +":" + string2;
+                  geocodeSearch(string3);
               }
           }
           if(map.getZoom() < 10 ){
@@ -180,20 +185,10 @@
         }
     }
 
-    //增加标签
-	function bdGEO(){
-        var adda = adds[index];
-        geocodeSearch(adda);
-        index++;
-    }
 
 
     //增加学校标签
 	function geocodeSearch(add){
-        //显示标签速度
-        if(index < adds.length){
-		    setTimeout(window.bdGEO,0);
-        }
 		myGeo.getPoint(add, function(point){
             console.log(add,point)
 
@@ -202,11 +197,8 @@
                 // point = uniquePoint(point);
 
 				var address = new BMap.Point(point.lng, point.lat);
-
-			    if(add.substring(add.length-3,add.length-1) == "大学") {
-                    var index = add.indexOf("(");
-                    add = add.substring(index + 1, add.length - 1);
-                }
+                var index = add.indexOf("(");
+                add = add.substring(index + 1, add.length - 1);
 				var label = new BMap.Label(add,{offset:new BMap.Size(20,-10)});
 				addMarker(address,label);
 			}
@@ -215,10 +207,6 @@
 
     //增加学院标签
 	function collegegeocodeSearch(add){
-        //显示标签速度
-        if(index < collegeadds.length){
-		    setTimeout(window.bdGEO,0);
-        }
         //双清路30号清华大学(马克思主义学院),116.327709,40.011861
         var index1 = add.indexOf(")");
         var index2 = add.lastIndexOf(",");
@@ -234,6 +222,7 @@
 	//添加地图标签
 	function addMarker(point,label){
 		var marker = new BMap.Marker(point);
+		//添加标签响应函数
 		//marker.addEventListener("mousedown",attribute);
 		map.addOverlay(marker);
 		//标签跳动
