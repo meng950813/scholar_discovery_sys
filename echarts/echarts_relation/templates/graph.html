@@ -38,9 +38,10 @@
     function institution_relation() {
         var school_input = $("#school_name");
         var institution_input = $("#institution_name");
-        url ='/api/institution/relation?school=' + school_input.val() + '&institution=' + institution_input.val();
+        var url ='/api/institution/relation';
+        var data = {school: school_input.val(), institution: institution_input.val()};
 
-        $.get(url, function (jsondata) {
+        $.post(url, data, function (jsondata) {
             myChart.hideLoading();
             var option = getOption(jsondata);
             myChart.setOption(option);

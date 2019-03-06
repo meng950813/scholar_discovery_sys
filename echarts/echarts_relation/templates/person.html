@@ -27,13 +27,19 @@
         window.open(base_url + '/' + id);
     });
     // 老师id
-    user_id = "{{user_id}}";
-    url = '/api/person/relation/' + user_id;
-    $.get(url, function (jsondata) {
+    var user_id = "{{user_id}}";
+    var url = '/api/person/relation';
+    var data = {teacher_id: user_id};
+
+    $.post(url, data, function (jsondata) {
         myChart.hideLoading();
-        option = getOption(jsondata, true);
+        var option = getOption(jsondata, true);
         myChart.setOption(option);
     }, 'json');
+    //test
+    $.post('/api/institution/address', {keyword: '哈哈'}, function (jsondata) {
+        console.log(jsondata);
+    });
     </script>
 </body>
 </html>
