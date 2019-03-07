@@ -38,7 +38,7 @@ var addressInfo = packageAddress();
  * 
  * @param {string  } search_key : 发送的搜索内容，string类型
  */
-function search_by_keyword(search_key,serach_id){
+function search(search_key,serach_id){
 
 	$.ajax({
 		// url: `/api/institution/address?keyword=${search_key}&keyword_id=${serach_id}`,
@@ -46,7 +46,7 @@ function search_by_keyword(search_key,serach_id){
 		type: "post",
 		data: {"keyword":search_key,"keyword_id":serach_id},
 		success: function (response) {
-			console.log(response);
+			//console.log(response);
 			
 			formatAddress(response);
 			
@@ -74,7 +74,7 @@ function formatAddress(adds_info){
 
 	// 解析学校数据
 	for(var i in adds_info.school){
-		console.log(i);
+		//console.log(i);
 		var oneSchool = adds_info.school[i];
 		
 		// 此处信任后端数据 ==> 学校名唯一 ==> 不再判断，直接添加
@@ -86,63 +86,15 @@ function formatAddress(adds_info){
 
 		college_add.push(`${oneCollege.address}(${oneCollege.school},${oneCollege.institution});${oneCollege.position}`);
 	}
-	
-	console.log(school_add,college_add);
+
+	//console.log(school_add,college_add);
 	// 设置新地址
 	addressInfo.setAddress(school_add, college_add);
 
 }
 
 
-/**
- * 根据给定的学校及学院名，发送 ajax 请求 , 获取学院简介，
- * 返回值结构：{"brief" : "xxxxxxx"}
- * 
- * @param {string} school_name 学校名
- * @param {string} college_name 学院名
- */
-function getCollegeInfo(school_name,college_name){
-	$.post({
-		url:"api/institution/introduction",
-		data:{"school":school_name,"institution" : college_name},
-		function (data) {
-			// 返回数据，填充title
-			$("#show_info .page-header").html(`<h2>${college_name} <small>${school_name}</small></h2>`);
-			// 填充简介数据
-			$("#show_info .lead").html(`${data.brief}`);
-			// 显示模态框
-			$("#myModal").modal();
-			
-			myChart.showLoading();
-			//默认不显示名字
-			if (isShowingName)
-				toggleName();
 
-			// 获取任务关系数据
-			getInstitutionRelation(school_name,college_name);
-		}
-	},"json");
-}
-
-
-/**
- * 根据给定的学校及学院名，发送 ajax 请求，获取对应学院的关系
- * 
- * @param {string} school_name 学校名
- * @param {string} college_name 学院名
- */
-function getInstitutionRelation(school_name,college_name){
-	$.post({
-		url:"/api/institution/relation",
-		data:{"school":school_name,"institution" : college_name},
-		function(jsondata){
-			
-			myChart.hideLoading();
-			var option = getOption(jsondata);
-			myChart.setOption(option);
-		}
-	},"json");
-}
 
 /**
  * 使用闭包封装 地址 数组
@@ -226,7 +178,7 @@ var egdata = {
 			'position' : "116.330553,40.008631"
 		},
 	]
-}
+};
 
 formatAddress(egdata);
 SCHOOL_ADDRESS = addressInfo.getSchoolAdd();
