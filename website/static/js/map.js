@@ -12,7 +12,6 @@ map.disableDoubleClickZoom();
 //获取浏览器定位
 var geolocation = new BMap.Geolocation();
 var user_location;
-var index = 0;
 //根据地址获取经纬度
 var myGeo = new BMap.Geocoder();
 position();
@@ -26,12 +25,13 @@ var SCHOOL_ADDRESS = [];
 var COLLEGE_ADDRESS = [];
 
 
-addToPoint(SCHOOL_ADDRESS);
+addToPoint(COLLEGE_ADDRESS);
 
 
 if (!isSupportCanvas()) {
     alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
 }
+
 heatmapOverlay = new BMapLib.HeatmapOverlay({ "radius": 20 });
 map.addOverlay(heatmapOverlay);
 heatmapOverlay.setDataSet({ data: HOT_SCHOOL_POINTS, max: 100 });
@@ -101,19 +101,15 @@ function showInfo(e) {
         closeHeatmap();
         // 定位学校
         for (var i = 0; i < SCHOOL_ADDRESS.length; i++) {
-            var index1 = SCHOOL_ADDRESS[i].lastIndexOf("(");
-            var string1 = SCHOOL_ADDRESS[i].substring(0, index1 + 1);
-            var string2 = SCHOOL_ADDRESS[i].substring(index1 + 1, SCHOOL_ADDRESS[i].length + 1);
             var no = i + 1;
-            var string3 = string1 + no + ":" + string2;
-            geocodeSearch(string3);
+            geocodeSearch(no + "：" + SCHOOL_ADDRESS[i]);
         }
     }
     // 判断缩放等级，显示学院
     if (map.getZoom() > 14) {
-        
+
         // console.log(COLLEGE_ADDRESS);
-        
+
         delPoint();
 
         for (var i = 0; i < COLLEGE_ADDRESS.length; i++) {
@@ -146,35 +142,39 @@ function showInfo1(e) {
 
 
 /**
- * 将地址信息转换为经纬度
- * @param {array} adds 学校地址
+ * 将学院经纬添加到热力图数组中
+ * @param {array} adds 学校地址 双清路30号清华大学(清华大学,马克思主义学院);116.327709,40.011861
  */
 function addToPoint(adds) {
     for (var j = 0; j < adds.length; j++) {
-        myGeo.getPoint(adds[j], function (point) {
             // TODO  set 'count' should be more meaningful
-            HOT_SCHOOL_POINTS.push({ "lng": point.lng, "lat": point.lat, "count": j * 500000 });
-        })
+            var index1 = adds[j].indexOf(";");
+            var index2 = adds[j].lastIndexOf(",");
+            lng = adds[j].substring(index1 + 1, index2);
+            lat = adds[j].substring(index2 + 1, adds[j].length);
+            HOT_SCHOOL_POINTS.push({ "lng": lng, "lat": lat, "count": j * 5000});
     }
 }
 
 
 
-//增加学校标签
+/**
+ * 增加学校定位及标签
+ * @param {number} order 序号
+ * @param {string} add 地址，格式如下 ： 116.327709,40.011861;清华大学
+ */
 function geocodeSearch(add) {
-    myGeo.getPoint(add, function (point) {
-        // console.log(add, point)
+    var index1 = add.indexOf("：");
+    var index2 = add.indexOf(",");
+    var index3 = add.indexOf(";");
+    var lng = add.substring(index1 + 1, index2);
+    var lat = add.substring(index2 + 1, index3);
+    var address = new BMap.Point(lng, lat);
+    add1 = add.substring(0, index1 + 1) + add.substring(index3+1,address.length);
+    var label = new BMap.Label(add1, { offset: new BMap.Size(20, -10) });
+    label.addEventListener("mousedown",schooleattribute);
+    addMarker(address, label);
 
-        if (point) {
-
-            var address = new BMap.Point(point.lng, point.lat);
-            var index = add.indexOf("(");
-            add = add.substring(index + 1, add.length - 1);
-            var label = new BMap.Label(add, { offset: new BMap.Size(20, -10) });
-            label.addEventListener("mousedown",schooleattribute);
-            addMarker(address, label);
-        }
-    })
 }
 
 /**
@@ -186,17 +186,18 @@ function collegegeocodeSearch(order,add) {
 
     // 结果：["双清路30号清华大学(马克思主义学院)","116.327709,40.011861"]
     var part = add.split(";");
-   
+
     // 结果：["116.327709","40.011861"]
     var point_arr = part[1].split(",");
 
     var point = new BMap.Point(point_arr[0], point_arr[1]);
-    
+
     var label_name = order + " : " + part[0];
 
     var label = new BMap.Label(label_name, { offset: new BMap.Size(20, -10) });
 
     label.addEventListener("mousedown", attribute);
+
     addMarker(point, label);
 }
 
@@ -234,10 +235,9 @@ function attribute(e) {
     var add_arr = address.substring(address.indexOf("(") + 1).split(")")[0].split(',');
 
     // 发送获取学院简介的ajax请求
-    getCollegeInfo(add_arr[0],add_arr[1]);    
-
-
+    getCollegeInfo(add_arr[0],add_arr[1]);  
 }
+
 
 //点击学校标签使学校地址居中放大
 function schooleattribute(e){
@@ -255,7 +255,7 @@ function schooleattribute(e){
 
     //设置地图中心点
     map.setCenter(new BMap.Point(lng, lat));
-
+    
     map.setZoom(map.getZoom() + 2);
 
     // 判读当前缩放等级，一定程度时取消热力图，显示学校名
