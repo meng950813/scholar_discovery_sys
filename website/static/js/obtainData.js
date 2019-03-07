@@ -20,7 +20,7 @@ var addressInfo = packageAddress();
  * 		"school":[
  * 			{
  * 				"name":'清华大学',
- * 			'position' : "123.123456,123.123456"
+ * 				"address":"北京市海淀区双清路30号"
  * 			},
  * 			...
  * 		],
@@ -78,12 +78,12 @@ function formatAddress(adds_info){
 		var oneSchool = adds_info.school[i];
 		
 		// 此处信任后端数据 ==> 学校名唯一 ==> 不再判断，直接添加
-		school_add.push(`${oneSchool.position};${oneSchool.name}`);
+		school_add.push(`${oneSchool.address}(${oneSchool.name})`);
 	}
 
 	for(var i in adds_info.college){
 		var oneCollege = adds_info.college[i];
-
+		
 		college_add.push(`${oneCollege.address}(${oneCollege.school},${oneCollege.institution});${oneCollege.position}`);
 	}
 	
@@ -102,17 +102,19 @@ function formatAddress(adds_info){
  * @param {string} college_name 学院名
  */
 function getCollegeInfo(school_name,college_name){
-	$.post({
+	$.ajax({
 		url:"api/institution/introduction",
+		type: 'post',
+		dataType: 'json',
 		data:{"school":school_name,"institution" : college_name},
-		function (data) {
+		success: function (data) {
 			// 返回数据，填充title
 			$("#show_info .page-header").html(`<h2>${college_name} <small>${school_name}</small></h2>`);
 			// 填充简介数据
 			$("#show_info .lead").html(`${data.brief}`);
 			// 显示模态框
 			$("#myModal").modal();
-			
+
 			myChart.showLoading();
 			//默认不显示名字
 			if (isShowingName)
@@ -121,7 +123,7 @@ function getCollegeInfo(school_name,college_name){
 			// 获取任务关系数据
 			getInstitutionRelation(school_name,college_name);
 		}
-	},"json");
+	});
 }
 
 
@@ -132,16 +134,18 @@ function getCollegeInfo(school_name,college_name){
  * @param {string} college_name 学院名
  */
 function getInstitutionRelation(school_name,college_name){
-	$.post({
+	$.ajax({
 		url:"/api/institution/relation",
+        type: "post",
+		dataType: 'json',
 		data:{"school":school_name,"institution" : college_name},
-		function(jsondata){
+		success: function(jsondata){
 			
 			myChart.hideLoading();
 			var option = getOption(jsondata);
 			myChart.setOption(option);
 		}
-	},"json");
+	});
 }
 
 /**
@@ -149,7 +153,7 @@ function getInstitutionRelation(school_name,college_name){
  */
 function packageAddress() { 
 	var school_address = [];
-	var college_address = [];
+	var college_address = []
 	
 	return {
 		setAddress : function (schoolAddress_info,collegeAddress_info) { 
@@ -178,19 +182,23 @@ var egdata = {
 	"school":[
 		{
 			"name":'清华大学',
-			"position":"116.337975,40.004456"
+			"address":"北京市海淀区双清路30号"
 		},
 		{
 			"name":'北京大学',
-			"position":"116.328847,40.0119"
+			"address":"北京市海淀区颐和园路5号"
 		},
 		{
 			"name":'中国人民大学',
-			"position":"116.313809,40.001671"
+			"address":"北京市海淀区中关村大街59号"
 		},
 		{
 			"name":'北京理工大学',
-			"position":"116.289819,40.030484"
+			"address":"北京海淀区中关村南大街5号"
+		},
+		{
+			"name":'北京航空航天大学',
+			"address":"北京市海淀区学院路37号"
 		}
 	],
 
@@ -229,6 +237,7 @@ var egdata = {
 }
 
 formatAddress(egdata);
+
 SCHOOL_ADDRESS = addressInfo.getSchoolAdd();
 COLLEGE_ADDRESS = addressInfo.getCollegeAdd();
-addToPoint(COLLEGE_ADDRESS);
+addToPoint(SCHOOL_ADDRESS);
