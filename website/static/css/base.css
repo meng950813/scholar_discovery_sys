@@ -1,0 +1,93 @@
+﻿ .main{
+     background-color: white;
+ }
+
+ .top{
+     width: 100%;
+     height: 160px;
+     border: 0px solid green;
+ }
+
+ .logo{
+     width: 160px;
+     height: 160px;
+     border: 0px solid darkgreen;
+     margin-left: 209px;
+     margin-bottom: 100px;
+     float: left;
+     overflow: hidden;
+ }
+
+.topic{
+        width:1000px;
+        height:160px;
+        text-align: center;
+        line-height: 190px;
+        font-size: 75px;
+        margin-left: 450px;
+        padding-right: 40px;
+        font-family: 华文楷体;
+        border: 0px solid darkgreen;
+        }
+
+.middle1{
+        width:100%;
+        height:1px;
+        border: 1px solid black;
+        background-color: black;
+}
+
+.main{
+    width: 100%;
+    height: 1000px;
+    border: 2px solid saddlebrown;
+    margin-top: -10px;
+    background-image:url('/static/backimg.jpg');
+    background-size: cover;
+}
+
+
+ #select{
+     width: 200px;
+     height: 50px;
+     margin-left: 350px;
+     margin-top: 50px;
+     position:absolute;
+     opacity: 0;
+     z-index: 2;
+
+ }
+#select:hover{
+    opacity: 1;
+}
+
+ .map{
+     width: 1200px;
+     height: 900px;
+     margin-left: 350px;
+     margin-top: 50px;
+     position:absolute;
+     border: 2px solid #cccccc;
+     z-index: 1;
+ }
+
+ .map label{
+     max-width: none;
+ }
+
+
+
+ .middle2{
+        width:100%;
+        height:1px;
+        border: 1px solid black;
+        background-color: black;
+        margin-top: 10px;
+}
+
+ .websiteinfo{
+     width: 1900px;
+     height: 200px;
+     border: 0px solid #00adcc;
+     text-align: center;
+ }
