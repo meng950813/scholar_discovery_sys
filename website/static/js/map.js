@@ -102,7 +102,7 @@ function showInfo(e) {
         // 定位学校
         for (var i = 0; i < SCHOOL_ADDRESS.length; i++) {
             var no = i + 1;
-            geocodeSearch(no + "：" + SCHOOL_ADDRESS[i]);
+            geocodeSearch(no , SCHOOL_ADDRESS[i]);
         }
     }
     // 判断缩放等级，显示学院
@@ -127,7 +127,7 @@ function showInfo1(e) {
         delPoint();
         for (var i = 0; i < SCHOOL_ADDRESS.length; i++) {
             var no = i + 1;
-            geocodeSearch(no + "：" + SCHOOL_ADDRESS[i]);
+            geocodeSearch(no , SCHOOL_ADDRESS[i]);
         }
     }
     if (map.getZoom() < 11) {
@@ -162,16 +162,26 @@ function addToPoint(adds) {
  * @param {number} order 序号
  * @param {string} add 地址，格式如下 ： 116.327709,40.011861;清华大学
  */
-function geocodeSearch(add) {
-    var index1 = add.indexOf("：");
-    var index2 = add.indexOf(",");
-    var index3 = add.indexOf(";");
-    var lng = add.substring(index1 + 1, index2);
-    var lat = add.substring(index2 + 1, index3);
-    var address = new BMap.Point(lng, lat);
-    add1 = add.substring(0, index1 + 1) + add.substring(index3+1,address.length);
-    var label = new BMap.Label(add1, { offset: new BMap.Size(20, -10) });
+function geocodeSearch(order,add) {
+    // 分割坐标串与学校名， 结果： ["116.327709,40.011861","清华大学"]
+    var split_arr = add.split(";");
+    
+    // 序号：学校名 ==> 1: 清华大学
+    var label_name = order + ": " + split_arr[1];
+    
+    // 分割坐标，结果： ["116.327709","40.011861"]
+    var point = split_arr[0].split(",");
+
+    // 根据坐标获取位置
+    var address = new BMap.Point(point[0], point[1]);
+    
+    // 设置 label 内容
+    var label = new BMap.Label(label_name, { offset: new BMap.Size(20, -10) });
+    
+    // 设置响应事件
     label.addEventListener("mousedown",schooleattribute);
+    
+    // 添加定位点及标签
     addMarker(address, label);
 
 }
@@ -261,10 +271,10 @@ function schooleattribute(e){
     if (map.getZoom() > 11 && map.getZoom() < 15) {
         // 关闭热力图
         closeHeatmap();
-        // 定位学校
+        // 定位学校A
         for (var i = 0; i < SCHOOL_ADDRESS.length; i++) {
             var no = i + 1;
-            geocodeSearch(no + "：" + SCHOOL_ADDRESS[i]);
+            geocodeSearch(no , SCHOOL_ADDRESS[i]);
         }
     }
     // 判断缩放等级，显示学院
