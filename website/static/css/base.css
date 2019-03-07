@@ -1,93 +1,82 @@
-﻿ .main{
-     background-color: white;
- }
-
- .top{
-     width: 100%;
-     height: 160px;
-     border: 0px solid green;
- }
-
- .logo{
-     width: 160px;
-     height: 160px;
-     border: 0px solid darkgreen;
-     margin-left: 209px;
-     margin-bottom: 100px;
-     float: left;
-     overflow: hidden;
- }
-
-.topic{
-        width:1000px;
-        height:160px;
-        text-align: center;
-        line-height: 190px;
-        font-size: 75px;
-        margin-left: 450px;
-        padding-right: 40px;
-        font-family: 华文楷体;
-        border: 0px solid darkgreen;
-        }
-
-.middle1{
-        width:100%;
-        height:1px;
-        border: 1px solid black;
-        background-color: black;
-}
-
-.main{
+﻿/*---created by chen---*/
+html,body{
     width: 100%;
-    height: 1000px;
-    border: 2px solid saddlebrown;
-    margin-top: -10px;
-    background-image:url('/static/backimg.jpg');
-    background-size: cover;
+    height: 100%;
+}
+body{
+    background: url("../backimg.jpg") no-repeat;
+    background-size: 100% 100%;
+    padding-bottom: 30px;
+}
+html,body,div,p,button,a,h1,h2,h3,h4,h5,h6{
+    box-sizing: border-box;
+}
+.container{
+    background: #fafaf8;
 }
 
+/*header*/
+.navbar-me{
+    border-bottom: 1px solid grey;
+    background: #fafaf8;
+    /*margin-bottom: 0;*/
+}
+.nav-logo{
+    font-size: 30px;
+    margin: 0 15px;
+}
+a:hover{
+    text-decoration: none;
+}
+/* end of header  */
 
- #select{
+
+/* map */
+.map-box{
+    position: relative;
+}
+
+#select{
      width: 200px;
-     height: 50px;
-     margin-left: 350px;
-     margin-top: 50px;
+     height: 40px;
      position:absolute;
-     opacity: 0;
-     z-index: 2;
+     top: 0;
+     left: 0;
+     opacity: 0.7;
+     z-index: 200;
 
  }
 #select:hover{
     opacity: 1;
 }
-
- .map{
-     width: 1200px;
-     height: 900px;
-     margin-left: 350px;
-     margin-top: 50px;
-     position:absolute;
-     border: 2px solid #cccccc;
-     z-index: 1;
- }
-
- .map label{
-     max-width: none;
- }
-
-
-
- .middle2{
-        width:100%;
-        height:1px;
-        border: 1px solid black;
-        background-color: black;
-        margin-top: 10px;
+#map{
+    height: 700px;
+    min-height: 100%;
+    background: #777;
+    cursor: pointer;
+    z-index: 100;
+    border: 1px solid #000000;
 }
 
- .websiteinfo{
-     width: 1900px;
-     height: 200px;
-     border: 0px solid #00adcc;
-     text-align: center;
+#map label{
+     max-width: none;
+     cursor: pointer;
  }
+
+/* 显示弹出窗中学院简介信息的样式 */
+#myModal{
+
+}
+
+
+.lead p{
+    color: #000;
+    font-size: 16px;
+    text-indent: 30px;
+}
+
+/* footer */
+.page-footer {
+    border-top: 1px solid grey;
+    padding: 5px;
+}

@@ -126,27 +126,22 @@ function showInfo(e) {
 //右击缩小
 function showInfo1(e) {
     map.setCenter(new BMap.Point(e.point.lng, e.point.lat));
-    map.setZoom(map.getZoom() - 3);
-    if (map.getZoom() > 10 && map.getZoom() < 17) {
+    map.setZoom(map.getZoom() - 2);
+    if (map.getZoom() > 11 && map.getZoom() < 15) {
         delPoint();
         for (var i = 0; i < SCHOOL_ADDRESS.length; i++) {
-            var index1 = SCHOOL_ADDRESS[i].lastIndexOf("(");
-            var string1 = SCHOOL_ADDRESS[i].substring(0, index1 + 1);
-            var string2 = SCHOOL_ADDRESS[i].substring(index1 + 1, SCHOOL_ADDRESS[i].length + 1);
             var no = i + 1;
-            var string3 = string1 + no + ":" + string2;
-            geocodeSearch(string3);
+            geocodeSearch(no + "：" + SCHOOL_ADDRESS[i]);
         }
     }
-    if (map.getZoom() < 10) {
+    if (map.getZoom() < 11) {
         delPoint();
-        heatmapOverlay = new BMapLib.HeatmapOverlay({ "radius": 20 });
+        heatmapOverlay = new BMapLib.HeatmapOverlay({ "radius": 30 });
         map.addOverlay(heatmapOverlay);
         heatmapOverlay.setDataSet({ data: HOT_SCHOOL_POINTS, max: 100 });
         heatmapOverlay.show();
         position();
     }
-
 }
 
 
@@ -176,6 +171,7 @@ function geocodeSearch(add) {
             var index = add.indexOf("(");
             add = add.substring(index + 1, add.length - 1);
             var label = new BMap.Label(add, { offset: new BMap.Size(20, -10) });
+            label.addEventListener("mousedown",schooleattribute);
             addMarker(address, label);
         }
     })
@@ -240,5 +236,46 @@ function attribute(e) {
     // 发送获取学院简介的ajax请求
     getCollegeInfo(add_arr[0],add_arr[1]);    
 
+
+}
+
+//点击学校标签使学校地址居中放大
+function schooleattribute(e){
+    //获取学校地址坐标
+    var address = e.target.content.split("：")[1];
+    var fulladdress;
+    for(var i=0; i< SCHOOL_ADDRESS.length; i++){
+        if(SCHOOL_ADDRESS[i].indexOf(address) > 0){
+            fulladdress = SCHOOL_ADDRESS[i];
+        }
+    }
+    lng = fulladdress.split(",")[0];
+    lat = fulladdress.substring(fulladdress.indexOf(",")+1,fulladdress.indexOf(";"));
+    console.log(lng, lat);
+
+    //设置地图中心点
+    map.setCenter(new BMap.Point(lng, lat));
+
+    map.setZoom(map.getZoom() + 2);
+
+    // 判读当前缩放等级，一定程度时取消热力图，显示学校名
+    if (map.getZoom() > 11 && map.getZoom() < 15) {
+        // 关闭热力图
+        closeHeatmap();
+        // 定位学校
+        for (var i = 0; i < SCHOOL_ADDRESS.length; i++) {
+            var no = i + 1;
+            geocodeSearch(no + "：" + SCHOOL_ADDRESS[i]);
+        }
+    }
+    // 判断缩放等级，显示学院
+    if (map.getZoom() > 14) {
+        // console.log(COLLEGE_ADDRESS);
+        delPoint();
+        for (var i = 0; i < COLLEGE_ADDRESS.length; i++) {
+            var order = i + 1;
+            collegegeocodeSearch(order , COLLEGE_ADDRESS[i]);
+        }
+    }
 
 }

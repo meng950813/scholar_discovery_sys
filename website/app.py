@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 logging.basicConfig(level=logging.DEBUG)
 # 初始化数据库
-db.create_engine('root', '9527', 'training')
+db.create_engine('root', '111111', 'eds_base', '47.106.83.33')
 # 导入蓝图
 app.register_blueprint(api_blueprint)
 

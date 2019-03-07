@@ -1,13 +1,19 @@
-/*---created by chen---*/
 html,body{
     width: 100%;
-    height: 100%;
+    height: 1435px;
 }
 body{
-    background: url("../backimg.jpg") no-repeat;
+    /*background: url("../backimg.jpg") no-repeat;*/
     background-size: 100% 100%;
-    padding-bottom: 30px;
 }
+
+.main{
+    background: url("../backimg.jpg") no-repeat;
+    width: 100%;
+    background-size: 100% 100%;
+    height: auto;
+}
+
 html,body,div,p,button,a,h1,h2,h3,h4,h5,h6{
     box-sizing: border-box;
 }
@@ -19,6 +25,7 @@ html,body,div,p,button,a,h1,h2,h3,h4,h5,h6{
 .navbar-me{
     border-bottom: 1px solid grey;
     background: #fafaf8;
+    margin-bottom: 0px;
     /*margin-bottom: 0;*/
 }
 .nav-logo{
@@ -28,55 +35,603 @@ html,body,div,p,button,a,h1,h2,h3,h4,h5,h6{
 a:hover{
     text-decoration: none;
 }
-/* end of header  */
 
 
-/* map */
-.map-box{
-    position: relative;
+.per-info{
+    width: 1050px;
+    height: 450px;
+    margin-left: 435px;
+    margin-top: 20px;
+    border: 2px solid darkgray;
+    background-color: #ffffff;
 }
 
-#select{
-     width: 200px;
-     height: 40px;
-     position:absolute;
-     top: 0;
-     left: 0;
-     opacity: 0.7;
-     z-index: 200;
+.per-info-title{
+    width: 233px;
+    height: 80px;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 500;
+    border-bottom: 1px dotted #7d3f98;
+    margin: 0 auto 1em;
+    margin-top: 10px;
+    line-height: 115px;
+    text-transform: uppercase;
+    color: #7d3f98;
+    font-family: "PT Sans", sans-serif;
+}
 
+.per-info-content{
+    width: 890px;
+    height: 335px;
+    margin: 0 auto 1em;
+    margin-top: -25px;
+    border: 0px solid #000000;
+    background-color: white;
+}
+
+.per-info-content-title{
+    width:140px;
+    height:30px;
+    font-size: 25px;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: 20px;
+    margin-left: 90px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 5px;
+    color: #14a6ff;
+}
+
+.teacher-name{
+    width:100px;
+    height:30px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: 20px;
+    margin-left: 90px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 5px;
+    color: #2f2f2f;
+}
+
+.teacher-name-c{
+    width:200px;
+    height:30px;
+    font-size: 20px;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: -30px;
+    margin-left: 200px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 5px;
+}
+
+
+.teacher-title{
+    width:100px;
+    height:30px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: -30px;
+    margin-left: 520px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 5px;
+}
+
+.teacher-title-c{
+    width:200px;
+    height:30px;
+    font-size: 20px;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: -30px;
+    margin-left: 630px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 1px;
+}
+
+.teacher-name{
+    width:100px;
+    height:30px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: 20px;
+    margin-left: 90px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 5px;
+    color: #2f2f2f;
+}
+
+.teacher-name-c{
+    width:200px;
+    height:30px;
+    font-size: 18px;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: -30px;
+    margin-left: 200px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 1px;
+}
+
+
+.teacher-school{
+    width:100px;
+    height:30px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: -30px;
+    margin-left: 520px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 5px;
+}
+
+.teacher-school-c{
+    width:200px;
+    height:30px;
+    font-size: 18px;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: -30px;
+    margin-left: 630px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 1px;
+}
+
+.teacher-title{
+    width:100px;
+    height:30px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: 20px;
+    margin-left: 90px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 5px;
+    color: #2f2f2f;
+}
+
+.teacher-title-c{
+    width:200px;
+    height:30px;
+    font-size: 18px;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: -30px;
+    margin-left: 200px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 1px;
+}
+
+.teacher-email{
+    width:100px;
+    height:30px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: -30px;
+    margin-left: 520px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 5px;
+}
+
+.teacher-email-c{
+    width:200px;
+    height:30px;
+    font-size: 18px;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: -30px;
+    margin-left: 630px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 0px;
+}
+
+
+.teacher-url{
+    width:100px;
+    height:30px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: 20px;
+    margin-left: 90px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 4px;
+    color: #2f2f2f;
+}
+
+.teacher-url-c{
+    width:670px;
+    height:30px;
+    font-size: 15px;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: -30px;
+    margin-left: 200px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 1px;
+}
+
+ .teacher-url-c a{
+     text-decoration: none;
+     color: #0d14ff;
  }
-#select:hover{
-    opacity: 1;
-}
-#map{
-    height: 700px;
-    min-height: 100%;
-    background: #777;
-    cursor: pointer;
-    z-index: 100;
-    border: 1px solid #000000;
+
+ .teacher-url-c:hover a{
+
+     color: #ff9b54;
+ }
+
+.teacher-field{
+    width:100px;
+    height:30px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "PT Sans", sans-serif;
+    line-height: 30px;
+    margin-top: 35px;
+    margin-left: 90px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 4px;
+    color: #2f2f2f;
 }
 
-#map label{
-     max-width: none;
+.teacher-field-c{
+    width:670px;
+    height:90px;
+    font-size: 15px;
+    font-family: "PT Sans", sans-serif;
+    line-height: 38px;
+    margin-top: -33px;
+    margin-left: 200px;
+    border: 0px solid #cc0b0a;
+    letter-spacing: 1px;
+}
+
+.social-net{
+    width: 1050px;
+    height: 600px;
+    border: 1px solid darkgray;
+    margin-top: 10px;
+    margin-left: 435px;
+    background-color: #f3f3f3;
+}
+
+.social-net-title{
+    width: 233px;
+    height: 80px;
+    text-align: center;
+    font-size: 35px;
+    font-weight: 500;
+    border-bottom: 1px dotted #7d3f98;
+    margin: 0 auto 1em;
+    margin-top: 10px;
+    line-height: 115px;
+    text-transform: uppercase;
+    color: #7d3f98;
+    font-family: "PT Sans", sans-serif;
+}
+
+.little1{
+    width: 105px;
+    height: 33px;
+    border: 0px solid #cccccc;
+    font-size: 22px;
+    font-family: 新宋体;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-left: 109px;
+}
+
+
+
+.social-net-image{
+    width:500px;
+    height: 400px;
+    margin-left: 78px;
+    margin-top: 15px;
+    border: 2px solid #cccccc;
+    float: left;
+    background-image: url("/static/relationship1.png");
+    background-size: 461px;
+}
+
+.little2{
+    width: 105px;
+    height: 33px;
+    border: 0px solid #cccccc;
+    font-size: 22px;
+    font-family: 新宋体;
+    font-weight: bold;
+    margin-top: -30px;
+    margin-left: 667px;
+}
+
+ .refresh{
+     width: 80px;
+     height: 20px;
+     margin-left: 900px;
+     margin-top: -28px;
+     border: 0px solid #00adcc;
+ }
+
+
+ .refresh a:hover{
      cursor: pointer;
+     text-decoration: none;
+     color: #cc8916;
  }
 
-/* 显示弹出窗中学院简介信息的样式 */
-#myModal{
+.recommend{
+    width: 350px;
+    height:400px;
+    margin-top: 15px;
+    border: 2px solid #cccccc;
+    float: right;
+    margin-right: 50px;
+    overflow: hidden;
+}
+
+.close-tea-group{
+    width: auto;
+    height: 118px;
+    margin-bottom: 5px;
+    border: 0px solid #4e11ff;
+    border-bottom: 1px dotted #7d3f98;
+}
+
+ul{
+    list-style: none;
+    padding-left: 0;
+    margin-top: auto;
+}
+ul li{
+     overflow: hidden;
+     padding-bottom: 5px;
+     font-family: 微软雅黑;
+}
+
+.close-tea-image{
+    width: 40px;
+    height: 40px;
+    margin-top:7px;
+    margin-left: 20px;
+    border-radius:50%;
+    border: 0px solid #9C1A1C;
+}
+
+ .close-tea-name{
+     width: auto;
+     height: 20px;
+     float: left;
+     margin-left:70px;
+     margin-top: -35px;
+     font-size: 18px;
+     border: 0px solid #00adcc;
+     line-height: 20px;
+ }
+
+ .close-tea-name a{
+     text-decoration: none;
+     color: #0d14ff;
+ }
+
+ .close-tea-name:hover a{
+     font-weight: bold;
+     color: #ff9b54;
+ }
+
+ .close-tea-school{
+     width: auto;
+     height: 20px;
+     margin-top: -5px;
+     margin-left: 70px;
+     font-size: 16px;
+     border: 0px solid #cc009b;
+     line-height: 20px;
+     color: black;
+ }
+
+ .close-tea-college{
+     width: auto;
+     height: 20px;
+     margin-top: -20px;
+     margin-left: 220px;
+     font-size: 16px;
+    border: 0px solid #cc009b;
+ }
+
+ .close-tea-field{
+     width: auto;
+     height: 40px;
+     border: 0px solid #ff0300;
+     font-size: 16px;
+     margin-left: 70px;
+     margin-top: 15px;
+     color: black;
+     overflow: hidden;
+     word-break:break-all;
+     word-wrap: break-word;
+	display:-webkit-box;
+	-webkit-line-clamp:2;
+	-webkit-box-orient:vertical;
+ }
+
+.ach{
+    width: 1050px;
+    border: 1px solid darkgray;
+    margin-top: 10px;
+    margin-left: 435px;
+    background-color: #f3f3f3;
+}
+
+.ach-title{
+    width: 300px;
+    height: 80px;
+    text-align: center;
+    font-size: 35px;
+    font-weight: 500;
+    border-bottom: 1px dotted #7d3f98;
+    /*border: 1px solid #ff0300;*/
+    margin: 0 auto 1em;
+    margin-top: 10px;
+    line-height: 115px;
+    text-transform: uppercase;
+    color: #7d3f98;
+    font-family: "PT Sans", sans-serif;
+}
+
+.ach-total{
+    width:600px;
+    height: 50px;
+    margin-left: 80px;
+    font-size: 18px;
+}
+
+.ach-total td{
+    width: 75px;
+}
+
+.paper{
+    width: 890px;
+    height: auto;
+    margin-left: 78px;
+    border: 0px solid #ff0300;
+}
+
+.paper-group{
+    width: 850px;
+    height: 80px;
+    margin: auto;
+    margin-top: 10px;
+    border: 0px solid #00adcc;
+}
+
+.paper-name{
+    width: 840px;
+    height:50px;
+    line-height: 50px;
+    border: 0px solid #A5D6D9;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding-bottom: 20px;
+
 
 }
 
+.paper-name a{
+    color: #000000;
+    text-decoration: none;
+}
 
-.lead p{
-    color: #000;
+.paper-name a:hover{
+    color: #ff9b54;
+
+}
+
+ .paper-publisher{
+    width:auto;
+    height:20px;
+    border: 0px solid #d91300;
+    display: inline;
     font-size: 16px;
-    text-indent: 30px;
 }
 
-/* footer */
+.paper-year{
+    width: auto;
+    height:20px;
+    border: 0px solid #0001d9;
+    display: inline;
+    font-size: 16px;
+     margin-left: 30px;
+}
+
+.paper-keyword{
+    width: auto;
+    height:20px;
+    border: 0px solid #00d915;
+    display: inline;
+    font-size: 16px;
+     margin-left: 30px;
+}
+
+.project{
+    width: 890px;
+    height: auto;
+    margin-left: 78px;
+    border: 0px solid #ff0300;
+}
+
+.pro-group{
+    width: 850px;
+    height: 80px;
+    margin: auto;
+    margin-top: 10px;
+    border: 0px solid #00adcc;
+}
+
+.pro-name{
+    width: 840px;
+    height:50px;
+    line-height: 50px;
+    border: 0px solid #A5D6D9;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding-bottom: 20px;
+    color: black;
+
+}
+
+ .pro-money{
+    width:auto;
+    height:20px;
+    border: 0px solid #d91300;
+    display: inline;
+    font-size: 16px;
+}
+
+.pro-year{
+    width: auto;
+    height:20px;
+    border: 0px solid #0001d9;
+    display: inline;
+    font-size: 16px;
+     margin-left: 30px;
+}
+
+.pro-level{
+    width: auto;
+    height:20px;
+    border: 0px solid #00d915;
+    display: inline;
+    font-size: 16px;
+     margin-left: 30px;
+}
+
+ /* footer */
+#bottom{
+    position: relative;
+    width: 1050px;
+    margin-left: 435px;
+}
+
 .page-footer {
     border-top: 1px solid grey;
-    padding: 5px;
+    padding-top: 10px;
+    margin-top: 20px;
 }
