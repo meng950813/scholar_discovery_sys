@@ -144,17 +144,18 @@ function showInfo1(e) {
     }
 }
 
-
 /**
- * 将地址信息转换为经纬度
- * @param {array} adds 学校地址
+ * 将学院经纬添加到热力图数组中
+ * @param {array} adds 学校地址 双清路30号清华大学(清华大学,马克思主义学院);116.327709,40.011861
  */
 function addToPoint(adds) {
     for (var j = 0; j < adds.length; j++) {
-        myGeo.getPoint(adds[j], function (point) {
             // TODO  set 'count' should be more meaningful
-            HOT_SCHOOL_POINTS.push({ "lng": point.lng, "lat": point.lat, "count": j * 500000 });
-        })
+            var index1 = adds[j].indexOf(";");
+            var index2 = adds[j].lastIndexOf(",");
+            lng = adds[j].substring(index1 + 1, index2);
+            lat = adds[j].substring(index2 + 1, adds[j].length);
+            HOT_SCHOOL_POINTS.push({ "lng": lng, "lat": lat, "count": j * 5000});
     }
 }
 

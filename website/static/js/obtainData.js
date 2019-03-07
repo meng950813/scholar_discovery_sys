@@ -182,62 +182,57 @@ var egdata = {
 	"school":[
 		{
 			"name":'清华大学',
-			"address":"北京市海淀区双清路30号"
+			"position":"116.337975,40.004456"
 		},
 		{
 			"name":'北京大学',
-			"address":"北京市海淀区颐和园路5号"
+			"position":"116.328847,40.0119"
 		},
 		{
 			"name":'中国人民大学',
-			"address":"北京市海淀区中关村大街59号"
+			"position":"116.313809,40.001671"
 		},
 		{
 			"name":'北京理工大学',
-			"address":"北京海淀区中关村南大街5号"
-		},
-		{
-			"name":'北京航空航天大学',
-			"address":"北京市海淀区学院路37号"
+			"position":"116.289819,40.030484"
 		}
 	],
 
 	"college":[
 		{
 			'school': '清华大学',
-			'institution': '公共管理学院', 
+			'institution': '公共管理学院',
 			'address': '北京市海淀区双清路30号清华大学',
 			'position' : "116.337975,40.004456"
 		},
 		{
 			'school': '清华大学',
-			'institution': '马克思主义学院', 
+			'institution': '马克思主义学院',
 			'address': '双清路30号清华大学',
 			'position' : "116.327709,40.011861"
 		},
 		{
 			'school': '清华大学',
-			'institution': '机械工程学院', 
+			'institution': '机械工程学院',
 			'address': '双清路30号清华大学医学科学楼',
 			'position' : "116.324311,40.01068"
 		},
 		{
 			'school': '清华大学',
-			'institution': '核能与新能源技术研究院', 
+			'institution': '核能与新能源技术研究院',
 			'address': '北京市海淀区清华大学-何善衡楼内',
 			'position' : "116.337058,40.009361"
 		},
 		{
 			'school': '清华大学',
-			'institution': '材料学院', 
+			'institution': '材料学院',
 			'address': '北京市海淀区双清路30号清华园清华大学',
 			'position' : "116.330553,40.008631"
 		},
 	]
-}
+};
 
 formatAddress(egdata);
-
 SCHOOL_ADDRESS = addressInfo.getSchoolAdd();
 COLLEGE_ADDRESS = addressInfo.getCollegeAdd();
-addToPoint(SCHOOL_ADDRESS);
+addToPoint(COLLEGE_ADDRESS)
