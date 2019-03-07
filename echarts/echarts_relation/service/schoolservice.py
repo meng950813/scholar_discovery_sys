@@ -53,7 +53,7 @@ class SchoolService:
                 if school['name'] == school_name:
                     break
             else:
-                schools.append({'name': school_name, 'address': address})
+                schools.append({'name': school_name, 'position': result['POSITION']})
 
         return schools, colleges
 
