@@ -20,10 +20,19 @@
             color:white;
             opacity:0;
         }
+        #top_list {
+            position: absolute;
+            transform: translate(900px, -600px);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <svg width="1000" height="700"></svg>
+    <div>
+        <ul id="top_list">
+        </ul>
+    </div>
 </body>
 <script type="text/javascript">
     //中国地图
@@ -38,5 +47,28 @@
     chinaMap.institutions = data;
     //显示中国地图
     chinaMap.showChinaMap();
+    chinaMap.onUpdateMap = onUpdateMap;
+    //获得数据项
+    let topList = d3.select('#top_list');
+    function clickItem(item) {
+        chinaMap.clickTopItem(item);
+    }
+
+    function onUpdateMap(items, index) {
+        let update = topList.selectAll('li')
+            .data(items)
+            .text(function (d, i) {
+                return d.name;
+            });
+        update.enter()
+            .append('li')
+            .text(function (d, i) {
+                return d.name;
+            })
+            .on('click', clickItem);
+
+        update.exit()
+            .remove();
+    }
 </script>
 </html>
