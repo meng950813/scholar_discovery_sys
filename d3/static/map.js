@@ -110,9 +110,9 @@ class ChinaMap{
         //添加保存标注的点
         this.svg.append('g')
             .attr('id', 'tag');
-        //默认地图颜色
+        //地图颜色 [0,1]映射到['#ffffcc', '#800026']
         this.mapColor = d3.interpolate('#ffffcc', '#800026');
-        //投影函数
+        //投影函数 用于将GeoJson映射到像素
         this.projection = d3.geoMercator()
             .translate([this.width / 2, this.height / 2]);
         //地理路径生成器
@@ -126,6 +126,8 @@ class ChinaMap{
         this.filepath_list = ['mapdata/china.json', 'mapdata/geometryProvince', 'mapdata/geometryCouties'];
         //栈，用于保存文件名和地图名
         this.stack = [{filename: this.filepath_list[0], 'name': '中国'}];
+        //保存已经加载过的文件数据，有则不再获取
+        this.loadedData = {};
         //机构经纬度 数组
         this.institutions = [];
         //提示框
@@ -150,9 +152,8 @@ class ChinaMap{
         //存入栈中
         this.stack.push({'filename': filename,'name': name});
         let that = this;
-        //加载文件
-        d3.json(filename).then(
-            function (jsondata) {
+        //加载文件成功都会保存文件
+        function success(jsondata) {
             //返回的是空数组
             if (jsondata.length == 0) {
                 return;
@@ -169,7 +170,18 @@ class ChinaMap{
                     .remove();
             //更新面包屑导航栏
             that.updateBreadCrumb(name, that.scaleLevel);
-        });
+        }
+        //已经加载过的数据，则直接显示即可
+        if (filename in this.loadedData){
+            success(this.loadedData[filename]);
+        }
+        //加载文件
+        else{
+            d3.json(filename).then(function (jsondata) {
+                that.loadedData[filename] = jsondata;
+                success(jsondata);
+            });
+        }
     }
 
     /**
@@ -187,7 +199,6 @@ class ChinaMap{
             .scale(zoomScale * 45);
         //生成位置及对应的权值 主要用于显示热力图
         let address_weights = this.handleHotSpotData();
-        console.log(address_weights);
         //生成地图
         that.svg.select('#map')
             .selectAll('path')
@@ -333,13 +344,12 @@ class ChinaMap{
         return schools;
     }
     /**
-     * 绘制学校
+     * 私有函数 绘制学校所在的位置 不过目前并未添加事件
      */
     redrawInstitutions(){
         //获取学校
         let schools = this.handleInstitutions();
-        console.log(schools);
-        //绘制
+        //使用id为tag的g来保存所有的文字
         let group = this.svg.select('#tag')
             .selectAll('g')
             .data(schools)
@@ -354,7 +364,7 @@ class ChinaMap{
             .attr('d', 'm16.98001,0.50592c-8.560135,0 -15.5,6.160021 -15.5,13.758243c0,7.600051 15.5,33.241746 15.5,33.241746s15.5,-25.641696 15.5,-33.241746c0,-7.598221 -6.9378,-13.758243 -15.5,-13.758243z')
             .attr('stroke-width', '1')
             .attr('fill', 'red');
-
+        //添加数字
         group.append('text')
             .attr('transform', 'translate(-6,-12)')
             .attr('fill', 'white')
@@ -368,14 +378,16 @@ class ChinaMap{
         */
     }
     /**
-     * 私有函数 点击面包屑导航 仅仅用于回退
+     * 私有函数 点击面包屑导航 仅仅用于地图回退
      * @param index 点击的导航栏的索引
      */
     clickBreadcrumb(index) {
+        //第一次直接显示。若点击的索引和缩放等级相同，则不进行操作
         if (this.visible && this.scaleLevel == index)
             return;
         //显示地图
         this.scaleLevel = index;
+        //获取文件的url和名字
         let realpath = this.stack[this.scaleLevel].filename;
         let name = this.stack[this.scaleLevel].name;
         //维护栈
@@ -432,9 +444,9 @@ class ChinaMap{
             filename = id + '.json';
         //隐藏tooltip
         this.mouseout(path, datum, index);
-        //回调show，展示地图
+        //获取url
         let realpath = this.filepath_list[this.scaleLevel] + '/' + filename;
-        //展示
+        //加载并展示地图
         this.loadAndShowMap(realpath, datum.properties.name);
     }
 
@@ -454,9 +466,9 @@ class ChinaMap{
      * @param index 选择集的索引
      */
     mouseover(path, datum, index){
+        //鼠标悬浮时设置地图块的透明度
         d3.select(path)
-            //.attr('fill', 'yellow');
-            .style('opacity', 0.3);
+            .style('opacity', 0.2);
         //渐渐显示tooltip
         this.tooltip.transition()
             .duration(200)
