@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>教程学习</title>
+    <script src="{{ url_for('static', filename='d3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='map.js') }}"></script>
+    <style>
+        #tooltip {
+            background:rgba(0,0,0,0.9);
+            position: absolute;
+            text-align: center;
+            margin: 10px;
+            border:1px solid grey;
+            pointer-events: none;
+            border-radius:5px;
+            font-size:12px;
+            width:auto;
+            padding:4px;
+            color:white;
+            opacity:0;
+        }
+    </style>
+</head>
+<body>
+    <svg width="1000" height="700"></svg>
+</body>
+<script type="text/javascript">
+    //中国地图
+    let chinaMap = new ChinaMap(d3.select('body').select('svg'));
+    //TODO:假数据 注意，数据库中的省份不带有省/市
+    let data = [
+        {'school': '南京大学', 'address':[ '中国', '江苏省', '南京市'], 'weight': 92, 'longitude':118.966713 , 'latitude': 32.122396},
+        {'school': '东南大学', 'address':[ '中国', '江苏省', '南京市'], 'weight': 90, 'longitude':118.961851 , 'latitude': 32.125119},
+        //{'school': '南京大学', 'address':[ '中国', '江苏省', '南京市'], 'weight': 92, 'longitude': 118.825176 , 'latitude': 31.889893},
+        {'school': '清华大学', 'address':[ '中国', '北京市', '北京市'], 'weight': 71, 'longitude':116.342122, 'latitude': 39.999281},
+        ];
+    chinaMap.institutions = data;
+    //显示中国地图
+    chinaMap.showChinaMap();
+</script>
+</html>
