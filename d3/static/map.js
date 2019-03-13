@@ -134,6 +134,7 @@ class ChinaMap{
         this.tooltip = d3.select('body')
             .append('div')
             .attr('id', 'tooltip');
+        this.special_cities = ['北京市', '天津市', '上海市', '台湾省', '海南省', '香港特别行政区', '澳门特别行政区'];
     }
 
     /**
@@ -141,6 +142,34 @@ class ChinaMap{
      */
     showChinaMap(){
         this.clickBreadcrumb(0);
+    }
+
+    clickTopItem(item){
+        if ('selector' in item && 'datum' in item){
+            this.clickMap(item.selector, item.datum);
+        }
+    }
+
+    onUpdateMap(items){
+    }
+
+    /**
+     * 地图更新时回调该函数，需要外部重写
+     * @param items 保存着更新后的数据
+     * @param {Number} index 索引 0时redrawMap回调，1则是redrawInstitutions()回调
+     */
+    updateMapCallback(items, index){
+        if (index == 0){
+            this.onUpdateMap(items);
+        }//尝试提取数据
+        else if (index == 1){
+            let data = [];
+
+            for (let i = 0;i < items.length; i++){
+                data.push({'name': items[i].school});
+            }
+            this.onUpdateMap(data);
+        }
     }
 
     /**
@@ -152,9 +181,9 @@ class ChinaMap{
         //存入栈中
         this.stack.push({'filename': filename,'name': name});
         let that = this;
-        //加载文件成功都会保存文件
+        //加载文件成功回调函数
         function success(jsondata) {
-            //返回的是空数组
+            //若是空数组，则直接退出
             if (jsondata.length == 0) {
                 return;
             }
@@ -164,6 +193,7 @@ class ChinaMap{
             //二级后开始显示学校标记
             if (that.scaleLevel > 0)
                 that.redrawInstitutions();
+            //中国地图删除标记
             else
                 that.svg.select('#tag')
                     .selectAll('g')
@@ -171,7 +201,7 @@ class ChinaMap{
             //更新面包屑导航栏
             that.updateBreadCrumb(name, that.scaleLevel);
         }
-        //已经加载过的数据，则直接显示即可
+        //已经加载过数据，则直接回调函数
         if (filename in this.loadedData){
             success(this.loadedData[filename]);
         }
@@ -199,6 +229,8 @@ class ChinaMap{
             .scale(zoomScale * 45);
         //生成位置及对应的权值 主要用于显示热力图
         let address_weights = this.handleHotSpotData();
+        //用于回调updateMapCallback的数据
+        let items = [];
         //生成地图
         that.svg.select('#map')
             .selectAll('path')
@@ -207,8 +239,10 @@ class ChinaMap{
             .append('path')
             .each(function (d, i) {
                 d.weight = 0;
-                if (address_weights.has(d.properties.name))
+                if (address_weights.has(d.properties.name)){
                     d.weight = address_weights.get(d.properties.name);
+                    items.push({'name': d.properties.name, 'selector': this, 'weight': d.weight, 'datum': d});
+                }
             })
             .attr('stroke', '#000')
             .attr('stroke-width', 1)
@@ -223,11 +257,17 @@ class ChinaMap{
                 that.mousemove(this, d, i);
             })
             .on('click', function (d, i) {
-                that.clickMap(this, d, i);
+                that.clickMap(this, d);
             })
             .on('mouseout', function (d, i) {
-                that.mouseout(this, d, i);
+                that.mouseout(this, d);
             });
+        //回调更新地图钩子函数
+        if (items.length > 0)
+            this.updateMapCallback(items, 0);
+        else{
+            this.updateMapCallback(this.getLimitedInstitutions(), 1);
+        }
     }
 
     /**
@@ -271,7 +311,8 @@ class ChinaMap{
         });
         return address_values;
     }
-    handleInstitutions(){
+
+    getLimitedInstitutions(){
         //筛选对应的学校
         let schools = [];
 
@@ -294,6 +335,14 @@ class ChinaMap{
             if (ret)
                 schools.push(d);
         });
+        return schools;
+    }
+    /**
+     * 处理学院数据并返回
+     * @returns {Array} 处理好的数组
+     */
+    handleInstitutions(){
+        let schools = this.getLimitedInstitutions();
         //绘制机构
         if (schools.length <= 0)
             return schools;
@@ -343,12 +392,15 @@ class ChinaMap{
         }
         return schools;
     }
+
     /**
      * 私有函数 绘制学校所在的位置 不过目前并未添加事件
      */
     redrawInstitutions(){
         //获取学校
         let schools = this.handleInstitutions();
+        //回调地图更新函数
+        //this.updateMapCallback(schools, 1);
         //使用id为tag的g来保存所有的文字
         let group = this.svg.select('#tag')
             .selectAll('g')
@@ -429,7 +481,7 @@ class ChinaMap{
      * @param datum DOM对应的数据
      * @param index 选择集的索引
      */
-    clickMap(path, datum, index){
+    clickMap(path, datum){
         //超出缩放等级
         if (this.scaleLevel >= this.filepath_list.length - 1)
             return;
@@ -443,7 +495,7 @@ class ChinaMap{
         else
             filename = id + '.json';
         //隐藏tooltip
-        this.mouseout(path, datum, index);
+        this.mouseout(path, datum);
         //获取url
         let realpath = this.filepath_list[this.scaleLevel] + '/' + filename;
         //加载并展示地图
@@ -492,9 +544,8 @@ class ChinaMap{
      * 私有函数 鼠标移出地图块回调函数
      * @param path 指向了path
      * @param datum DOM对应的数据
-     * @param index 选择集的索引
      */
-    mouseout(path, datum, index){
+    mouseout(path, datum){
         d3.select(path)
             //.attr('fill', this.mapColor(datum.weight));
             .style('opacity', 1);
