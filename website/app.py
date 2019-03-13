@@ -14,7 +14,7 @@ app.register_blueprint(api_blueprint)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('basic.html')
 
 
 @app.route('/homepage/<int:teacher_id>')
