@@ -12,3 +12,7 @@
 # doc/**/*.txt  
 
 query/querydata
+
+**/.idea
+
+**/__pycache__
