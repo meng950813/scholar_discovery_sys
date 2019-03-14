@@ -78,7 +78,7 @@ function formatAddress(adds_info){
 		var oneSchool = adds_info.school[i];
 		
 		// 此处信任后端数据 ==> 学校名唯一 ==> 不再判断，直接添加
-		school_add.push(`${oneSchool.address}(${oneSchool.name})`);
+		school_add.push(`${oneSchool.position};${oneSchool.name}`);
 	}
 
 	for(var i in adds_info.college){

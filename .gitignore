@@ -19,4 +19,7 @@ spider/**/*.sql
 spider/**/*.log
 
 **/__pycache__
-*/.idea/*
+
+
+**/.idea
+
