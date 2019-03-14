@@ -1,0 +1,49 @@
+/* 通用样式 */
+body,html{
+	height:100%;
+	width:100%;
+}
+.btn_color{
+	background-color:#00d3d4;
+	color:#fff
+}
+ul li{
+	list-style: none;
+	cursor: pointer;
+}
+
+
+/* header */
+.navbar #logo{
+	padding: 2px;
+}
+
+
+/* footer */
+.footer { 
+	margin:0px; 
+	background-color: #fff; 
+	text-align: center;
+	clear: both;
+	letter-spacing: 0.08em;}
+
+.footer .copyright { 
+	color: #787878;
+	font-size: 12px;
+}
+.footer .copyright span { 
+	color: #57dfc7;
+}
+
+
+/* Tool */
+.display_none{
+	display: none;
+}
+.display_block{
+	display: block;
+}
+
+[v-cloak]{ 
+	display: none; 
+}
