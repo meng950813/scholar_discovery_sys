@@ -115,11 +115,47 @@
     min-height:200px;
     width:200px;
 	padding: 10px;
-	background:#FAFAB8;
+	background:#fafaf8;
 	opacity: 0.8;
 }
+
+
+#top_list {
+	/* 生成一个 名为 top_list_item 的计数器，且从 0 开始 */
+	counter-reset: top_list_item 0;
+	font-size: 14px;
+}
+
+
 #top_list > li{
 	cursor: pointer;
 	padding: 10px;
 	border-bottom: 1px dotted #777;
+	border-radius: 15px;
+}
+
+
+#top_list > li:hover{
+	background: #fafae0;
+}
+
+/* 给结果排名 */
+#top_list > li:before{
+	content: counter(top_list_item);
+	display: inline-block;
+	padding-right: 10px;
+
+	/* 设置计数器自增 */
+	counter-increment: top_list_item;
+}
+
+
+#top_list > li:nth-child(1):before{
+	color: #f54545;
+}
+#top_list > li:nth-child(2):before{
+	color:#ff8547;
+}
+#top_list > li:nth-child(3):before{
+	color: #ffac38;
 }
