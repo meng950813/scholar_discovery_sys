@@ -22,4 +22,5 @@ spider/**/*.log
 query/querydata
 
 
-**/.idea
+**/__pycache__
+
