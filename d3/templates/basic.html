@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>专家发现系统</title>
+        
+        <link href="../static/css/public.css" rel="stylesheet" type="text/css" />
+        <link href="../static/css/index.css" rel="stylesheet" type="text/css" />
+        
+        <link rel="stylesheet" href="../static/resources/bootstrap3/css/bootstrap.min.css" />
+        
+        <link rel="icon" href="../static/images/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+      
+    
+    <!-- header -->
+    <nav role="navigation" class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="#" id="logo" class="navbar-brand ">
+                    <img src="../static/images/logo-new.png"/>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" >发布需求</a>
+                    </li>
+                    <li>
+                        <a href="#">关于我们</a>
+                    </li>
+                    <li>
+                    <a href="#">项目介绍</a>
+                </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>        
+
+
+    <!-- 搜索区 -->
+    <div id="search-container" class="search-area container">
+        <div class="imglog">
+            <img src="../static/images/Polaris.png" />
+        </div>
+
+            <form  role="search" class="navbar-form search-form text-center">
+
+                <div  class="form-group">
+
+                    <input type="text" id="simple-input"  placeholder="搜索" class="form-control">
+
+                    <ul id="hot-key-list" class="hot-key" style="padding-left:0px;">
+                        <li data='123'> 人工智能 </li>
+                        <li data='123'> 数据挖掘 </li>
+                        <li data='123'> 人工智能 </li>
+                        <li data='123'> 数据挖掘 </li>
+                        <li data='123'> 人工智能 </li>
+                        <li data='123'> 数据挖掘 </li>
+                    </ul>
+
+
+                    <!-- 隐藏的提示区 -->
+                    <ul id="hide-tip" class="display_none">
+                        <li data='123'>23456</li>
+                        <li data='123'>23456</li>
+                        <li data='123'>23456</li>
+                        <li data='123'>23456</li>
+                    </ul>
+
+
+                </div>
+                <button class="btn btn_color" type="button" id = 'search-btn'>搜索</button>
+            </form>
+
+    </div>
+
+
+    <div id="map-d3-container" class="container display_none">
+        <svg></svg>
+
+        <ul id="top_list"></ul>
+    </div>
+
+
+
+    <div class="footer navbar-fixed-bottom">
+        <p class="copyright">&copy;copyright@ 2019 东南大学 Five五团队</p>
+    </div>
+
+<script src="../static/resources/jquery/jquery.min.js"></script>
+<!--<script src="../static/resources/bootstrap3/js/bootstrap.min.js"></script>-->
+<script src="../static/js/index.js"></script>
+<script src="{{ url_for('static', filename='d3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='map.js') }}"></script>
+
+<script type="text/javascript">
+    //中国地图
+    let chinaMap = new ChinaMap(d3.select('body').select('svg'));
+    //TODO:假数据 注意，数据库中的省份不带有省/市
+    let data = [
+        {'school': '南京大学', 'address':[ '中国', '江苏省', '南京市'], 'weight': 92, 'longitude':118.966713 , 'latitude': 32.122396},
+        {'school': '东南大学', 'address':[ '中国', '江苏省', '南京市'], 'weight': 90, 'longitude':118.961851 , 'latitude': 32.125119},
+        //{'school': '南京大学', 'address':[ '中国', '江苏省', '南京市'], 'weight': 92, 'longitude': 118.825176 , 'latitude': 31.889893},
+        {'school': '清华大学', 'address':[ '中国', '北京市', '北京市'], 'weight': 71, 'longitude':116.342122, 'latitude': 39.999281},
+        ];
+    chinaMap.institutions = data;
+    //显示中国地图
+    chinaMap.showChinaMap();
+    chinaMap.onUpdateMap = onUpdateMap;
+    //获得数据项
+    let topList = d3.select('#top_list');
+    function clickItem(item) {
+        chinaMap.clickTopItem(item);
+    }
+
+    function onUpdateMap(items, index) {
+        let update = topList.selectAll('li')
+            .data(items)
+            .text(function (d, i) {
+                return d.name;
+            });
+        update.enter()
+            .append('li')
+            .text(function (d, i) {
+                return d.name;
+            })
+            .on('click', clickItem);
+
+        update.exit()
+            .remove();
+    }
+</script>
+</body>
+</html>

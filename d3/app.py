@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('map.html')
+    return render_template('basic.html')
 
 
 @app.route('/mapdata/<path:filename>')
