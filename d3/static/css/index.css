@@ -1,0 +1,161 @@
+.search-area{
+	margin:0 auto ;
+}
+
+/* 搜索区域中的 logo  */
+.search-area .imglog{
+	width:200px;
+	height:200px;
+	margin:0 auto 10px;
+
+	-webkit-transition:width 0.5s, height 0.5s;
+    transition:width 0.5s, height 0.5s; 
+}
+
+.search-area .imglog img{
+	display:block;
+	height:100%;
+}
+
+
+.search-area input{
+	height: 40px!important;
+}
+.search-area  #simple-input{
+	width: 600px;
+}
+
+.search-area .search-form{
+	padding-bottom: 0px; 
+	text-align: center;
+}
+.search-area .form-group{
+	position: relative;
+}
+
+/* 与 search-area 平级的 searched 类 */
+#search-container.searched > .imglog{
+	width: 50px;
+	height: 50px;
+	display: inline-block;
+	vertical-align: top;
+}
+#search-container.searched .search-form{
+	display: inline-block!important;
+	margin-left: 10px;
+}
+#search-container.searched .search-form{
+	padding: 0;
+}
+
+
+/* 热搜区 */
+.hot-key{
+	position: absolute;
+	padding-top: 5px;
+}
+
+.hot-key li{
+	display: inline-block;
+	padding: 5px ;
+	color: #777;
+	font-size: 14px;
+}
+
+
+/* 隐藏的输入提示框 */
+#hide-tip{
+	position: absolute;
+	width: 100%;
+	background: #fffafa;
+	border: solid 1px #777;
+	border-radius: 5px;
+	padding-left: 0;
+	color: black;
+	text-align: left;
+	z-index: 9999;
+
+}
+#hide-tip li{
+	padding: 5px 10px;
+}
+
+#hide-tip li:hover{
+	background: rgb(223, 219, 219);
+}
+
+/* 地图区域 */
+#map-d3-container{
+	min-height: 400px;
+	background: #fafaf8;
+	margin-top: 40px;
+	position:relative;
+}
+
+ #tooltip {
+    background:rgba(0,0,0,0.9);
+    position: absolute;
+    text-align: center;
+    margin: 10px;
+    border:1px solid grey;
+    pointer-events: none;
+    border-radius:5px;
+    font-size:12px;
+    width:auto;
+    padding:4px;
+    color:white;
+    opacity:0;
+}
+
+#top_list {
+	position: absolute;
+	right:0;
+	top: 0;
+	
+    min-height:200px;
+    width:200px;
+	padding: 10px;
+	background:#fafaf8;
+	opacity: 0.8;
+}
+
+
+#top_list {
+	/* 生成一个 名为 top_list_item 的计数器，且从 0 开始 */
+	counter-reset: top_list_item 0;
+	font-size: 14px;
+}
+
+
+#top_list > li{
+	cursor: pointer;
+	padding: 10px;
+	border-bottom: 1px dotted #777;
+	border-radius: 15px;
+}
+
+
+#top_list > li:hover{
+	background: #fafae0;
+}
+
+/* 给结果排名 */
+#top_list > li:before{
+	content: counter(top_list_item);
+	display: inline-block;
+	padding-right: 10px;
+
+	/* 设置计数器自增 */
+	counter-increment: top_list_item;
+}
+
+
+#top_list > li:nth-child(1):before{
+	color: #f54545;
+}
+#top_list > li:nth-child(2):before{
+	color:#ff8547;
+}
+#top_list > li:nth-child(3):before{
+	color: #ffac38;
+}

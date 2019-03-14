@@ -226,7 +226,7 @@ class ChinaMap{
         this.svg.select('#map').selectAll('path').remove();
         //设置缩放比和中心点
         that.projection.center(center)
-            .scale(zoomScale * 45);
+            .scale(zoomScale * 42);
         //生成位置及对应的权值 主要用于显示热力图
         let address_weights = this.handleHotSpotData();
         //用于回调updateMapCallback的数据
