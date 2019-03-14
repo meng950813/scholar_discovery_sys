@@ -12,7 +12,9 @@ def index():
 @app.route('/mapdata/<path:filename>')
 def get_data(filename):
     path = os.path.join(os.getcwd(), 'static', 'mapdata')
+    
     print(os.path.join(path, filename))
+    
     # 读取文件，若没有文件则返回空
     try:
         with open(os.path.join(path, filename), 'r', encoding='utf-8') as fp:

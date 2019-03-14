@@ -89,7 +89,6 @@
 	min-height: 400px;
 	background: #fafaf8;
 	margin-top: 40px;
-	padding-top:20px;
 	position:relative;
 }
 
@@ -109,12 +108,18 @@
 }
 
 #top_list {
-padding-left:10px;
-    position: absolute;
-    right:0;
-    top:0;
-    height:200px;
-    width:250px;
-    background:red;
-    cursor: pointer;
+	position: absolute;
+	right:0;
+	top: 0;
+	
+    min-height:200px;
+    width:200px;
+	padding: 10px;
+	background:#FAFAB8;
+	opacity: 0.8;
+}
+#top_list > li{
+	cursor: pointer;
+	padding: 10px;
+	border-bottom: 1px dotted #777;
 }

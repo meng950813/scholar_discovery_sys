@@ -10,7 +10,7 @@
   map_width = parseInt($("#map-d3-container").width() / 100) *100;
 
   $("#map-d3-container").height(map_height);
-  $("#map-d3-container svg").attr('height',map_height - 20);
+  $("#map-d3-container svg").attr('height',map_height);
   $("#map-d3-container svg").attr('width',map_width);
 
   console.log($("#map-d3-container svg"));
