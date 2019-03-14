@@ -9,6 +9,7 @@
 
 
 # ignore all .txt files in the doc/ directory
+
 # doc/**/*.txt
 
 test.txt
@@ -18,8 +19,7 @@ spider/dbhelper.py
 spider/**/*.sql
 spider/**/*.log
 
-**/__pycache__
+query/querydata
 
 
 **/.idea
-
