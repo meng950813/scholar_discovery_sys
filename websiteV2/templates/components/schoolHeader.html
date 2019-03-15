@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}-专家发现系统</title>
+    <link href="../static/css/public.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/reset.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../static/resources/bootstrap3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/resources/flat-ui-2.2.2-dist/css/flat-ui.min.css"/>
+
+    <link rel="icon" href="../static/images/favicon.ico" type="image/x-icon" />
+    <script src="../static/resources/vue/vue.js"></script>
+    <script src="../static/resources/vue/commonTools.js"></script>
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+<nav role="navigation" class="navbar navbar-default">
+        <div class="navbar-header">
+            <a href="#" class="navbar-brand">
+                <img src="../static/images/logo-new.png"/>
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <form v-cloak v-bind:class="{display_block: not_index }"  role="search" class="navbar-form navbar-left display_none">
+
+                    <div class="form-group">
+                        <input type="text" onkeydown="return ClearSubmit(event)" placeholder="搜索"
+                            @keydown.enter="enter_search" v-model="keyword" class="form-control" style="width:350px">
+                    </div>
+                    <button class="btn btn_color" type="button" @click='go_search($event)'>搜索</button>
+                </form>
+
+                {% if user %}
+                     <li><a href="#"  @click='open("Need")'>添加联系人</a></li>
+                    <li  id="username"><a href="{{ url_for('schoolPersonal') }}">{{ user[0][0] }}</a></li>
+                    <li><a href="{{ url_for('logout') }}">注销</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">登录</a></li>
+                {% endif %}
+            </ul>
+        </div>
+</nav>
+
+<div class="main">
+    {% block main %}{% endblock %}
+</div>
+</body>
+</html>
