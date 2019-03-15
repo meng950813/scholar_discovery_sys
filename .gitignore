@@ -21,7 +21,7 @@ spider/**/*.log
 
 query/querydata
 
-websiteV2/static/query/querydata
+websiteV2/static/querydata
 
 **/__pycache__
 
