@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}-专家发现系统</title>
-    <link href="../static/css/public.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="../static/resources/bootstrap3/css/bootstrap.min.css" />
+    <link href="{{ url_for('static',filename='css/public.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='resources/bootstrap3/css/bootstrap.min.css') }}" />
 
-    <link rel="icon" href="../static/images/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/x-icon" />
     {% block head %}{% endblock %}
 </head>
 
@@ -14,8 +14,8 @@
     <nav role="navigation" class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
-                <a href="#" id="logo" class="navbar-brand">
-                    <img src="../static/images/logo-new.png"/>
+                <a href="/" id="logo" class="navbar-brand">
+                    <img src="{{ url_for('static',filename='images/logo-new.png') }}"/>
                 </a>
             </div>
 
@@ -36,7 +36,7 @@
 
     {% block main %}{% endblock %}
 
-    <div class="footer navbar-fixed-bottom">
+    <div class="footer">
         <p class="copyright">&copy;copyright 2019 东南大学 Five五团队</p>
     </div>
 

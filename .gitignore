@@ -27,4 +27,4 @@ websiteV2/static/querydata
 
 **/.idea
 
-config.py
+websiteV2/config.py

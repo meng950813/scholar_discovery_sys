@@ -3,10 +3,7 @@ body{
     color: black;
 }
 
-.container{
-    width: 800px;
-    height: 1000px;
-    margin-left: 25%;
+.search-container{
     border: 1px solid #000000;
     background-color: white;
 }

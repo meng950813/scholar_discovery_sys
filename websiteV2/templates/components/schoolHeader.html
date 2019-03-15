@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}-专家发现系统</title>
-    <link href="../static/css/public.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="../static/resources/bootstrap3/css/bootstrap.min.css" />
+    <link href="{{ url_for('static',filename='css/public.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='resources/bootstrap3/css/bootstrap.min.css') }}" />
 
-    <link rel="icon" href="../static/images/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/x-icon" />
     {% block head %}{% endblock %}
 </head>
 
 <body>
 <nav role="navigation" class="navbar navbar-default">
+    <div class="container">
         <div class="navbar-header">
-            <a href="#" class="navbar-brand">
+            <a href="/" id="logo" class="navbar-brand">
                 <img src="../static/images/logo-new.png"/>
             </a>
         </div>
@@ -30,10 +31,21 @@
                 {% endif %}
             </ul>
         </div>
+    </div>
 </nav>
 
-<!-- <div class="main"> -->
-    {% block main %}{% endblock %}
-<!-- </div> -->
+
+
+{% block main %}{% endblock %}
+
+<div class="footer">
+    <p class="copyright">&copy;copyright 2019 东南大学 Five五团队</p>
+</div>
+
+<script src="{{ url_for('static',filename='resources/jquery/jquery.min.js') }}"></script>
+
+{% block script %}{% endblock %}
+
+
 </body>
 </html>

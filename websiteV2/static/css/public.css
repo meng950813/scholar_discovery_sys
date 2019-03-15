@@ -3,6 +3,7 @@ body,html{
 	height:100%;
 	width:100%;
 }
+
 .btn_color{
 	background-color:#00d3d4;
 	color:#fff
@@ -21,18 +22,24 @@ ul li{
 
 /* footer */
 .footer { 
-	margin:0px; 
 	background-color: #fff; 
-	text-align: center;
-	clear: both;
-	letter-spacing: 0.08em;}
+	position: absolute;
+	height: 30px;
+	/*
+		 保证 footer 不会覆盖 body 中的内容
+		 缺点： 一定会有滚动条
+		 TODO： 待优化
+	 */
+	bottom: -40px;
+	left: 0;
+	right: 0;
+}
 
 .footer .copyright { 
+	text-align: center;
 	color: #787878;
 	font-size: 12px;
-}
-.footer .copyright span { 
-	color: #57dfc7;
+	line-height: 30px;
 }
 
 
