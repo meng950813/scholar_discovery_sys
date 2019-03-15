@@ -26,3 +26,5 @@ websiteV2/static/querydata
 **/__pycache__
 
 **/.idea
+
+config.py
