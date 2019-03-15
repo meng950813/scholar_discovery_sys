@@ -4,26 +4,26 @@
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/login.css') }}">
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-function checkForm(form)
-{
-	if(form.username.value=="")
-	{
-		alert("用户名不能为空!");
-		form.username.focus();
-		return false;
-	}
-	if(form.password.value=="")
-	{
-		alert("密码不能为空!");
-		form.password.focus();
-		return false;
-	}
-		return true;
-}
+    function checkForm(form)
+    {
+        if(form.username.value=="")
+        {
+            alert("用户名不能为空!");
+            form.username.focus();
+            return false;
+        }
+        if(form.password.value=="")
+        {
+            alert("密码不能为空!");
+            form.password.focus();
+            return false;
+        }
+            return true;
+    }
 
-</script>
+    </script>
 {% endblock %}
 
 {% block main %}
