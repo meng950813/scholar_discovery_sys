@@ -77,10 +77,10 @@ function onKeywordChange(e){
 
   // 否则
   // 清空上一个尚未响应的函数
-  clearTimeout(FLAG_VARIABLE.recode_setTimeout);
+  // clearTimeout(FLAG_VARIABLE.recode_setTimeout);
   
   // 设置输入时间间隔为 0.6s 
-  FLAG_VARIABLE.recode_setTimeout = setTimeout(getAssociativeWordsByAjax.bind(this),600)
+  // FLAG_VARIABLE.recode_setTimeout = setTimeout(getAssociativeWordsByAjax.bind(this),600)
   
 }
 
@@ -98,6 +98,8 @@ function onKeyDown(event){
   /**若键入 删除 / 回退 键， 且内容清空，隐藏联想框 */ 
   else if((e.keyCode === 8 || e.keyCode === 46) && !$("#simple-input").val()){
     hideAssociativeWordsArea()
+    // 清空上一个尚未响应的函数
+    clearTimeout(FLAG_VARIABLE.recode_setTimeout);
   }
 }
 
@@ -110,7 +112,7 @@ function getAssociativeWordsByAjax (){
   console.log("getAssociativeWordsByAjax")
   // TODO： ajax 获取数据
   
-  toggleAssociativeWordsArea();
+  // toggleAssociativeWordsArea();
 
   // 测试数据
   var associative_words_list = ['社交网络','深度学习','医疗健康','人工智能'];
