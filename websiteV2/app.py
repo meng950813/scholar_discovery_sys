@@ -12,8 +12,7 @@ db.create_engine(DB_CONFIG['user'], DB_CONFIG['pwd'], DB_CONFIG['db_name'])
 
 @app.route('/')
 def index():
-    return render_template("basic.html")
-
+    return render_template("index.html")
 
 @app.route('/login/')
 def login():
