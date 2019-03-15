@@ -104,6 +104,10 @@ class Subject:
         rank = {}
         # wd是res的key,代表词，res[wd]还是字典，代表词对应的老师及其对该词的值，r是res[wd]中的key,代表老师id
         exp_list = [r for wd in res.keys() for r in res[wd]]
+        for wd in lda.keys():
+            for r in lda[wd]:
+                exp_list.append(r)
+
         exp_list = set(exp_list)
         if 'col' in exp_list:
             # 教师名单，所以去掉cof
@@ -125,8 +129,10 @@ class Subject:
                 else:
                     rank[r] *= 10e-6
             for wd in lda:
-                if wd not in res:
+                if wd not in res and r in lda[wd]:
                     rank[r] *= lda[wd][r]
+                else:
+                    rank[r] *= 10e-6
             if self.pagerank.get(r):
                 rank[r] *= self.pagerank[r] * self.id_name[r]["total"]
         return rank
