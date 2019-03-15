@@ -1,0 +1,37 @@
+{% extends '../template.html' %}
+{% block title %}个人中心{% endblock %}
+
+{%  block head %}
+    <link href="../static/css/personal.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block main %}
+
+ <span>关系网络</span>
+    <div class="social-net"></div>
+    <span>联系列表</span>
+    <div class="list">
+        <form method="post" action="" >
+        <table class="table table-hover">
+            <tr>
+                <td>企业</td>
+                <td>部门</td>
+                <td>联系人</td>
+                <td>备注</td>
+                <td>联系方式</td>
+                <td>操作</td>
+            </tr>
+            <tr>
+                <td>百里腾公司</td>
+                <td>产品部</td>
+                <td>马彦云</td>
+                <td>总经理</td>
+                <td>11111111</td>
+                <td><button type="button" class="btn btn-danger" onclick="javascript:this.form.action='delete'";>删除</button>
+               <button type="button" class="btn btn-info" >修改</button></td>
+            </tr>
+        </table>
+        </form>
+    </div>
+
+{% endblock %}

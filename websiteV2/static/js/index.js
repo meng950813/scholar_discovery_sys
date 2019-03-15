@@ -24,6 +24,9 @@ $(document).ready(function(){
 
   // 绑定输入框中的 onchange 事件
   $("#simple-input").on("input",onKeywordChange);
+
+   // 绑定输入框中的 onkeydown 事件
+   $("#simple-input").on("keydown",onKeyDown);
   
   // 绑定 热点词的 点击事件
   $("#hot-key-list").on("click",search_hot_word);
@@ -33,7 +36,9 @@ $(document).ready(function(){
 
 
   // 绑定搜索按钮的点击事件
-  $("#search-btn").click(go_search);
+  $("#search-btn").on("click",go_search);
+
+
 });
 
 
@@ -48,6 +53,9 @@ var FLAG_VARIABLE = {
    */      
   recode_setTimeout : undefined,
 
+  // 保存上次搜索的内容，减少重复搜索
+  lastKey : undefined
+
 }
 
 
@@ -59,25 +67,42 @@ function onKeywordChange(e){
 
   // 获取搜索框中的内容
   let keyword = $(e.target).val();
-  console.log(keyword);
-    
+
   // 若 keyword 为空 
   if(!keyword ){
-    
     // 隐藏联想框
     hideAssociativeWordsArea();
-
     return;
   }
 
   // 否则
   // 清空上一个尚未响应的函数
-  clearTimeout(FLAG_VARIABLE.recode_setTimeout);
+  // clearTimeout(FLAG_VARIABLE.recode_setTimeout);
   
   // 设置输入时间间隔为 0.6s 
-  FLAG_VARIABLE.recode_setTimeout = setTimeout(getAssociativeWordsByAjax.bind(this),600)
+  // FLAG_VARIABLE.recode_setTimeout = setTimeout(getAssociativeWordsByAjax.bind(this),600)
   
 }
+
+/**
+ * 响应键盘事件 ： 包括 确认 + 删除
+ * @param {} event 
+ */
+function onKeyDown(event){
+  let e = event || window.event;
+  
+  /**响应回车键 且 keyword 不为空，执行搜索任务 */
+  if(e.keyCode == 13 && $("#simple-input").val()){
+    go_search()
+  }
+  /**若键入 删除 / 回退 键， 且内容清空，隐藏联想框 */ 
+  else if((e.keyCode === 8 || e.keyCode === 46) && !$("#simple-input").val()){
+    hideAssociativeWordsArea()
+    // 清空上一个尚未响应的函数
+    clearTimeout(FLAG_VARIABLE.recode_setTimeout);
+  }
+}
+
 
 
 /**
@@ -87,7 +112,7 @@ function getAssociativeWordsByAjax (){
   console.log("getAssociativeWordsByAjax")
   // TODO： ajax 获取数据
   
-  toggleAssociativeWordsArea();
+  // toggleAssociativeWordsArea();
 
   // 测试数据
   var associative_words_list = ['社交网络','深度学习','医疗健康','人工智能'];
@@ -107,23 +132,48 @@ function search_hot_word(event){
 
   // 设置搜索框中的内容
   $("#simple-input").val(key);
-        
-  // 开始搜索
-  go_search(key);
+  
+
+  go_search()
 }
     
     
 /**
- * 发送搜索请求，
- * @param {str} keyword 搜索关键字
+ * 发送搜索请求
  * return： 
  */
-function go_search(keyword){
+function go_search(){
 
+  
   // 关闭联想提示框
   hideAssociativeWordsArea();
 
-  // TODO 发送 Ajax 请求
+  let keyword = $("#simple-input").val();
+
+  // 若 keyword 为空
+  if(!keyword || keyword == FLAG_VARIABLE.lastKey){
+    return;
+  }
+
+  FLAG_VARIABLE.lastKey = keyword;
+
+  //异步回调获得数据
+  $.ajax({
+    url: 'api/school/address',
+    data: {'keyword': keyword},
+    dataType: 'json',
+    type: 'POST',
+  }).done(function (data) {
+
+    console.log(data);
+    
+    chinaMap.setData(data);
+    chinaMap.showChinaMap();
+
+    if(data == null){
+      $("#top_list").html("<h3>无搜索结果</h3>");
+    }
+  });
 
   // 标识搜索开始，显示地图
   showMapArea();
@@ -175,4 +225,79 @@ function renderAssociativeWords(data){
   }
   
   $("#hide-tip").html(html);
+}
+
+
+
+/* *******调用地图部分******* */
+//中国地图
+let chinaMap = new ChinaMap(d3.select('body').select('svg'));
+
+
+// //异步回调获得数据
+// $.ajax({
+//     url: 'api/school/address',
+//     data: {'keyword': '计算机'},
+//     dataType: 'json',
+//     type: 'POST',
+// }).done(function (data) {
+//     chinaMap.setData(data);
+//     chinaMap.showChinaMap();
+// });
+
+
+chinaMap.onUpdateMap = onUpdateMap;
+chinaMap.onUpdateBreadCrumb = onUpdateBreadCrumb;
+//获得数据项 DOM
+let topList = d3.select('#top_list');
+let breadCrumb = d3.select('#breadcrumb');
+/**
+ * 更新地图时会回调该函数，主要用于刷新topList列表的值和回调函数
+ * @param items 是一个数组 每一个数据项至少会有一个键为name的名字，有的会有selector 和 weight
+ */
+function onUpdateMap(items) {
+    let update = topList.selectAll('li')
+        .data(items)
+        .text(function (d, i) {
+            return d.name;
+        });
+    update.enter()
+        .append('li')
+        .text(function (d, i) {
+            return d.name;
+        })
+        .on('click', function (item) {
+            //点击函数使用了chinaMap提供的函数
+            let ret = chinaMap.clickMapBlockByItem(item);
+        });
+
+    update.exit()
+        .remove();
+}
+/**
+ * 以texts来更新对应的面包屑导航栏
+ * @param texts {Array} 更新导航栏的显示文本
+ */
+function onUpdateBreadCrumb(texts){
+    console.log(texts);
+    let update = breadCrumb.selectAll('li')
+        .data(texts)
+        .text(function (d) {
+            return d;
+        });
+        update.enter()
+        .append('li')
+        .text(function (data) {
+            return data;
+        })
+        .attr('style', function (d, i) {
+                return "cursor: pointer";
+        })
+        .on('click', function (d, i) {
+            //点击函数使用了chinaMap提供的函数
+            chinaMap.clickBreadcrumb(i);
+        });
+    //删除不必要的数据项
+    update.exit()
+        .remove();
 }

@@ -1,0 +1,190 @@
+body{
+    background-color: #f3f3f3;
+    color: black;
+}
+
+.container{
+    width: 800px;
+    height: 1000px;
+    margin-left: 25%;
+    border: 1px solid #000000;
+    background-color: white;
+}
+
+.part1{
+    width:750px;
+    height: 100px;
+    margin-left: 10px;
+    line-height: 100px;
+    color: black;
+    font-weight: bold;
+    border-bottom: 1px solid #000000;
+}
+
+.college{
+    width: 750px;
+    height: 60px;
+    margin-top: 5px;
+    border-bottom: 1px solid #b9b0a3;
+    line-height: 60px;
+    color: black;
+    font-size: 20px;
+}
+
+.tags{
+    width: 750px;
+    height: auto;
+    margin-top: 5px;
+    font-size: 18px;
+    border-bottom: 1px solid #b9b0a3;
+    color: #000;
+    padding-bottom: 5px;
+}
+
+.scholar{
+    width: 750px;
+    height: auto;
+    margin-top: 5px;
+    border-bottom: 1px solid #000000;
+}
+
+
+
+ul li{
+    padding: 1px 5px!important;
+    font-size: 15px;
+}
+
+#image{
+    text-align:center;
+    width:100px;
+    height:100px;
+    margin-left: 30px;
+    border-radius: 50%;
+    background-color: #00a0e9;
+    font-size: 40px;
+    color: white;
+    line-height: 100px;
+}
+
+ul.search-person>li:hover{
+    -moz-box-shadow:0px 0px 0px #FFFFFF, 0px 5px 5px #F0F0F0;
+    -webkit-box-shadow:0px 0px 0px #FFFFFF, 0px 5px 5px #F0F0F0;
+    box-shadow:0px 0px 0px #FFFFFF, 0px 5px 5px #F0F0F0;
+    cursor: auto;
+}
+
+.search-container {
+    width:900px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+}
+
+.search-head{
+    padding-top:20px;
+}
+.search-head p{
+    font-size:18px;
+    font-weight:600;
+}
+
+.search-neck p{
+    font-size:16px;
+    font-weight:550;
+    padding-left:55px;
+}
+
+.search-neck ul{
+    padding-left:85px
+}
+
+.search-li{
+    border-bottom:solid 1px transparent;
+    border-color: #888888;
+    margin-top:none;
+}
+
+.search-li:last-child{
+    border-bottom:none;
+    margin-top:none;
+}
+
+
+ul.search-pill{
+    padding-top:5px;
+}
+
+ul.search-pill li{
+    display:inline-block;
+    border:solid 1px transparent;
+    border-color: #d0d0d0;
+    border-radius: 5px;
+    margin-right: 5px;
+    margin-bottom: 4px;
+    padding: 1px 5px!important;
+}
+
+
+
+ul.search-perpendicular{
+    padding-top:5px;
+}
+
+ul.search-perpendicular li{
+    display:inline-block;
+    border-right:solid 1px transparent;
+    border-color: #d0d0d0;
+    margin-right: 5px;
+    margin-bottom: 4px;
+    padding: 1px 10px 1px 5px!important;
+}
+
+ul.search-perpendicular li:last-child{
+    border-right:none;
+}
+
+ul.search-line{
+    margin-top:5px;
+}
+
+ul.search-person>li{
+    margin-top:31px;
+    border-bottom:solid 1px transparent;
+    border-color: #f0f0f0;
+}
+
+ul.search-person>li:last-child{
+    border-bottom:none;
+}
+
+
+
+ul.search-person p{
+    font-size:16px;
+    font-weight:600;
+}
+
+ul.search-more{
+    margin-bottom: 10px;
+    margin-left: 46px;
+    width: 878px;
+    line-height:25px;
+}
+
+ul.search-more>li{
+    margin-bottom: 10px;
+}
+
+ul.search-more div{
+    font-size:16px;
+}
+
+ul.search-more li{
+    margin-left:10px;
+}
+
+ul.search-text{
+    margin-left:15px;
+}
+
