@@ -20,6 +20,8 @@ def school_address():
     :return: {school: [], college: [}
     """
     keyword = request.form.get('keyword')
+    # 限定输出的个数为10个
+    max_count = 10
     # 查询
     data = query.do_query(keyword, {})
     results = query.prints_for_school(data, None)
@@ -43,9 +45,8 @@ def school_address():
     # 整合数据
     for result in results:
         result.update(schools[result['school']])
-    # print(results)
 
-    return json.dumps(results)
+    return json.dumps(results[:max_count])
 
 
 @api_blueprint.route('/mapdata/<path:filename>')
