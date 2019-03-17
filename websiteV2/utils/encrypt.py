@@ -13,7 +13,7 @@ import hashlib
 import sys
 sys.path.append("..")
 
-from config import SCREET_KEY
+from config import SECRET_KEY
 
 
 
@@ -27,9 +27,9 @@ def encryption(pwd):
     pwd = str(pwd)
 
     password = hashlib.md5(pwd.encode())
-    password.update(SCREET_KEY['KEY'])
+    password.update(SECRET_KEY['KEY'])
     # 第三次加密
-    password.update(SCREET_KEY['KEY2'])
+    password.update(SECRET_KEY['KEY2'])
 
     return password.hexdigest()
 

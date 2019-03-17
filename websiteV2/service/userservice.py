@@ -25,7 +25,7 @@ class UserService:
         :param username:用户名（str）
         :param pwd: 原始密码（str）
         :return:  字典对象{'ID': 1, 'NAME': '测试账号', 'TYPE': '1'}
-                or {'error':True,"msg":"请输入正确的账户或密码"}
+                or {'error':True}
         """
         #  加密出密码
         password = encrypt.encryption(pwd)
@@ -42,7 +42,7 @@ class UserService:
 
         # 未查询到结果
         if not back:
-            return {'error':True,"msg":"请输入正确的账户或密码"}
+            return {'error':True}
         # 返回查询结果
         return  back
 
