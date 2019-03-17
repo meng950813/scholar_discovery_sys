@@ -1,10 +1,14 @@
 from flask import Flask,render_template,redirect,url_for,request
 from controllers.api import api_blueprint
+from controllers.user import user_blueprint
 from utils import db
 from config import DB_CONFIG
 
+import hashlib
+
 app = Flask(__name__)
 app.register_blueprint(api_blueprint)
+app.register_blueprint(user_blueprint)
 
 # 需要预先调用，且只调用一次
 db.create_engine(DB_CONFIG['user'], DB_CONFIG['pwd'], DB_CONFIG['db_name'])
@@ -17,13 +21,15 @@ def index():
 @app.route('/login/')
 def login():
     #商务登录
-    return render_template("./components/login.html")
+    err = request.args.get("error")
+    return render_template("./components/login.html",error = err)
 
 
 @app.route('/manageLogin')
 def manageLogin():
     #管理员登录
     return render_template("./components/manageLogin.html")
+
 
 
 @app.route('/search')

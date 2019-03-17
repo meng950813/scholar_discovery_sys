@@ -69,7 +69,7 @@ def _select(sql, first, *args):
     try:
         connection = POOL.connection()
         cursor = connection.cursor(cursor=pymysql.cursors.DictCursor)
-        # 执行语句
+        # 利用本身的 execute 函数的特性，传入两个参数：sql语句与tuple类型的参数，以避免sql注入
         cursor.execute(sql, args)
 
         if first:
@@ -102,12 +102,21 @@ def select(sql, *args):
     :param args: select的SQL语句所对应的值
     :return: list(dict) 或者None
     """
+    print(sql)
     return _select(sql, False, *args)
 
 
 if __name__ == '__main__':
-    create_engine('root', '9527', 'training')
+    from config import DB_CONFIG
+
+    # 需要预先调用，且只调用一次
+    create_engine(DB_CONFIG['user'], DB_CONFIG['pwd'], DB_CONFIG['db_name'])
 
     teachers = select('select * from es_teacher limit 0,10')
-    print(teachers)
+    # print(teachers)
+
+    sql_base = "select * from sys_user where NAME = %s"
+    print(select( sql_base % "1 or 1=1 or %s","123") )
+
+    print(select( sql_base, "%测试账号" ))
 
