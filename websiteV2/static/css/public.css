@@ -1,7 +1,12 @@
 /* 通用样式 */
 body,html{
-	height:100%;
 	width:100%;
+	box-sizing: border-box;
+}
+body{
+	height: 100%;
+	padding-bottom: 40px; 
+	position: relative;
 }
 
 .btn_color{
@@ -25,12 +30,7 @@ ul li{
 	background-color: #fff; 
 	position: absolute;
 	height: 30px;
-	/*
-		 保证 footer 不会覆盖 body 中的内容
-		 缺点： 一定会有滚动条
-		 TODO： 待优化
-	 */
-	bottom: -40px;
+	bottom: 0;
 	left: 0;
 	right: 0;
 }
@@ -51,9 +51,6 @@ ul li{
 	display: block;
 }
 
-[v-cloak]{ 
-	display: none; 
-}
 
 /* 信息提示窗 */
 .alert-container{
@@ -101,4 +98,14 @@ ul li{
 .alert-container > .alert-warning {
 	background-color: #F89406;
 	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGYSURBVEhL5ZSvTsNQFMbXZGICMYGYmJhAQIJAICYQPAACiSDB8AiICQQJT4CqQEwgJvYASAQCiZiYmJhAIBATCARJy+9rTsldd8sKu1M0+dLb057v6/lbq/2rK0mS/TRNj9cWNAKPYIJII7gIxCcQ51cvqID+GIEX8ASG4B1bK5gIZFeQfoJdEXOfgX4QAQg7kH2A65yQ87lyxb27sggkAzAuFhbbg1K2kgCkB1bVwyIR9m2L7PRPIhDUIXgGtyKw575yz3lTNs6X4JXnjV+LKM/m3MydnTbtOKIjtz6VhCBq4vSm3ncdrD2lk0VgUXSVKjVDJXJzijW1RQdsU7F77He8u68koNZTz8Oz5yGa6J3H3lZ0xYgXBK2QymlWWA+RWnYhskLBv2vmE+hBMCtbA7KX5drWyRT/2JsqZ2IvfB9Y4bWDNMFbJRFmC9E74SoS0CqulwjkC0+5bpcV1CZ8NMej4pjy0U+doDQsGyo1hzVJttIjhQ7GnBtRFN1UarUlH8F3xict+HY07rEzoUGPlWcjRFRr4/gChZgc3ZL2d8oAAAAASUVORK5CYII=") !important;
+}
+
+
+
+/* 人物社交网络容器 */
+.social-net{
+    width: 100%;
+    height: 700px;
+    border: 2px solid rgba(203, 210, 219, 0.82);
+    color: black;
 }

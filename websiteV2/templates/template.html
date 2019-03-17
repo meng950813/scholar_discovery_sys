@@ -24,7 +24,7 @@
                     {% if user %}
                         <li><a href="#">发布需求</a></li>
                         <li><a href="#">添加联系人</a></li>
-                        <li  id="username"><a href="{{ url_for('governPersonal') }}">{{ user[0][0] }}</a></li>
+                        <li  id="username"><a href="{{ url_for('governPersonal') }}">{{ user["NAME"] }}</a></li>
                         <li><a href="{{ url_for('logout') }}">注销</a></li>
                     {% else %}
                         <li><a href="{{ url_for('login') }}">登录</a></li>
