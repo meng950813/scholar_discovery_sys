@@ -15,6 +15,11 @@ def index():
     return render_template("basic.html")
 
 
+@app.route('/relation')
+def relation():
+    return render_template('relation.html')
+
+
 @app.route('/login/')
 def login():
     #商务登录
