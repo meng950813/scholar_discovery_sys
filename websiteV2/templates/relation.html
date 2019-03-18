@@ -20,6 +20,11 @@
             color:white;
             opacity:0;
         }
+        #sample{
+            fill: none;
+            stroke: brown;
+            stroke-width: 2;
+        }
     </style>
 </head>
 <body>
@@ -57,6 +62,7 @@
         'links': edges,
         "categories": categories,
     };
+    let svg = d3.select('svg');
     let relationGraph = new RelationGraph(d3.select('svg'));
     relationGraph.setData(json_data);
 </script>

@@ -76,7 +76,6 @@ function intersectRect(r1, r2) {
 class ChinaMap{
     constructor(svg){
         this.svg = svg;
-        let that = this;
         //所有的path都添加到g中，并命名为map
         this.svg.append('g')
             .attr('id', 'map');
@@ -110,7 +109,6 @@ class ChinaMap{
         this.tooltip = d3.select('body')
             .append('div')
             .attr('id', 'tooltip');
-        this.special_cities = ['北京市', '天津市', '上海市', '重庆市', '台湾省', '海南省', '香港特别行政区', '澳门特别行政区'];
     }
 
     /**
@@ -248,7 +246,7 @@ class ChinaMap{
             .data(jsondata.features)
             .enter()
             .append('path')
-            .each(function (d, i) {
+            .each(function (d) {
                 d.weight = 0;
                 if (address_weights.has(d.properties.name)){
                     d.weight = address_weights.get(d.properties.name);
@@ -257,20 +255,20 @@ class ChinaMap{
             })
             .attr('stroke', '#000')
             .attr('stroke-width', 1)
-            .attr('fill', function (d, i) {
+            .attr('fill', function (d) {
                 return that.mapColor(d.weight);
             })
             .attr('d', that.path)
-            .on('mouseover', function (d, i, nodes) {
+            .on('mouseover', function (d, i) {
                 that.mouseover(this, d, i)
             })
             .on('mousemove', function (d, i) {
                 that.mousemove(this, d, i);
             })
-            .on('click', function (d, i) {
+            .on('click', function (d) {
                 that.clickMap(this, d);
             })
-            .on('mouseout', function (d, i) {
+            .on('mouseout', function (d) {
                 that.mouseout(this, d);
             });
         //回调更新地图钩子函数

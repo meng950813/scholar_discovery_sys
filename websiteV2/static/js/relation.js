@@ -11,7 +11,8 @@ class RelationGraph{
         this.height = this.svg.attr('height');
         let that = this;
         //参与缩放的标签都在此g标签中
-        this.group = this.svg.append('g');
+        this.group = this.svg.append('g')
+            .attr('cursor', 'pointer');
         //为svg添加缩放事件
         this.svg.call(d3.zoom()
             .scaleExtent([0.5, 2])
@@ -23,6 +24,8 @@ class RelationGraph{
         this.links_group = null;
         //节点group，在this.group节点下
         this.nodes_group = null;
+        //文本group，在this.group节点下
+        this.labels_group = null;
         //类别group，与this.group同级
         this.categories_group = null;
         //创建力导向
@@ -69,9 +72,12 @@ class RelationGraph{
             .attr('id', 'lines');
         this.nodes_group = this.group.append('g')
             .attr('id', 'nodes');
+        this.labels_group = this.group.append('g')
+            .attr('id', 'labels');
         //添加节点和连线
         this.addNodes();
         this.addLinks();
+        this.addLabels();
     }
 
     /**
@@ -176,6 +182,36 @@ class RelationGraph{
             })
     }
 
+    addLabels(){
+        let that = this;
+        let fontSize = 20;
+        this.labels_group.selectAll('text')
+            .data(this.nodes)
+            .enter()
+            .append('text')
+            .attr('fill', 'white')
+            .attr('display', 'none')
+            .attr('dx', d => -d.name.length * fontSize / 2)
+            .attr('dy', fontSize / 4)
+            .attr('font-size', fontSize)
+            .attr('stroke-width', 0.5)
+            .attr('stroke', d => this.categories[d.category].color)
+            .text(d => d.name)
+            .call(this.dragNodesCallback(this.simulation))
+            .on('mouseover', function (d) {
+                that.mouseOver2Node(d);
+            })
+            .on('mousemove', function () {
+                that.setVisibleOfToolTip(true);
+            })
+            .on('mouseout', function () {
+                that.mouseOut();
+            })
+            .on('click', function (d) {
+                that.clickNode(this, d);
+            });
+    }
+
     /**
      * 设置this.nodes_group中的circle标签的透明度
      * @param opacity 透明度
@@ -224,6 +260,24 @@ class RelationGraph{
             links = this.links_group.selectAll('path').filter(filter);
 
         links.style('stroke-width', width);
+    }
+
+    /**
+     * 设置this.labels_group中的text标签是否显示
+     * @param visible 是否隐藏
+     * @param filter 过滤器，为空则完全不过滤
+     */
+    setVisibleOfLabels(visible, filter = null){
+        //隐藏标签
+        let labels = null;
+        let display = visible? 'inline': 'none';
+
+        if (filter == null)
+            labels = this.labels_group.selectAll('text');
+        else
+            labels = this.labels_group.selectAll('text').filter(filter);
+
+        labels.style('display', display);
     }
 
     /**
@@ -375,16 +429,14 @@ class RelationGraph{
                 return 'M' + d.source.x + ',' + d.source.y
                 + 'A' + dr + ',' + dr + ' 0 0,1' + d.target.x + ',' + d.target.y;
             });
-            /*
-            .attr('x1', d => d.source.x)
-            .attr('y1', d => d.source.y)
-            .attr('x2', d => d.target.x)
-            .attr('y2', d => d.target.y);
-            */
         //更新节点坐标
         this.nodes_group.selectAll('circle')
             .attr('cx', d => d.x)
             .attr('cy', d => d.y);
+        //更新文本坐标
+        this.labels_group.selectAll('text')
+            .attr('x', d => d.x)
+            .attr('y', d => d.y);
     }
 
     /**
@@ -448,14 +500,16 @@ class RelationGraph{
         let node_name = datum.name;
         //隐藏其他节点
         this.setOpacityOfNodes(0.2, d => !temp_nodes.has(d.name));
-        //隐藏连线
+        //隐藏其他连线
         this.setOpacityOfLinks(0.2, function (d) {
             return d.source.name != node_name && d.target.name != node_name;
         });
-        //高亮其他连线
+        //加宽连线
         this.setWidthOfLinks(5, function (d) {
             return d.source.name == node_name || d.target.name == node_name;
-        })
+        });
+        //显示文本
+        this.setVisibleOfLabels(true, d => temp_nodes.has(d.name));
     }
 
     /**
@@ -471,6 +525,7 @@ class RelationGraph{
         this.setWidthOfLinks(function (d) {
             return d.width;
         });
+        this.setVisibleOfLabels(false);
     }
 
     /**
@@ -492,5 +547,9 @@ class RelationGraph{
         });
         //其他联系半透明
         this.setOpacityOfLinks(0.2, d => d != datum);
+        //显示有联系的节点的文本
+        this.setVisibleOfLabels(true, function (d) {
+            return d.name == datum.source.name || d.name == datum.target.name;
+        })
     }
 }
