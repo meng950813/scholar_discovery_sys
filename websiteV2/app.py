@@ -11,7 +11,7 @@ app.register_blueprint(api_blueprint)
 app.register_blueprint(user_blueprint)
 
 # 需要预先调用，且只调用一次
-db.create_engine(DB_CONFIG['user'], DB_CONFIG['pwd'], DB_CONFIG['db_name'])
+db.create_engine(**DB_CONFIG)
 
 app.secret_key = SESSION_KEY
 """
