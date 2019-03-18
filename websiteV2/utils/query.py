@@ -126,7 +126,8 @@ class Subject:
                     rank[r] *= 10e-6
             for wd in lda:
                 if wd not in res:
-                    rank[r] *= lda[wd][r]
+                    if r in lda[wd]:
+                        rank[r] *= lda[wd][r]
             if self.pagerank.get(r):
                 rank[r] *= self.pagerank[r] * self.id_name[r]["total"]
         return rank

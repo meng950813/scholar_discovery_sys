@@ -27,4 +27,5 @@ websiteV2/static/querydata
 
 **/.idea
 
-config.py
+websiteV2/config.py
+websiteV2/template/map.html

@@ -26,11 +26,12 @@ school_dao = SchoolDao()
 
 if __name__ == '__main__':
     import utils.db as db
+    from config import DB_CONFIG
     import logging
 
     logging.basicConfig(level=logging.DEBUG)
     # 需要预先调用，且只调用一次
-    db.create_engine('root', '9527', 'training')
+    db.create_engine(DB_CONFIG['user'], DB_CONFIG['pwd'], DB_CONFIG['db_name'])
 
     print(school_dao.get_position_by_names(['清华大学', '北京大学']))
 
