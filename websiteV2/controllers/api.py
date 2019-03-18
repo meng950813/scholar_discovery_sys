@@ -4,8 +4,7 @@ date: 2019-03-14
 desc: api蓝图，主要负责获取请求并返回需要的数据，格式为json
 """
 from flask import Blueprint, request
-import json
-import os
+import json, logging, os
 from utils.query import query
 from service.schoolservice import school_service
 
@@ -57,7 +56,7 @@ def get_mapdata(filename):
     :return: 若存在文件，则返回该文件的数据，若不存在，则返回一个空数组
     """
     path = os.path.join(os.getcwd(), 'static', 'mapdata')
-    print(os.path.join(path, filename))
+    logging.info(os.path.join(path, filename))
     # 读取文件，若没有文件则返回空
     try:
         with open(os.path.join(path, filename), 'r', encoding='utf-8') as fp:
