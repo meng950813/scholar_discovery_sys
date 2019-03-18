@@ -6,7 +6,9 @@ desc: api蓝图，主要负责获取请求并返回需要的数据，格式为js
 from flask import Blueprint, request
 import json, logging, os
 from utils.query import query
+import utils.relation
 from service.schoolservice import school_service
+from service.teacherservice import teacher_service
 
 
 api_blueprint = Blueprint('api', __name__, url_prefix='/api')
@@ -65,3 +67,28 @@ def get_mapdata(filename):
         data = "[]"
     return data
 
+
+@api_blueprint.route('/person/relation', methods=['POST'])
+def person_relation():
+    """
+    获取个人与其他人的关系
+    :return:
+    """
+    teacher_id = request.form.get('teacher_id', type=int)
+    # 获取该老师的所有联系
+    relations = teacher_service.get_relations_by_id(teacher_id)
+    # 获取有联系的老师的所有老师的ID数组
+    teacher_id_set = set()
+    for relation in relations:
+        teacher_id_set.add(relation['teacher2_id'])
+    teacher_id_set.add(teacher_id)
+    # 获取所有老师
+    teachers = teacher_service.get_teachers_by_ids(teacher_id_set)
+    # 获取老师的头衔，如果有的话
+    academic_titles = teacher_service.get_academic_titles_by_ids(teacher_id_set)
+    # 总的学术头衔
+    total_categories = ['未知', '副教授', '教授']
+    total_categories.extend(teacher_service.get_total_academic_titles())
+    # 获取d3.js封装的RelationGraph所需的数据格式
+    data = utils.relation.handle_relations(teachers, relations, academic_titles, total_categories)
+    return json.dumps(data)
