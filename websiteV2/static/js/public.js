@@ -101,9 +101,20 @@ function hideAlert(){
 
 /**
  * 显示模态窗
+ * @param {string} mod_id 模态窗id
  */
-function showModal(){
+function showModal(mod_id){
+    let modal = document.getElementById(mod_id);
     
+    // 若找不到对应模态窗
+    if(!modal){
+        console.log("id 有误，找不到对应模态窗");
+        return;
+    }
+
+    // 显示模态窗
+    $(mod_id).modal();
+
 }
 
 /**
