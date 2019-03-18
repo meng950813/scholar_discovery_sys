@@ -153,17 +153,18 @@ class RelationGraph{
     addLinks(){
         let that = this;
         //添加连线
-        this.links_group.selectAll('line')
+        this.links_group.selectAll('path')
             .data(this.links)
             .enter()
-            .append('line')
+            .append('path')
+            .attr('fill', 'none')
             .style('stroke', '#ccc')
             .each(function (d) {
                 //设置线的默认宽度
                 if (d.width == undefined)
                     d.width = 2;
             })
-            .style('stroke-width', 2)
+            .style('stroke-width', d => d.width)
             .on('mouseover', function (d) {
                 that.mouseOver2Link(d);
             })
@@ -201,9 +202,9 @@ class RelationGraph{
         let links = null;
 
         if (filter == null)
-            links = this.links_group.selectAll('line');
+            links = this.links_group.selectAll('path');
         else
-            links = this.links_group.selectAll('line').filter(filter);
+            links = this.links_group.selectAll('path').filter(filter);
 
         links.attr('opacity', opacity);
     }
@@ -218,9 +219,9 @@ class RelationGraph{
         let links = null;
 
         if (filter == null)
-            links = this.links_group.selectAll('line');
+            links = this.links_group.selectAll('path');
         else
-            links = this.links_group.selectAll('line').filter(filter);
+            links = this.links_group.selectAll('path').filter(filter);
 
         links.style('stroke-width', width);
     }
@@ -264,7 +265,7 @@ class RelationGraph{
         let that = this;
         //清除线
         let count = 0;
-        let lines = this.links_group.selectAll('line')
+        let lines = this.links_group.selectAll('path')
             .filter(function (d, i) {
                 if (d.source.category == category || d.target.category == category){
                     let links = that.links.splice(i - count, 1);
@@ -364,11 +365,22 @@ class RelationGraph{
      */
     tickCallback(){
         //更新连线坐标
-        this.links_group.selectAll('line')
+        let that = this;
+        this.links_group.selectAll('path')
+            .attr('d', function (d) {
+                let dx = d.target.x - d.source.x;
+                let dy = d.target.y - d.source.y;
+                let dr = Math.sqrt(dx * dx + dy * dy);
+
+                return 'M' + d.source.x + ',' + d.source.y
+                + 'A' + dr + ',' + dr + ' 0 0,1' + d.target.x + ',' + d.target.y;
+            });
+            /*
             .attr('x1', d => d.source.x)
             .attr('y1', d => d.source.y)
             .attr('x2', d => d.target.x)
             .attr('y2', d => d.target.y);
+            */
         //更新节点坐标
         this.nodes_group.selectAll('circle')
             .attr('cx', d => d.x)
@@ -435,7 +447,7 @@ class RelationGraph{
         }
         let node_name = datum.name;
         //隐藏其他节点
-        this.setOpacityOfNodes(0.5, d => !temp_nodes.has(d.name));
+        this.setOpacityOfNodes(0.2, d => !temp_nodes.has(d.name));
         //隐藏连线
         this.setOpacityOfLinks(0.2, function (d) {
             return d.source.name != node_name && d.target.name != node_name;
@@ -475,7 +487,7 @@ class RelationGraph{
         let html = '<p>' + datum.source.name + '-' + datum.target.name + '</p>';
         this.setVisibleOfToolTip(true, html);
         //其他节点半透明
-        this.setOpacityOfNodes(0.5, function (d) {
+        this.setOpacityOfNodes(0.2, function (d) {
             return d.name != datum.source.name && d.name != datum.target.name;
         });
         //其他联系半透明
