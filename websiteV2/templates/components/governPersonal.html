@@ -6,23 +6,29 @@
 <div class="container">
     <h3>关系网络</h3>
     <div class="social-net"></div>
+
     <h3>联系列表</h3>
-    <div class="list">
-        <table class="table table-hover">
+    
+    <table class="table table-hover">
+        <thead class="thead-dark">
             <tr>
                 <th>企业</th>
                 <th>部门</th>
                 <th>联系人</th>
                 <th>备注</th>
                 <th>联系方式</th>
+                <th>创建时间</th>
                 <th>操作</th>
             </tr>
+        </thead>
+        <tbody>
             <tr>
                 <td>百里腾公司</td>
                 <td>产品部</td>
                 <td>马彦云</td>
                 <td>总经理</td>
                 <td>11111111</td>
+                <td>2019/3/3</td>
                 <td>
                     <button type="button" class="btn btn-danger" onclick="javascript:this.form.action='delete'";>删除</button>
                     <button type="button" class="btn btn-info" >修改</button>
@@ -34,14 +40,14 @@
                 <td>李云腾</td>
                 <td>总经理</td>
                 <td>12345678900</td>
+                <td>2019/3/3</td>
                 <td>
                     <button type="button" class="btn btn-danger" onclick="javascript:this.form.action='delete'";>删除</button>
                     <button type="button" class="btn btn-info" >修改</button>
                 </td>
             </tr>
-        </table>
-    </div>
-
+        </tbody>
+    </table>
 </div>
 
 {% endblock %}
