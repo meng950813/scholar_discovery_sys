@@ -99,7 +99,12 @@ function hideAlert(){
     $(".alert-container").removeClass("show-opacity");
 }
 
-
+/**
+ * 显示模态窗
+ */
+function showModal(){
+    
+}
 
 /**
  * 自执行函数，用于确定是否需要显示后端传回的登陆错误信息

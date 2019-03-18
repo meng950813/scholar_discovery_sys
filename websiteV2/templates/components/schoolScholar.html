@@ -6,6 +6,44 @@
 {% endblock %}
 
 {% block main %}
+
+    <!-- 搜索区 -->
+    <div id="search-container" class="search-area container">
+        <div class="imglog">
+            <img src="../static/images/Polaris.png" />
+        </div>
+
+        <form  role="search" class="navbar-form search-form text-center">
+
+            <div  class="form-group">
+
+                <input type="text" id="simple-input"  placeholder="搜索" class="form-control">
+
+                <ul id="hot-key-list" class="hot-key" style="padding-left:0px;">
+                    <li data='123'> 计算机 </li>
+                    <li data='123'> 玻璃 </li>
+                    <li data='123'> 人工智能 </li>
+                    <li data='123'> 数据挖掘 </li>
+                    <li data='123'> 人工智能 </li>
+                    <li data='123'> 数据挖掘 </li>
+                </ul>
+
+
+                <!-- 隐藏的提示区 -->
+                <ul id="hide-tip" class="display_none">
+                    <li data='123'>23456</li>
+                    <li data='123'>23456</li>
+                    <li data='123'>23456</li>
+                    <li data='123'>23456</li>
+                </ul>
+
+            </div>
+            <button class="btn btn_color" type="button" id = 'search-btn'>搜索</button>
+        </form>
+
+    </div>
+    
+        
     <div class="container search-container">
         <div class="part1">根据关键词 <b>"计算机"</b>，为您推荐 <b>6</b> 名专家</div>
         <ul>
