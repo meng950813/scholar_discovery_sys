@@ -1,6 +1,9 @@
-/*
-    获取地图的中心
+/**
+* author: xiaoniu
+* date: 2019-03-18
  */
+
+//获取地图的中心
 function getCenter(features) {
     //最小经度和纬度
     let longitudeMin = 100000;
@@ -200,14 +203,12 @@ class ChinaMap{
                 that.redrawInstitutions();
             //中国地图删除标记
             else
-                that.svg.select('#tag')
-                    .selectAll('g')
-                    .remove();
+                that.svg.select('#tag').selectAll('g').remove();
             //更新面包屑导航栏
             let texts = [];
             for (let i = 0; i < that.stack.length; i++)
                 texts.push(that.stack[i].name);
-
+            //调用更新面包屑钩子函数
             that.onUpdateBreadCrumb(texts);
         }
         //已经加载过数据，则直接回调函数
@@ -465,7 +466,6 @@ class ChinaMap{
             return;
         let id = datum.properties.id;
         let filename = '';
-        let that = this;
         this.scaleLevel++;
         //TODO:由于文件名问题，故需要加上00
         if (this.scaleLevel == 2)
