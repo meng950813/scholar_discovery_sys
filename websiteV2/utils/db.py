@@ -102,7 +102,7 @@ def select(sql, *args):
     :param args: select的SQL语句所对应的值
     :return: list(dict) 或者None
     """
-    print(sql)
+    print(sql,args)
     return _select(sql, False, *args)
 
 
