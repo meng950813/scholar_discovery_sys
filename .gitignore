@@ -19,6 +19,7 @@ spider/dbhelper.py
 spider/**/*.sql
 spider/**/*.log
 
+
 query/querydata
 
 websiteV2/static/querydata
