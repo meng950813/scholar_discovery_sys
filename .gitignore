@@ -22,6 +22,11 @@ spider/**/*.log
 
 query/querydata
 
-**/.idea
+websiteV2/static/querydata
 
 **/__pycache__
+
+**/.idea
+
+websiteV2/config.py
+websiteV2/template/map.html
