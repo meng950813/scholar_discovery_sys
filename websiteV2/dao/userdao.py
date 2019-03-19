@@ -38,6 +38,35 @@ class UserDao:
 
         return result
 
+
+    def createSchoolRelation(self , info_dict):
+        """
+        创建新的关系学校商务与高校老师的关系
+        :param info_dict : 字典类型参数: 格式如下：
+        info_dict = {
+            "user_id" : 100000,
+            "teacher_id" : 73994,
+            "teacher_name" : "谢光辉",
+            "college_id" : 1341,
+            "college_name" : "农学院",
+            "school_id" : 19024,
+            "school_name" : "中国农业大学",
+            "remark" : "备注-  33",
+            "link_method" : "123@123.com"
+        }
+        :return: 插入的id / None
+        """
+
+        """ 需要插入的关键字包括：
+            ID,U_ID,TEACHER_ID,TEACHER_NAME,COLLEGE_ID,COLLEGE_NAME,SCHOOL_ID,SCHOOL_NAME,REMARK,CREATION_TIME,LINK,STATUS
+        """
+        sql = """insert into sys_net_of_school_agent(U_ID,TEACHER_ID,TEACHER_NAME,COLLEGE_ID,COLLEGE_NAME,SCHOOL_ID,SCHOOL_NAME,REMARK,LINK)
+            value(%(user_id)s,%(teacher_id)s,%(teacher_name)s,%(college_id)s,%(college_name)s,%(school_id)s,%(school_name)s,%(remark)s,%(link_method)s)"""
+
+        return db.insert(sql , info_dict)
+
+
+
 user_dao = UserDao()
 
 

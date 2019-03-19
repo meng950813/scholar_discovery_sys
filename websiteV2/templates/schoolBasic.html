@@ -1,49 +1,32 @@
-{% extends './components/schoolHeader.html' %}
-{% block title %}首页{% endblock %}
+{% extends 'template.html' %}
+{% block title %}个人中心{% endblock %}
 
 {%  block head %}
-        <link href="../static/css/index.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/index.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block main %}
     <div id='app'>
-        <div class="search-area container" v-bind:class="{ searched : has_searched}">
+        <div class="search-area container">
+
             <div class="imglog">
                 <img src="../static/images/Polaris.png" />
             </div>
-            <div class="collapse navbar-collapse">
 
-            <form  action="/search"  method="post" class="navbar-form search-form text-center">
-                <div  class="form-group">
-                        <input type="text" id="simple-input" name="simple-input" onkeydown="return ClearSubmit(event)"  placeholder="请输入关键字" class="form-control">
-                </div>
-                <button class="btn btn_color" type="button" @click='go_search()'>搜索</button>
-            </form>
+            <div class="collapse navbar-collapse">
+                <form  action="/search"  method="POST" class="navbar-form search-form text-center" onsubmit="return checkForm1(this);">
+                    <div  class="form-group">
+                            <input type="text" id="simple-input" name="simple-input" placeholder="请输入关键字" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn_color" >搜索</button>
+                </form>
+            </div>
 
         </div>
-
-    </div>
-
-    <div><a href="{{ url_for('search') }}">ss</a></div>
-
-    <div id="map-d3" class="container display_none" v-bind:class="{display_block : has_searched}">
-        <ul id="topList">
-            <li>清华大学</li>
-            <li>清华大学</li>
-            <li>清华大学</li>
-            <li>清华大学</li>
-            <li>清华大学</li>
-        </ul>
-    </div>
-
-<div class="footer navbar-fixed-bottom">
-    <p class="copyright">&copy;copyright@ 2019 东南大学 Five五团队</p>
 </div>
 
-<script src="../static/resources/flat-ui-2.2.2-dist/js/vendor/jquery.min.js"></script>
-<script src="../static/resources/bootstrap3/js/bootstrap.min.js"></script>
-<script  src="../static/resources/flat-ui-2.2.2-dist/js/flat-ui.min.js"></script>
-<script src="../static/js/index.js"></script>
-<script src="../static/resources/layer/layer.js"></script>
+{% endblock %}
 
+{% block script %}
+    <script src="{{ url_for('static', filename='js/public.js') }}" ></script>
 {% endblock %}

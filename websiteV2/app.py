@@ -37,7 +37,11 @@ def index():
     user = None
     if "username" in session:
         user = session.get("username")
-    return render_template("index.html",user = user)
+        if user["TYPE"] == "1":
+            return render_template("index.html",user = user)
+        else:
+            return render_template("schoolBasic.html",user = user)
+    return render_template("index.html")
 
 
 @app.route('/index')
@@ -47,6 +51,12 @@ def index_2():
         user = session.get("username")
     return render_template("index.html", user = user)
 
+@app.route('/schoolBasic')
+def schoolBasic():
+    user = None
+    if "username" in session:
+        user = session.get("username")
+    return render_template("schoolBasic.html", user = user)
 
 @app.route('/relation')
 def relation():
@@ -76,8 +86,10 @@ def manageLogin():
     return render_template("./components/manageLogin.html")
 
 
-@app.route('/search')
+
+@app.route('/search',methods=['GET','POST'])
 def search():
+    keyword = request.form.get("simple-input")
     return render_template('./components/schoolScholar.html' , user = session.get('username'))
 
 

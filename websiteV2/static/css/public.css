@@ -10,7 +10,7 @@ body{
 }
 
 main{
-	padding-bottom: 40px; 
+	padding-bottom: 35px; 
 }
 
 .btn_color{
@@ -114,4 +114,23 @@ footer .copyright {
     border: 2px solid rgba(203, 210, 219, 0.82);
 	color: black;
 	margin-bottom: 20px;
+}
+
+/* 模态窗样式 */
+.modal{
+	padding: 50px 0;
+}
+
+.modal .container{
+	background: white;
+	padding: 20px 10%;
+}
+
+.modal .form-group{
+	padding: 5px;
+}
+
+.modal textarea{
+	width: 100%;
+	padding: 10px;
 }
