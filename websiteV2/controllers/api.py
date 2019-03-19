@@ -9,6 +9,7 @@ import logging
 import os
 from utils.query import query
 import utils.relation
+import utils.wordcloud
 from service.schoolservice import school_service
 from service.teacherservice import teacher_service
 
@@ -126,3 +127,26 @@ def institution_relation():
     # 获取d3.js封装的RelationGraph所需的数据格式
     data = utils.relation.handle_relations(teachers, relations, academic_titles, total_categories)
     return json.dumps(data)
+
+
+@api_blueprint.route('/word_cloud', methods=['POST'])
+def get_wordcloud():
+    """
+    根据老师id获取对应的关键字，并生成WordCloud可用的数据格式
+    :return: 依赖于d3.js的WordCloud类可用的数据格式
+    """
+    teacher_id = request.form.get('teacher_id', type=int)
+    # 查询内存，获取研究的词
+    words = utils.wordcloud.get_keywords_of_id(teacher_id)
+    if words is None:
+        return json.dumps([])
+
+    # 获取最大的权值
+    handle_data = []
+    max_score = None
+    for key, value in words.items():
+        if max_score is None:
+            max_score = value
+        handle_data.append({'text': key, 'size': value / max_score * 100})
+    # 取前100个
+    return json.dumps(handle_data[:50])
