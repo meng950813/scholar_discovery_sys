@@ -80,12 +80,8 @@ def manageLogin():
     return render_template("./components/manageLogin.html")
 
 
-<<<<<<< HEAD
 
 @app.route('/search',methods=['GET','POST'])
-=======
-@app.route('/search')
->>>>>>> origin/xiaoniu
 def search():
     keyword = request.form.get("simple-input")
     return render_template('./components/schoolScholar.html' , user = session.get('username'))
