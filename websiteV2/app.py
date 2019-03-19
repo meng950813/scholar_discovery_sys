@@ -1,4 +1,5 @@
 from flask import Flask,render_template,redirect,url_for,request,session
+import logging
 from controllers.api import api_blueprint
 from controllers.user import user_blueprint
 from utils import db
@@ -9,6 +10,8 @@ from config import SESSION_KEY
 app = Flask(__name__)
 app.register_blueprint(api_blueprint)
 app.register_blueprint(user_blueprint)
+# 打印logging输出
+logging.basicConfig(level=logging.DEBUG)
 
 # 需要预先调用，且只调用一次
 db.create_engine(**DB_CONFIG)
@@ -28,6 +31,7 @@ Session(app)
 
 """
 
+
 @app.route('/')
 def index():
     user = None
@@ -38,6 +42,7 @@ def index():
         else:
             return render_template("schoolBasic.html",user = user)
     return render_template("index.html")
+
 
 @app.route('/index')
 def index_2():
@@ -55,12 +60,13 @@ def schoolBasic():
 
 @app.route('/relation')
 def relation():
+    """测试关系图使用的路由函数"""
     return render_template('relation.html')
 
 
 @app.route('/login/')
 def login():
-    #商务登录
+    # 商务登录
     if "username" in session:
         return redirect("index")
 
@@ -70,12 +76,16 @@ def login():
 
 @app.route('/manageLogin')
 def manageLogin():
-    #管理员登录
+    # 管理员登录
     return render_template("./components/manageLogin.html")
 
 
+<<<<<<< HEAD
 
 @app.route('/search',methods=['GET','POST'])
+=======
+@app.route('/search')
+>>>>>>> origin/xiaoniu
 def search():
     keyword = request.form.get("simple-input")
     return render_template('./components/schoolScholar.html' , user = session.get('username'))
@@ -83,7 +93,7 @@ def search():
 
 @app.route("/logout/")
 def logout():
-    #商务注销
+    # 商务注销
     session.pop("username",None)
 
     return redirect(url_for("login"))
@@ -94,14 +104,16 @@ def manageLogout():
     # 管理员注销
     return redirect(url_for("manageLogin"))
 
+
 @app.route("/governPersonal/")
 def governPersonal():
-    #转到个人页面
+    # 转到个人页面
     return render_template("./components/governPersonal.html" , user = session.get('username'))
+
 
 @app.route("/schoolPersonal/")
 def schoolPersonal():
-    #转到个人页面
+    # 转到个人页面
     return render_template("./components/schoolPersonal.html" , user = session.get('username'))
 
 

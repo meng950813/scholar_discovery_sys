@@ -5,6 +5,7 @@
     <title>d3-关系图</title>
     <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/relation.js') }}"></script>
+    <script src="{{ url_for('static',filename='resources/jquery/jquery.min.js') }}"></script>
     <style>
         #tooltip {
             background:rgba(0,0,0,0.9);
@@ -20,6 +21,11 @@
             color:white;
             opacity:0;
         }
+        #sample{
+            fill: none;
+            stroke: brown;
+            stroke-width: 2;
+        }
     </style>
 </head>
 <body>
@@ -29,35 +35,18 @@
     let width = 800;
     let height = 800;
 
-    let categories = [
-        {name: '长江学者（青年学者）', color: '#EE6A50'},
-        {name: '长江学者（特聘教师）', color: '#4F94CD'},
-        {name: '杰出青年', color: '#DAA520'},
-        ];
-
-    let nodes = [
-        {category: 0, name: '桂林'},
-        {category: 1, name: '广州'},
-        {category: 2, name: '厦门'},
-        {category: 1, name: '杭州'},
-        {category: 0, name: '上海'},
-        {category: 1, name: '青岛'},
-        {category: 0, name: '天津'}
-    ];
-    let edges = [
-        {source: 0, target: 1},
-        {source: 0, target: 2},
-        {source: 0, target: 3},
-        {source: 1, target: 4},
-        {source: 1, target: 5},
-        {source: 1, target: 6},
-    ];
-    let json_data = {
-        'nodes': nodes,
-        'links': edges,
-        "categories": categories,
-    };
+    let svg = d3.select('svg');
     let relationGraph = new RelationGraph(d3.select('svg'));
-    relationGraph.setData(json_data);
+    //异步调用
+    $.ajax({
+        url: '/api/person/relation',
+        type: 'POST',
+        data: {teacher_id: 150896},
+        dataType: 'json',
+        success: function (json_data) {
+            console.log(json_data);
+            relationGraph.setData(json_data);
+        }
+    });
 </script>
 </html>

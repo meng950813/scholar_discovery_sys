@@ -1,6 +1,9 @@
-/*
-    获取地图的中心
+/**
+* author: xiaoniu
+* date: 2019-03-18
  */
+
+//获取地图的中心
 function getCenter(features) {
     //最小经度和纬度
     let longitudeMin = 100000;
@@ -76,7 +79,6 @@ function intersectRect(r1, r2) {
 class ChinaMap{
     constructor(svg){
         this.svg = svg;
-        let that = this;
         //所有的path都添加到g中，并命名为map
         this.svg.append('g')
             .attr('id', 'map');
@@ -110,7 +112,6 @@ class ChinaMap{
         this.tooltip = d3.select('body')
             .append('div')
             .attr('id', 'tooltip');
-        this.special_cities = ['北京市', '天津市', '上海市', '重庆市', '台湾省', '海南省', '香港特别行政区', '澳门特别行政区'];
     }
 
     /**
@@ -202,14 +203,12 @@ class ChinaMap{
                 that.redrawInstitutions();
             //中国地图删除标记
             else
-                that.svg.select('#tag')
-                    .selectAll('g')
-                    .remove();
+                that.svg.select('#tag').selectAll('g').remove();
             //更新面包屑导航栏
             let texts = [];
             for (let i = 0; i < that.stack.length; i++)
                 texts.push(that.stack[i].name);
-
+            //调用更新面包屑钩子函数
             that.onUpdateBreadCrumb(texts);
         }
         //已经加载过数据，则直接回调函数
@@ -248,7 +247,7 @@ class ChinaMap{
             .data(jsondata.features)
             .enter()
             .append('path')
-            .each(function (d, i) {
+            .each(function (d) {
                 d.weight = 0;
                 if (address_weights.has(d.properties.name)){
                     d.weight = address_weights.get(d.properties.name);
@@ -257,20 +256,20 @@ class ChinaMap{
             })
             .attr('stroke', '#000')
             .attr('stroke-width', 1)
-            .attr('fill', function (d, i) {
+            .attr('fill', function (d) {
                 return that.mapColor(d.weight);
             })
             .attr('d', that.path)
-            .on('mouseover', function (d, i, nodes) {
+            .on('mouseover', function (d, i) {
                 that.mouseover(this, d, i)
             })
             .on('mousemove', function (d, i) {
                 that.mousemove(this, d, i);
             })
-            .on('click', function (d, i) {
+            .on('click', function (d) {
                 that.clickMap(this, d);
             })
-            .on('mouseout', function (d, i) {
+            .on('mouseout', function (d) {
                 that.mouseout(this, d);
             });
         //回调更新地图钩子函数
@@ -467,7 +466,6 @@ class ChinaMap{
             return;
         let id = datum.properties.id;
         let filename = '';
-        let that = this;
         this.scaleLevel++;
         //TODO:由于文件名问题，故需要加上00
         if (this.scaleLevel == 2)
