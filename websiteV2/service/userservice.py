@@ -7,7 +7,7 @@ desc: 内部调用了UserDao的函数，并提供了python下易用的函数
 from dao.userdao import user_dao
 from utils import encrypt
 
-import re
+import re,time
 
 
 class UserService:
@@ -45,6 +45,61 @@ class UserService:
             return {'error':True}
         # 返回查询结果
         return  back
+
+
+
+    def createSchoolRelation(self,info_data):
+        """
+        格式化传入的参数
+        :param info_data : 从前端获取的数据，字典类型，需要转化成如下格式
+        info_dict = {
+            "user_id" : 100000,
+            "teacher_id" : 73994,
+            "teacher_name" : "谢光辉",
+            "college_id" : 1341,
+            "college_name" : "农学院",
+            "school_id" : 19024,
+            "school_name" : "中国农业大学",
+            "remark" : "备注-  33",
+            "link_method" : "123@123.com",
+            "create_time" : "2019-03-04 14:21:23"
+        }
+        :return : 
+                {
+                    "success" : True/False,
+                    "id" : 123
+                }
+        """
+        
+        info_dict = {
+            "user_id" : info_data["user_id"],
+            "teacher_id" : None,
+            "teacher_name" : "contract_name",
+            "college_id" : None,
+            "college_name" : info_data["level_two"],
+            "school_id" : None,
+            "school_name" : info_data['level_one'],
+            "remark" : info_data['remark'],
+            "link_method" : info_data["link_method"],
+            "create_time" : self.current_time()
+        }
+
+        new_line_id = user_dao.createSchoolRelation(info_dict)
+
+        # 执行成功，返回新记录 id
+        if new_line_id:
+            return { "success" : True,"id" : new_line_id}
+        return {"success" : False}
+        
+
+
+    def current_time(self):
+        """
+        返回当前时间， 格式如："2019-03-04 14:21:23"
+        """
+        return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+
+
 
 user_service = UserService()
 

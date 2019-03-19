@@ -29,8 +29,44 @@ def dologin():
 
     session["username"] = result
 
+    print(result)
+    
     # TODO 根据用户身份重定向
-    return redirect(url_for("governPersonal"))
+    if result["TYPE"] == "1":
+
+        return redirect(url_for("governPersonal"))
+
+    return redirect(url_for("schoolPersonal"))
+
+
+@user_blueprint.route('/createRelationship', methods=['POST'])
+def createRelationship():
+    """
+    创建联系
+    :return: dict : { success:True,create_time:"2019/3/4",id:"123" }
+    """
+
+    user = session.get("username")
+    # 判断是否登陆
+    if not user:
+         return redirect(url_for("login")) 
+    
+    info = {
+        "user_id" : user["ID"],
+        "level_one" : request.form['level_one'],
+        "level_two" : request.form['level_two'],
+        "contract_name" : request.form['contract_name'],
+        "link_method" : request.form['link_method'],
+        "remark" : request.form['remark'],
+    }
+
+    # 企业商务
+    if user["TYPE"] == "1":
+        # user_service
+        pass
+    # 高校商务
+    else:
+        return user_service.createSchoolRelation(info)
 
 if __name__ == '__main__':
     pass

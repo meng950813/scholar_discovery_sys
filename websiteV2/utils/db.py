@@ -106,17 +106,104 @@ def select(sql, *args):
     return _select(sql, False, *args)
 
 
+
+def _insert(sql, insertMany , args):
+    """
+    insert语句
+    :param sql: SQL语句 内部变量使用?
+    :param insertMany: 是否要插入多行
+    :param args: SQL语句中要使用的变量
+    :return: 返回插入的结果
+    """
+    global POOL
+    connection = None
+    cursor = None
+    logging.info('SQL: %s %s' % (sql, args if len(args) > 0 else ""))
+    sql = sql.replace('?', '%s')
+
+    try:
+        connection = POOL.connection()
+        cursor = connection.cursor(cursor=pymysql.cursors.DictCursor)
+
+        print('SQL: %s %s' % (sql, args if len(args) > 0 else ""))
+
+        # 利用本身的 execute 函数的特性，传入两个参数：sql语句与tuple类型的参数，以避免sql注入
+        if insertMany:
+            # 插入多行
+            cursor.executemany(sql, args)
+        else:
+            cursor.execute(sql, args)
+
+        # 返回最后插入行的主键ID
+        return cursor.lastrowid
+        
+    except Exception as e:
+        print(e)
+        connection.rollback()  # 事务回滚
+
+    finally:
+        cursor.close()
+        
+        connection.commit()
+
+        connection.close()
+
+
+def insert(sql , args):
+    """
+    执行SQL语句
+    :param sql:  insert的SQL语句，可含?
+    :param args: insert的SQL语句所对应的值
+    :return: 最后插入行的主键ID
+    """
+    return _insert(sql, False, args)
+
+
+def insert_many(sql , *args):
+    """
+    执行SQL语句
+    :param sql:  insert的SQL语句，可含?
+    :param args: insert的SQL语句所对应的值
+    :return: 最后插入行的主键ID
+    """
+    return _insert(sql , True , *args)
+
+
 if __name__ == '__main__':
+    
+    import sys
+    sys.path.append("..")
+
     from config import DB_CONFIG
 
     # 需要预先调用，且只调用一次
-    create_engine(DB_CONFIG['user'], DB_CONFIG['pwd'], DB_CONFIG['db_name'])
+    create_engine(**DB_CONFIG)
 
     teachers = select('select * from es_teacher limit 0,10')
     # print(teachers)
 
-    sql_base = "select * from sys_user where NAME = %s"
-    print(select( sql_base % "1 or 1=1 or %s","123") )
+    # sql_base = "select * from sys_user where NAME = %s"
+    # print(select( sql_base % "1 or 1=1 or %s","123") )
 
-    print(select( sql_base, "%测试账号" ))
+    # print(select( sql_base, "%测试账号" ))
+
+    sql_base = """insert into sys_net_of_school_agent
+            (U_ID,TEACHER_ID,TEACHER_NAME,COLLEGE_ID,COLLEGE_NAME,SCHOOL_ID,SCHOOL_NAME,REMARK,LINK)
+            value(%(user_id)s,%(teacher_id)s,%(teacher_name)s,%(college_id)s,%(college_name)s,%(school_id)s,%(school_name)s,%(remark)s,%(link_method)s)"""
+    
+    info = (100000,73930,"张晖",1355,"马克思主义学院",19024,"中国农业大学","备注，dd","12345678908")
+    info_dict = {
+        "user_id" : 100000,
+        "teacher_id" : 73994,
+        "teacher_name" : "谢光辉",
+        "college_id" : 1341,
+        "college_name" : "农学院",
+        "school_id" : 19024,
+        "school_name" : "中国农业大学",
+        "remark" : "备注-  33",
+        "link_method" : "123@123.com"
+    }
+    print(insert(sql_base , info_dict))
+
+
 

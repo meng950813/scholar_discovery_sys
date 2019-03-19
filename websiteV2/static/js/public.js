@@ -99,6 +99,17 @@ function hideAlert(){
     $(".alert-container").removeClass("show-opacity");
 }
 
+
+/**
+ * 自执行函数，用于确定是否需要显示后端传回的登陆错误信息
+ */
+(function hasMsg(){
+    if(document.getElementById("error-msg")){
+        showAlert("请输入正确的账户或密码", ALERT_TYPE.error);
+    }
+})();
+
+
 /**
  * 显示模态窗
  * @param {string} mod_id 模态窗id
@@ -113,15 +124,82 @@ function showModal(mod_id){
     }
 
     // 显示模态窗
-    $(mod_id).modal();
+    $(modal).modal();
 
 }
 
 /**
- * 自执行函数，用于确定是否需要显示后端传回的登陆错误信息
+ * 添加联系人的模态框提交响应事件
  */
-(function hasMsg(){
-    if(document.getElementById("error-msg")){
-        showAlert("请输入正确的账户或密码", ALERT_TYPE.error);
+$("#submit-connect").on("click",function(e){
+    e.preventDefault();
+    let info = {
+        "level_one" : $("#name_level_one").val(),
+        "level_two" : $("#name_level_two").val(),
+        "contract_name" : $("#contract_name").val(),
+        "link_method" : $("#link_method").val(),
+        "remark" : $("#remark").val(),
+
+    };
+    // TODO checkout is there any empty
+    // checkUseful(info);
+
+    $.ajax({
+        "type" : "post",
+        "url" : 
+        "/user/createRelationship",
+        "dataType" : "json",
+        "data" : info,
+        success : function (data) { 
+
+            if(data.success){
+                showAlert("操作成功",ALERT_TYPE.success);
+                info.create_time = new Date().Format("yyyy-MM-dd");
+                info.id = data.id;
+                creatNewRecord(info);
+            }
+            else{
+                showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
+            }
+        }
+    });
+});
+
+
+/**
+ * 在联系列表里添加一条新的联系记录
+ * @param {object} info 用于填充的数据
+ */
+function creatNewRecord(info){
+    let html = `<tr>
+        <td>${info.level_one}</td>
+        <td>${info.level_two}</td>
+        <td>${info.contract_name}</td>
+        <td>${info.link_method}</td>
+        <td>${info.remark}</td>
+        <td>${info.create_time}</td>
+        <td>
+            <button type="button" class="btn btn-danger" data ="${info.id}">删除</button>
+            <button type="button" class="btn btn-info" data ="${info.id}">修改</button>
+        </td>
+    </tr>`;
+
+    // 插入到第一行
+    $("#contract_list tr:first").before(html);
+}
+
+
+
+
+function testInsert() {
+    var testData = {
+        "level_one" : `$("#name_level_one").val()`,
+        "level_two" : `$("#name_level_two").val()`,
+        "contract_name" :` $("#contract_name").val()`,
+        "link_method" : `$("#link_method").val()`,
+        "remark" :` $("#remark").val()`,
+        "create_time" : "2019/3/4"
     }
-})()
+    console.log("in testInsert : ", testData)
+    creatNewRecord(testData);
+  }
