@@ -1,11 +1,69 @@
 body{
-    background-color: #f3f3f3;
+    background-color: #ffffff;
     color: black;
+}
+
+.search-area{
+    width: 900px;
+	margin:0 auto ;
+}
+
+/* 搜索区域中的 logo  */
+.search-area .imglog{
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.search-area .imglog img{
+	display:block;
+	height:100%;
+}
+
+#search-container.searched .search-form{
+	display: inline-block!important;
+}
+#search-container.searched .search-form{
+	padding: 0;
+}
+
+.search-area input{
+	height: 40px!important;
+}
+.search-area  #simple-input{
+	width: 600px;
+}
+
+.search-area .search-form{
+	padding-bottom: 0px;
+	text-align: center;
+    margin-left: 10px;
+}
+.search-area .form-group{
+	position: relative;
+    margin-left: 20px;
+}
+
+/* 与 search-area 平级的 searched 类 */
+#search-container.searched > .imglog{
+	width: 50px;
+	height: 50px;
+	display: inline-block;
+	vertical-align: top;
+}
+#search-container.searched .search-form{
+	display: inline-block!important;
+	margin-left: 10px;
+}
+#search-container.searched .search-form{
+	padding: 0;
 }
 
 .search-container{
     border: 1px solid #000000;
     background-color: white;
+    margin-top: 20px;
 }
 
 .part1{
@@ -15,6 +73,7 @@ body{
     line-height: 100px;
     color: black;
     font-weight: bold;
+    font-size: 30px;
     border-bottom: 1px solid #000000;
 }
 

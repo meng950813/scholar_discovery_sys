@@ -6,47 +6,27 @@
 {% endblock %}
 
 {% block main %}
-    <!-- 搜索区 -->
-    <div id="search-container" class="search-area container">
-        <div class="imglog">
-            <img src="../static/images/Polaris.png" />
-        </div>
+    <div id='app'>
+        <div class="search-area container">
 
-        <form  role="search" class="navbar-form search-form text-center">
-
-            <div  class="form-group">
-
-                <input type="text" id="simple-input"  placeholder="搜索" class="form-control">
-
-                <ul id="hot-key-list" class="hot-key" style="padding-left:0px;">
-                    <li data='123'> 计算机 </li>
-                    <li data='123'> 玻璃 </li>
-                    <li data='123'> 人工智能 </li>
-                    <li data='123'> 数据挖掘 </li>
-                    <li data='123'> 人工智能 </li>
-                    <li data='123'> 数据挖掘 </li>
-                </ul>
-
-
-                <!-- 隐藏的提示区 -->
-                <ul id="hide-tip" class="display_none">
-                    <li data='123'>23456</li>
-                    <li data='123'>23456</li>
-                    <li data='123'>23456</li>
-                    <li data='123'>23456</li>
-                </ul>
-
+            <div class="imglog">
+                <img src="../static/images/Polaris.png" />
             </div>
-            <button class="btn btn_color" type="button" id = 'search-btn'>搜索</button>
-        </form>
 
-    </div>
-    
+            <div class="collapse navbar-collapse">
+                <form  action="/search"  method="POST" class="navbar-form search-form text-center" onsubmit="return checkForm1(this);">
+                    <div  class="form-group">
+                            <input type="text" id="simple-input" name="simple-input" placeholder="请输入关键字" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn_color" >搜索</button>
+                </form>
+            </div>
 
+        </div>
+</div>
 
 {% endblock %}
 
 {% block script %}
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/public.js') }}" ></script>
 {% endblock %}
-

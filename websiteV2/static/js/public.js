@@ -4,7 +4,7 @@ const ALERT_TYPE = {
     "error" : "error",
     "warning" : "warning",
     "success" : "success",
-} 
+};
 
 $("#submit").on("click",checkForm);
 
@@ -12,6 +12,7 @@ $("#submit").on("click",checkForm);
 function checkForm(){   
     let name = $("#username").val();
     let password = $("#password").val();
+
 
     if( name == ""){
         showAlert("用户名不能为空!",ALERT_TYPE.warning);
@@ -51,6 +52,15 @@ function checkForm(){
     // return true;
 }
 
+//判断校商首页搜索框是否为空
+function checkForm1() {
+
+    let keyword = $("#simple-input").val();
+    console.log(keyword);
+    if(keyword == ""){
+        return false;
+    }
+}
 
 /**
  * 利用正则表达式判断用户输入是否为 手机号/ 邮箱 / 6-8位 user_id 
@@ -60,7 +70,7 @@ function checkUsername(username){
     // 正则表达式
     let phone = /^\d{11}$/;
     let mail = /^[\d\w_]+@[\d\w]+\.com$/;
-    let id = /^\d{6,8}$/
+    let id = /^\d{6,8}$/;
 
     if( phone.test(username) || mail.test(username) || id.test(username)){
         return true;
