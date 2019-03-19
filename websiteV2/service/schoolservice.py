@@ -28,6 +28,24 @@ class SchoolService:
 
         return schools
 
+    def get_teachers_by_school(self, school_id, institution_id=None):
+        """
+        获取学校id或者(学校id,学院id)下的所有老师
+        :param school_id: 学校的id
+        :param institution_id: 该学校对应的学院的id
+        :return:list[dict] 字典的格式详见es_teacher
+        """
+        results = school_dao.get_teachers_by_school(school_id, institution_id)
+        # 转换成以id为键名，值为一个dict的数据项
+        teachers = {}
+        for result in results:
+            teacher_id = result['ID']
+            result.pop('ID')
+            # 设置title
+            result['TITLE'] = result['TITLE'] if (result['TITLE'] is not None and len(result['TITLE']) > 0) else '未知'
+            teachers[teacher_id] = result
+        return teachers
+
 
 school_service = SchoolService()
 
@@ -39,6 +57,8 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG)
     # 需要预先调用，且只调用一次
-    db.create_engine(DB_CONFIG['user'], DB_CONFIG['pwd'], DB_CONFIG['db_name'])
+    db.create_engine(**DB_CONFIG)
 
     print(school_service.get_position_by_names(['清华大学', '北京大学']))
+    print(school_service.get_teachers_by_school(17134))
+    print(school_service.get_teachers_by_school(17134, 557))

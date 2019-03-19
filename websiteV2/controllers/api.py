@@ -1,10 +1,12 @@
 """
 author: xiaoniu
-date: 2019-03-14
+date: 2019-03-19
 desc: api蓝图，主要负责获取请求并返回需要的数据，格式为json
 """
 from flask import Blueprint, request
-import json, logging, os
+import json
+import logging
+import os
 from utils.query import query
 import utils.relation
 from service.schoolservice import school_service
@@ -71,16 +73,19 @@ def get_mapdata(filename):
 @api_blueprint.route('/person/relation', methods=['POST'])
 def person_relation():
     """
-    获取个人与其他人的关系
-    :return:
+    获取个人与其他人的关系,请求格式如下
+        url: '/api/person/relation',
+        type: 'POST',
+        data: {teacher_id: 137950},
+        dataType: 'json'
+    :return: 返回RelationGraph类所需要的json
     """
+    # 获取老师id
     teacher_id = request.form.get('teacher_id', type=int)
     # 获取该老师的所有联系
-    relations = teacher_service.get_relations_by_id(teacher_id)
+    relations = teacher_service.get_relations_by_ids(teacher_id)
     # 获取有联系的老师的所有老师的ID数组
-    teacher_id_set = set()
-    for relation in relations:
-        teacher_id_set.add(relation['teacher2_id'])
+    teacher_id_set = set([relation['teacher2_id'] for relation in relations])
     teacher_id_set.add(teacher_id)
     # 获取所有老师
     teachers = teacher_service.get_teachers_by_ids(teacher_id_set)
@@ -89,6 +94,35 @@ def person_relation():
     # 总的学术头衔
     total_categories = ['未知', '副教授', '教授']
     total_categories.extend(teacher_service.get_total_academic_titles())
+    # 获取d3.js封装的RelationGraph所需的数据格式
+    data = utils.relation.handle_relations(teachers, relations, academic_titles, total_categories)
+    return json.dumps(data)
+
+
+@api_blueprint.route('/institution/relation', methods=['POST'])
+def institution_relation():
+    """
+        url: /api/institution/relation,
+        type: 'POST',
+        data: {school_id: 17134, institution_id: 557},
+        dataType: 'json'
+    获取该学校和院系下的所有老师的联系，并生成d3封装的RelationGraph类可用的数据格式，json
+    :return: json格式的数据
+    """
+    # 获取传递的参数
+    school_id = request.form.get('school_id', type=int)
+    institution_id = request.form.get('institution_id', type=int)
+    # 获取该学院和院系对应的所有老师
+    teachers = school_service.get_teachers_by_school(school_id, institution_id)
+    # 老师的id数组
+    teacher_ids = teachers.keys()
+    # 老师对应的学术头衔
+    academic_titles = teacher_service.get_academic_titles_by_ids(teacher_ids)
+    # 总的学术头衔类型
+    total_categories = ['未知', '副教授', '教授']
+    total_categories.extend(teacher_service.get_total_academic_titles())
+    # 获取老师的联系
+    relations = teacher_service.get_relations_by_ids(teacher_ids)
     # 获取d3.js封装的RelationGraph所需的数据格式
     data = utils.relation.handle_relations(teachers, relations, academic_titles, total_categories)
     return json.dumps(data)

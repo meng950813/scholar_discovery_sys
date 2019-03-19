@@ -72,7 +72,7 @@ class RelationGraph{
             .attr('cursor', 'pointer');
         //为svg添加缩放事件
         this.svg.call(d3.zoom()
-            .scaleExtent([0.7, 4])
+            .scaleExtent([0.3, 4])
             .on('zoom', function () {
                 that.group.attr('transform', d3.event.transform);
             }))
@@ -154,7 +154,7 @@ class RelationGraph{
      * @returns {number} 联系的宽度
      */
     static getEmphasisLinkWidthHook(datum){
-        return 15;
+        return 12;
     }
 
     /**
@@ -292,7 +292,7 @@ class RelationGraph{
 
     addLabels(){
         let that = this;
-        let fontSize = 20;
+        let fontSize = 25;
         this.labels_group.selectAll('text')
             .data(this.nodes)
             .enter()
@@ -302,7 +302,7 @@ class RelationGraph{
             .attr('dx', d => -d.name.length * fontSize / 2)
             .attr('dy', fontSize / 4)
             .attr('font-size', fontSize)
-            .attr('stroke-width', 0.5)
+            .attr('stroke-width', 0.8)
             .attr('stroke', d => this.categories[d.category].color)
             .text(d => d.name)
             .call(this.dragNodesCallback(this.simulation))
@@ -662,7 +662,7 @@ class RelationGraph{
      * @param minNodeRadius 最小的节点
      * @param maxNodeRadius 最大的节点
      */
-    normalizeNodes(minNodeRadius = 10, maxNodeRadius = 20){
+    normalizeNodes(minNodeRadius = 10, maxNodeRadius = 30){
         //获取节点的最大值
         let realNodeMaxSize = 0;
         for (let i = 0; i < this.nodes.length; i++){
@@ -682,7 +682,7 @@ class RelationGraph{
      * @param minLineWidth 最小宽度
      * @param maxLineWidth 最大宽度
      */
-    normalizeLinks(minLineWidth = 2, maxLineWidth = 12){
+    normalizeLinks(minLineWidth = 2, maxLineWidth = 8){
         this.transformLinksFormat();
         //获取最大宽度
         let maxWidth = 0;

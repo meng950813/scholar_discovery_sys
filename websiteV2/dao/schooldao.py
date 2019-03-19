@@ -20,6 +20,21 @@ class SchoolDao:
         results = db.select(sql, *school_names)
         return results
 
+    def get_teachers_by_school(self, school_id, institution_id=None):
+        """
+        获取学校id或者(学校id,学院id)下的所有老师
+        :param school_id: 学校的id
+        :param institution_id: 该学校对应的学院的id
+        :return:list[dict] 字典的格式详见es_teacher
+        """
+        if institution_id is None:
+            sql = 'select * from es_teacher where SCHOOL_ID = ?'
+            results = db.select(sql, school_id)
+        else:
+            sql = 'select * from es_teacher where SCHOOL_ID = ? and INSTITUTION_ID=?'
+            results = db.select(sql, school_id, institution_id)
+        return results
+
 
 school_dao = SchoolDao()
 
@@ -34,4 +49,5 @@ if __name__ == '__main__':
     db.create_engine(**DB_CONFIG)
 
     print(school_dao.get_position_by_names(['清华大学', '北京大学']))
+    print(school_dao.get_teachers_by_school(17134, 557))
 

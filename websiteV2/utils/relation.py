@@ -1,3 +1,9 @@
+"""
+author: xiaoniu
+date: 2019-03-19
+desc: 用于处理关系图的部分函数
+"""
+
 
 def handle_relations(teachers, relations, academic_titles, total_categories):
     """
@@ -21,7 +27,7 @@ def handle_relations(teachers, relations, academic_titles, total_categories):
     # 学术头衔会覆盖原有的头衔
     for title_row in academic_titles:
         teachers[title_row['TEACHER_ID']]['TITLE'] = title_row['HONOR']
-    # 获取老师关系 目前保证为无向图
+    # 获取老师关系 并保证为无向图
     for relation in relations:
         teacher2_id = relation['teacher2_id']
         if teacher2_id not in teachers.keys():
@@ -29,10 +35,10 @@ def handle_relations(teachers, relations, academic_titles, total_categories):
         teacher_id = relation['teacher1_id']
         teacher_name = teachers[teacher_id].get('NAME')
         teacher_title = teachers[teacher_id].get('TITLE')
-        # 合作论文次数
-        paper_num = relation['paper_num']
         teacher2_name = relation['teacher2_name']
         teacher2_title = teachers[teacher2_id].get('TITLE')
+        # 合作论文次数
+        paper_num = relation['paper_num']
         # 不添加自己到自己的边
         if teacher_id == teacher2_id:
             continue
@@ -51,7 +57,7 @@ def handle_relations(teachers, relations, academic_titles, total_categories):
                      {'title': teacher2_title, 'name': teacher2_name, 'id': teacher2_id}]
         for data in temp_list:
             for node in nodes:
-                if node['name'] == data['name']:
+                if node['id'] == data['id']:
                     node['radius'] += paper_num
                     break
             else:
