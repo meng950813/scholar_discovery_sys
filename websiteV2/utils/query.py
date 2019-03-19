@@ -224,6 +224,7 @@ class Query:
         for code in result:
             # 学科代码code下的教师权值信息
             teacher_info_s = result[code]
+
             for teacher_info in teacher_info_s:
                 # 教师id
                 teacher_id = teacher_info[0]
@@ -294,6 +295,30 @@ class Query:
                          'city': school_infomation['CITY'], 'score': school_rank[school_id]})
         return query_result
 
+    def prints_for_teacher(self, result):
+        '''
+        根据搜索到的老师信息得到老师所在的学院名，学校名，并打印
+        :param result:进行搜索后返回的老师信息，包括老师姓名及老师学院，以老师得分降序排序
+        :return:院系的搜索结果，老师+学院名+学校名
+        '''
+
+        teacher_info = []
+        for code in result:
+            # 学科代码code下的教师权值信息
+            teacher_info_s = result[code]
+
+            for teacher_info1 in teacher_info_s:
+                # 教师id
+                teacher_id = teacher_info1[0]
+                # 学院id
+                institution_id = self.id_name[teacher_id]['INSTITUTION_ID']
+
+                teacher_info.append({'teacher_name': self.id_name[teacher_id]["NAME"],'institution_name': self.institution_info[institution_id]['NAME'],'school_name':self.institution_info[institution_id]['SCHOOL_NAME']})
+
+        return teacher_info
+
+
+
     def do_query(self, text, filer):
         '''
 
@@ -339,9 +364,6 @@ class Query:
         # result {code:[teacher_id:value,].,code:[],...}
         return result
 
-
-
-
 def queryForTeacher(words, institution_id='1526'):
     '''
     搜索教师
@@ -371,7 +393,7 @@ subject = [
     {"code": '0830', "k": 18}, {"code": '0831', "k": 10}, {"code": '0832', "k": 12}]
 
 
-query = Query(subject, path = os.path.join(os.getcwd(), 'static'))
+query = Query(subject, path = os.path.join(os.getcwd(),'static'))
 
 
 
@@ -398,6 +420,11 @@ def query_all(range, words, limit=None):
         result = query.do_query(words, filer)
         result_info = query.prints_for_institution(result, limit)
         return result_info
+    if query_range == '老师':
+        filer = {}
+        result = query.do_query(words, filer)
+        result_info = query.prints_for_teacher(result)
+        return result_info
     if query_range == '教师':
         filer = {}
         filer['institution'] = limit
@@ -406,3 +433,6 @@ def query_all(range, words, limit=None):
         return result_info
 
 
+
+if __name__ == '__main__':
+    print(query_all("老师","计算机"))
