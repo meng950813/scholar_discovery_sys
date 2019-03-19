@@ -28,9 +28,10 @@ def dologin():
         return redirect(url_for("login" , error = 1))
 
     session["username"] = result
-
-    # TODO 根据用户身份重定向
-    return redirect(url_for("governPersonal"))
+    if result["TYPE"] == '1':
+        return redirect(url_for("index"))
+    else:
+        return redirect(url_for("schoolBasic"))
 
 if __name__ == '__main__':
     pass
