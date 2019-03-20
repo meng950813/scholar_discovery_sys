@@ -19,6 +19,7 @@ spider/dbhelper.py
 spider/**/*.sql
 spider/**/*.log
 
+
 query/querydata
 
 websiteV2/static/querydata
@@ -27,4 +28,5 @@ websiteV2/static/querydata
 
 **/.idea
 
-config.py
+websiteV2/config.py
+websiteV2/template/map.html

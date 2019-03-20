@@ -1,37 +1,42 @@
-{% extends './components/schoolHeader.html' %}
+{% extends 'template.html' %}
 {% block title %}个人中心{% endblock %}
 
-{%  block head %}
-    <link href="../static/css/personal.css" rel="stylesheet" type="text/css" />
-{% endblock %}
 
 {% block main %}
-
- <span>关系网络</span>
+<div class="container">
+    <h3>关系网络</h3>
     <div class="social-net"></div>
-    <span>联系列表</span>
+    <h3>联系列表</h3>
     <div class="list">
-        <form method="post" action="" >
         <table class="table table-hover">
-            <tr>
-                <td>学校</td>
-                <td>学院</td>
-                <td>联系人</td>
-                <td>备注</td>
-                <td>联系方式</td>
-                <td>操作</td>
-            </tr>
-            <tr>
-                <td>南京大学</td>
-                <td>计算机学院</td>
-                <td>周志华</td>
-                <td>人工智能学院院长</td>
-                <td>11111111</td>
-                <td><button type="button" class="btn btn-danger" onclick="javascript:this.form.action='delete'";>删除</button>
-               <button type="button" class="btn btn-info" >修改</button></td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>学校</th>
+                    <th>学院</th>
+                    <th>联系人</th>
+                    <th>联系方式</th>
+                    <th>备注</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="contract_list">
+                <tr>
+                    <td>南京大学</td>
+                    <td>计算机学院</td>
+                    <td>周志华</td>
+                    <td>11111111</td>
+                    <td>人工智能学院院长</td>
+                    <td>2019/3/3</td>
+                    <td>
+                        <button type="button" class="btn btn-danger">删除</button>
+                        <button type="button" class="btn btn-info" >修改</button>
+                    </td>
+                </tr>
+            </tbody>
         </table>
-        </form>
     </div>
+    
+</div>
 
 {% endblock %}

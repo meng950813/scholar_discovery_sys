@@ -91,16 +91,20 @@ function onKeywordChange(e){
 function onKeyDown(event){
   let e = event || window.event;
   
+
   /**响应回车键 且 keyword 不为空，执行搜索任务 */
   if(e.keyCode == 13 && $("#simple-input").val()){
-    go_search()
+    go_search();
+    window.event.returnValue = false; 
   }
   /**若键入 删除 / 回退 键， 且内容清空，隐藏联想框 */ 
   else if((e.keyCode === 8 || e.keyCode === 46) && !$("#simple-input").val()){
-    hideAssociativeWordsArea()
+    
+    hideAssociativeWordsArea();
     // 清空上一个尚未响应的函数
     clearTimeout(FLAG_VARIABLE.recode_setTimeout);
   }
+  
 }
 
 

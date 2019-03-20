@@ -3,44 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}-专家发现系统</title>
-    <link href="../static/css/public.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="../static/resources/bootstrap3/css/bootstrap.min.css" />
+    <link href="{{ url_for('static',filename='css/public.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='resources/bootstrap3/css/bootstrap.min.css') }}" />
 
-    <link rel="icon" href="../static/images/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/x-icon" />
     {% block head %}{% endblock %}
 </head>
 
 <body>
-    <nav role="navigation" class="navbar navbar-default">
-        <div class="container">
+    <header role="navigation" class="navbar navbar-default">
+        <nav class="container">
             <div class="navbar-header">
-                <a href="#" id="logo" class="navbar-brand">
-                    <img src="../static/images/logo-new.png"/>
+                <a href="/" id="logo" class="navbar-brand">
+                    <img src="{{ url_for('static',filename='images/logo-new.png') }}"/>
                 </a>
             </div>
 
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     {% if user %}
-                        <li><a href="#">发布需求</a></li>
-                        <li><a href="#">添加联系人</a></li>
-                        <li  id="username"><a href="{{ url_for('governPersonal') }}">{{ user[0][0] }}</a></li>
-                        <li><a href="{{ url_for('logout') }}">注销</a></li>
+                        {% if user["TYPE"] == '1' %}
+                            <li><a href="#">发布需求</a></li>
+                            <li><a href="javascript:void(0)"  onclick="showModal('addContractModal')">添加联系人</a></li>
+                            <li  id="username"><a href="{{ url_for('governPersonal') }}">{{ user["NAME"] }}</a></li>
+                            <li><a href="{{ url_for('logout') }}">注销</a></li>
+                        {% else %}
+                            <li><a href="javascript:void(0)"  onclick="showModal('addContractModal')">添加联系人</a></li>
+                            <li  id="username"><a href="{{ url_for('schoolPersonal') }}">{{ user["NAME"] }}</a></li>
+                            <li><a href="{{ url_for('logout') }}">注销</a></li>
+                        {% endif %}
                     {% else %}
                         <li><a href="{{ url_for('login') }}">登录</a></li>
                     {% endif %}
                 </ul>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
+    <main>
+        {% block main %}{% endblock %}
+        {% if user %}
+            <!-- 弹出窗 -->
+            <div class="modal fade" id="addContractModal">
+                <div class="container">
+                    
+                    <button type="button" class="close"  data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    
+                    <div class="page-header">
+                        <h2 class="text-center">添加联系人信息</h2>
+                    </div>
+                    {% if user["TYPE"] == '1' %}
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="name_level_one" class="col-sm-2 control-label">企业名</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="name_level_one" placeholder="请输入企业名">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name_level_two" class="col-sm-2 control-label">部门名</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="name_level_two" placeholder="请输入部门名">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contract_name" class="col-sm-2 control-label">联系人</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="contract_name" placeholder="请输入联系人姓名">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="link_method" class="col-sm-2 control-label">联系方式</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="link_method" placeholder="电话/邮箱">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="remark" class="col-sm-2 control-label">备 &nbsp; 注</label>
+                                <div class="col-sm-10">
+                                    <textarea name="remark" id="remark" rows="5" placeholder="备注信息"></textarea>
+                                </div>
+                            </div>
+                                
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button id="submit-connect" class="btn btn-info btn-block">添加</button>
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="name_level_one" class="col-sm-2 control-label">学校名</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="name_level_one" placeholder="请输入学校名">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name_level_two" class="col-sm-2 control-label">学院名</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="name_level_two" placeholder="请输入学院名">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contract_name" class="col-sm-2 control-label">联系人</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="contract_name" placeholder="请输入联系人姓名">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="link_method" class="col-sm-2 control-label">联系方式</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="link_method" placeholder="电话/邮箱">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="remark" class="col-sm-2 control-label">备 &nbsp; 注</label>
+                                <div class="col-sm-10">
+                                    <textarea name="remark" id="remark" rows="5" placeholder="备注信息"></textarea>
+                                </div>
+                            </div>
+                                
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button  id="submit-connect" class="btn btn-info btn-block">添加</button>
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            
+            </div>
+        {% endif %}
+    </main>
 
-    {% block main %}{% endblock %}
-
-    <div class="footer navbar-fixed-bottom">
-        <p class="copyright">&copy;copyright 2019 东南大学 Five五团队</p>
-    </div>
+    <footer>
+        <div class="copyright container">&copy;copyright 2019 东南大学 Five五团队</div>
+    </footer>
 
     <script src="{{ url_for('static',filename='resources/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='resources/bootstrap3/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/public.js') }}"></script>
 
     {% block script %}{% endblock %}
 </body>

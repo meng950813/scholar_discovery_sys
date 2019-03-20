@@ -1,4 +1,4 @@
-{% extends './components/schoolHeader.html' %}
+{% extends 'template.html' %}
 {% block title %}学者信息{% endblock %}
 
 {%  block head %}
@@ -6,7 +6,23 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container">
+    <div id="search-container" class="search-area container searched">
+        <div class="imglog">
+            <img src="../static/images/Polaris.png" />
+        </div>
+
+        <form  role="search" class="navbar-form search-form text-center">
+
+            <div  class="form-group">
+                <input type="text" id="simple-input"  placeholder="搜索" class="form-control">
+            </div>
+            <button class="btn btn_color" type="button" id = 'search-btn'>搜索</button>
+
+        </form>
+
+    </div>
+
+    <div class="container search-container">
         <div class="part1">根据关键词 <b>"计算机"</b>，为您推荐 <b>6</b> 名专家</div>
         <ul>
             <li>
