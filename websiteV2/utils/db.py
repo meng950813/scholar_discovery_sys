@@ -124,7 +124,7 @@ def _insert(sql, insertMany , args):
         connection = POOL.connection()
         cursor = connection.cursor(cursor=pymysql.cursors.DictCursor)
 
-        print('SQL: %s %s' % (sql, args if len(args) > 0 else ""))
+        # print('SQL: %s %s' % (sql, args if len(args) > 0 else ""))
 
         # 利用本身的 execute 函数的特性，传入两个参数：sql语句与tuple类型的参数，以避免sql注入
         if insertMany:

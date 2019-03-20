@@ -63,6 +63,7 @@ class UserDao:
         sql = """insert into sys_net_of_school_agent(U_ID,TEACHER_ID,TEACHER_NAME,COLLEGE_ID,COLLEGE_NAME,SCHOOL_ID,SCHOOL_NAME,REMARK,LINK)
             value(%(user_id)s,%(teacher_id)s,%(teacher_name)s,%(college_id)s,%(college_name)s,%(school_id)s,%(school_name)s,%(remark)s,%(link_method)s)"""
 
+        print("in userdao.py")
         return db.insert(sql , info_dict)
 
 
