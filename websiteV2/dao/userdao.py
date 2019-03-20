@@ -52,7 +52,8 @@ class UserDao:
             "school_id" : 19024,
             "school_name" : "中国农业大学",
             "remark" : "备注-  33",
-            "link_method" : "123@123.com"
+            "link_method" : "123@123.com",
+            "create_time" : "2019-03-04 14:21:23"
         }
         :return: 插入的id / None
         """
@@ -60,8 +61,8 @@ class UserDao:
         """ 需要插入的关键字包括：
             ID,U_ID,TEACHER_ID,TEACHER_NAME,COLLEGE_ID,COLLEGE_NAME,SCHOOL_ID,SCHOOL_NAME,REMARK,CREATION_TIME,LINK,STATUS
         """
-        sql = """insert into sys_net_of_school_agent(U_ID,TEACHER_ID,TEACHER_NAME,COLLEGE_ID,COLLEGE_NAME,SCHOOL_ID,SCHOOL_NAME,REMARK,LINK)
-            value(%(user_id)s,%(teacher_id)s,%(teacher_name)s,%(college_id)s,%(college_name)s,%(school_id)s,%(school_name)s,%(remark)s,%(link_method)s)"""
+        sql = """insert into sys_net_of_school_agent(U_ID,TEACHER_ID,TEACHER_NAME,COLLEGE_ID,COLLEGE_NAME,SCHOOL_ID,SCHOOL_NAME,REMARK,LINK,CREATION_TIME)
+            value(%(user_id)s,%(teacher_id)s,%(teacher_name)s,%(college_id)s,%(college_name)s,%(school_id)s,%(school_name)s,%(remark)s,%(link_method)s,%(create_time)s)"""
 
         print("in userdao.py")
         return db.insert(sql , info_dict)

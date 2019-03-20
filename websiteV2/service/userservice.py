@@ -70,18 +70,23 @@ class UserService:
                     "id" : 123
                 }
         """
-        
+        # info_dict = info_data
+        # info_dict["teacher_id"] = None
+        # info_dict["college_id"] = None
+        # info_dict["school_id"] = None
+
+        # print("in userservice.py , " , info_dict)
         info_dict = {
             "user_id" : info_data["user_id"],
             "teacher_id" : None,
-            "teacher_name" : "contract_name",
+            "teacher_name" : info_data["contract_name"],
             "college_id" : None,
             "college_name" : info_data["level_two"],
             "school_id" : None,
             "school_name" : info_data['level_one'],
             "remark" : info_data['remark'],
             "link_method" : info_data["link_method"],
-            "create_time" : self.current_time()
+            "create_time" : info_data["create_time"]
         }
 
         new_line_id = user_dao.createSchoolRelation(info_dict)
@@ -92,13 +97,6 @@ class UserService:
             return { "success" : True,"id" : new_line_id}
         return {"success" : False}
         
-
-
-    def current_time(self):
-        """
-        返回当前时间， 格式如："2019-03-04 14:21:23"
-        """
-        return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
 
 
 

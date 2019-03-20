@@ -114,6 +114,7 @@ def governPersonal():
 
 
 @app.route("/schoolPersonal/")
+
 def schoolPersonal():
     # 转到个人页面
     return render_template("./components/schoolPersonal.html" , user = session.get('username'))
