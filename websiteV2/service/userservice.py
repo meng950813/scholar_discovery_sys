@@ -86,6 +86,7 @@ class UserService:
 
         new_line_id = user_dao.createSchoolRelation(info_dict)
 
+        print("in userservice.py," , new_line_id)
         # 执行成功，返回新记录 id
         if new_line_id:
             return { "success" : True,"id" : new_line_id}

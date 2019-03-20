@@ -8,13 +8,16 @@ from dao.teacherdao import teacher_dao
 
 
 class TeacherService:
-    def get_relations_by_id(self, teacher_id):
+    @staticmethod
+    def get_relations_by_ids(id_list):
         """
         获取老师id对应的所有有联系的老师id
-        :param teacher_id: 老师id
-        :return: dict{}
+        :param id_list: 老师id数组 或单个id
+        :return: array
         """
-        results = teacher_dao.get_relations_by_id(teacher_id)
+        if isinstance(id_list, int):
+            id_list = [id_list]
+        results = teacher_dao.get_relations_by_ids(id_list)
         return results
 
     def get_teachers_by_ids(self, id_list):
@@ -66,7 +69,7 @@ if __name__ == '__main__':
     # 需要预先调用，且只调用一次
     db.create_engine(**DB_CONFIG)
     # 获取该老师的所有联系
-    self_relations = teacher_service.get_relations_by_id(150896)
+    self_relations = teacher_service.get_relations_by_ids(150896)
     print(self_relations)
     # 获取teacher2_id的所有id
     teacher_ids = [relation['teacher2_id'] for relation in self_relations]

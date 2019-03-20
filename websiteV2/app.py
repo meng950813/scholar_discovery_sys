@@ -64,6 +64,12 @@ def relation():
     return render_template('relation.html')
 
 
+@app.route('/word_cloud')
+def word_cloud():
+    """测试词云的路由函数"""
+    return render_template('wordcloud.html')
+
+
 @app.route('/login/')
 def login():
     # 商务登录

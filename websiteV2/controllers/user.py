@@ -66,7 +66,8 @@ def createRelationship():
         pass
     # 高校商务
     else:
-        return user_service.createSchoolRelation(info)
+        print("in user.py")
+        return json.dumps(user_service.createSchoolRelation(info))
 
 if __name__ == '__main__':
     pass

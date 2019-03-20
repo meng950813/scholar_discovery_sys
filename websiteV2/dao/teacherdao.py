@@ -7,14 +7,15 @@ import utils.db as db
 
 
 class TeacherDao:
-    def get_relations_by_id(self, teacher_id):
+    def get_relations_by_ids(self, id_list):
         """
         获取老师id对应的所有有联系的老师id
-        :param teacher_id: 老师id
+        :param id_list: 老师id数组
         :return: 所有和该老师有联系的数组
         """
-        sql = 'select * from teacher_teacher where teacher1_id=?'
-        results = db.select(sql, teacher_id)
+        string = 'select * from teacher_teacher where teacher1_id in (%s)'
+        sql = string % (','.join(['?' for id in id_list]))
+        results = db.select(sql, *id_list)
 
         return results
 

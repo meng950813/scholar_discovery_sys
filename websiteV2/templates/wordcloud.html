@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>词云示例代码</title>
+    <script src="{{ url_for('static', filename='js/d3.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/wordcloud.js') }}"></script>
+    <script src="{{ url_for('static',filename='resources/jquery/jquery.min.js') }}"></script>
+</head>
+<body>
+    <svg id="wordcloud" width="900" height="700"/>
+</body>
+<script type="text/javascript">
+    let svg = d3.select('#wordcloud');
+    let wordCloud = new WordCloud(svg);
+    //异步加载获取词
+    $.ajax({
+        url: 'api/word_cloud',
+        type: 'POST',
+        data: {teacher_id: 155102},
+        dataType: 'json',
+        success: function (json_data) {
+            wordCloud.setData(json_data);
+        }
+    });
+</script>
+</html>
