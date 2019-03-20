@@ -94,19 +94,13 @@ class Subject:
         return res
 
     def cal_rank(self, res, lda, cof):
-        '''
-        计算教师关于搜索内容的总评分，即整合语言模型评分，LDA评分，PageRank评分及教师能力评分
-        :param res: 教师语言模型评分
-        :param lda: 教师lda评分
-        :param cof: 处理教师在语言模型和lda模型出现不一致的情况
-        :return:result type dcit 教师id及其对搜索内容的总评分
-        '''
         rank = {}
-        # wd是res的key,代表词，res[wd]还是字典，代表词对应的老师及其对该词的值，r是res[wd]中的key,代表老师id
         exp_list = [r for wd in res.keys() for r in res[wd]]
-        exp_list = set(exp_list)
+        exp_list = list(set(exp_list))
+        exp_list_lda = [r for wd in lda.keys() for r in lda[wd]]
+        exp_list_lda = list(set(exp_list_lda))
+        exp_list.extend(exp_list_lda)
         if 'col' in exp_list:
-            # 教师名单，所以去掉cof
             exp_list.remove('col')
         for r in exp_list:
             rank[r] = cof
@@ -123,11 +117,12 @@ class Subject:
                     adjust = lda[wd][r]
                     rank[r] *= adjust
                 else:
-                    rank[r] *= 10e-6
+                    rank[r] *= 1e-6
             for wd in lda:
                 if wd not in res:
-                    if r in lda[wd]:
-                        rank[r] *= lda[wd][r]
+                    rank[r] *= lda[wd][r]
+                else:
+                    rank[r] *= 1e-6
             if self.pagerank.get(r):
                 rank[r] *= self.pagerank[r] * self.id_name[r]["total"]
         return rank
