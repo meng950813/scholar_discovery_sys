@@ -1,5 +1,6 @@
 from flask import Flask,render_template,redirect,url_for,request,session
 import logging
+import controllers.api as api
 from controllers.api import api_blueprint
 from controllers.user import user_blueprint
 from utils import db
@@ -86,11 +87,25 @@ def manageLogin():
     return render_template("./components/manageLogin.html")
 
 
-
 @app.route('/search',methods=['GET','POST'])
 def search():
     keyword = request.form.get("simple-input")
-    return render_template('./components/schoolScholar.html' , user = session.get('username'))
+    school_name = '中山大学'
+
+    data = api.get_teachers_by_school(school_name, keyword)
+    # 学者个数
+    number = data['number']
+    institutions = data['institutions']
+    # 遍历
+    for name, values in institutions.items():
+        print(name)
+        for teacher in values['teachers']:
+            print(teacher['NAME'], teacher['TITLE'])
+            print(teacher['YEAROLD'] if 'YEAROLD' in teacher else '年龄未知')
+            print(teacher['FIELDS'] if teacher['FIELDS'] is not None else '领域未知')
+        print(values['info'])
+    # 渲染，并传递参数
+    return render_template('./components/schoolScholar.html' , user=session.get('username'))
 
 
 @app.route("/logout/")
@@ -118,6 +133,11 @@ def governPersonal():
 def schoolPersonal():
     # 转到个人页面
     return render_template("./components/schoolPersonal.html" , user = session.get('username'))
+
+
+@app.route('/schoolBasic')
+def school_basic():
+    return render_template('schoolBasic.html')
 
 
 
