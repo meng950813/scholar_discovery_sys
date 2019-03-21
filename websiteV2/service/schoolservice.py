@@ -5,6 +5,7 @@ date: 2019-03-14
 desc: 内部调用了SchoolDao的函数，并提供了python下易用的函数
 """
 from dao.schooldao import school_dao
+import utils
 
 
 class SchoolService:
@@ -46,6 +47,17 @@ class SchoolService:
             teachers[teacher_id] = result
         return teachers
 
+    def get_institutions_by_ids(self, school_id, institution_ids):
+        """
+        给定学校id，和学院id数组来获取所有的学院信息
+        :param school_id: 学校id
+        :param institution_ids: 学校id下的学院id数组
+        :return:以学院id为键，其余信息为值的字典
+        """
+        results = school_dao.get_institutions_by_ids(school_id, institution_ids)
+
+        return utils.db2python(results, 'ID')
+
 
 school_service = SchoolService()
 
@@ -59,6 +71,10 @@ if __name__ == '__main__':
     # 需要预先调用，且只调用一次
     db.create_engine(**DB_CONFIG)
 
-    print(school_service.get_position_by_names(['清华大学', '北京大学']))
-    print(school_service.get_teachers_by_school(17134))
-    print(school_service.get_teachers_by_school(17134, 557))
+    # print(school_service.get_position_by_names(['清华大学', '北京大学']))
+    # print(school_service.get_teachers_by_school(17134))
+    # print(school_service.get_teachers_by_school(17134, 557))
+
+    institutions = school_service.get_institutions_by_ids(17134, [547, 548])
+    for _, institution in institutions.items():
+        print(institution)

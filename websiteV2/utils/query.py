@@ -290,7 +290,7 @@ class Query:
                          'city': school_infomation['CITY'], 'score': school_rank[school_id]})
         return query_result
 
-    def prints_for_teacher(self, result):
+    def prints_for_teacher(self, result,school_name):
         '''
         根据搜索到的老师信息得到老师所在的学院名，学校名，并打印
         :param result:进行搜索后返回的老师信息，包括老师姓名及老师学院，以老师得分降序排序
@@ -307,8 +307,15 @@ class Query:
                 teacher_id = teacher_info1[0]
                 # 学院id
                 institution_id = self.id_name[teacher_id]['INSTITUTION_ID']
-
-                teacher_info.append({'teacher_name': self.id_name[teacher_id]["NAME"],'institution_name': self.institution_info[institution_id]['NAME'],'school_name':self.institution_info[institution_id]['SCHOOL_NAME']})
+                if self.institution_info[institution_id]['SCHOOL_NAME'] == school_name:
+                    teacher_info.append({
+                        'teacher_id': teacher_id,
+                        'teacher_name': self.id_name[teacher_id]["NAME"],
+                        'institution_name': self.institution_info[institution_id]['NAME'],
+                        'institution_id': institution_id,
+                        'school_name':self.institution_info[institution_id]['SCHOOL_NAME'],
+                        'school_id': self.id_name[teacher_id]['SCHOOL_ID']
+                    })
 
         return teacher_info
 
@@ -333,7 +340,7 @@ class Query:
                 # 是名词且不是停用词，将其纳入搜索列表
                 words.append(word)
         if "school" in filer and len(filer["school"]) > 0:
-            teacher_id = {t for t in self.id_name if self.id_name[t]['school_id'] in filer['school']}
+            teacher_id = {t for t in self.id_name if str(self.id_name[t]['SCHOOL_ID']) in filer['school']}
         else:
             teacher_id = None
 
@@ -388,7 +395,12 @@ subject = [
     {"code": '0830', "k": 18}, {"code": '0831', "k": 10}, {"code": '0832', "k": 12}]
 
 
-query = Query(subject, path = os.path.join(os.getcwd(),'static'))
+if __name__ == '__main__':
+    path = os.path.join(os.getcwd(), '..', 'static')
+else:
+    path = os.path.join(os.getcwd(), 'static')
+
+query = Query(subject, path=path)
 
 
 
@@ -415,10 +427,12 @@ def query_all(range, words, limit=None):
         result = query.do_query(words, filer)
         result_info = query.prints_for_institution(result, limit)
         return result_info
+
     if query_range == '老师':
         filer = {}
+        school_name = limit
         result = query.do_query(words, filer)
-        result_info = query.prints_for_teacher(result)
+        result_info = query.prints_for_teacher(result,school_name)
         return result_info
     if query_range == '教师':
         filer = {}
@@ -428,6 +442,8 @@ def query_all(range, words, limit=None):
         return result_info
 
 
-
 if __name__ == '__main__':
-    print(query_all("老师","计算机"))
+    results = query_all('老师', '计算机',"中山大学")
+
+    print(results)
+    # print(query_all("老师","计算机"))
