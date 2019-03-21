@@ -11,145 +11,58 @@
             <img src="../static/images/Polaris.png" />
         </div>
 
-        <form  role="search" class="navbar-form search-form text-center">
+        <form  action="/search"  method="POST" class="navbar-form search-form text-center" onsubmit="return checkForm1(this);">
 
             <div  class="form-group">
-                <input type="text" id="simple-input"  placeholder="搜索" class="form-control">
+                <input type="text" id="simple-input" name="simple-input" placeholder="请输入关键字" class="form-control">
             </div>
-            <button class="btn btn_color" type="button" id = 'search-btn'>搜索</button>
+            <button class="btn btn_color" type="submit" id = 'search-btn'>搜索</button>
 
         </form>
 
     </div>
 
     <div class="container search-container">
-        <div class="part1">根据关键词 <b>"计算机"</b>，为您推荐 <b>6</b> 名专家</div>
+        <div class="part1">根据关键词 <b>"{{ keyword }}"</b>，为您推荐 <b> {{ number }}</b> 名专家</div>
         <ul>
+            {% for name,values in intstitutions.items()  %}
             <li>
-                <div class="college">计算机学院</div>
+                <div class="college">{{ name }}</div>
                 <div class="tags">
                     <ul class="search-pill">
-                        <li>1个国家重点学科</li>
-                        <li>2位院士</li>
-                        <li>3位杰青</li>
-                        <li>4位长江学者</li>
+                        <li>{{ values['info']['NKD_NUM'] }}个重点学科</li>
+                        <li>{{ values['info']['SKL_NUM'] }}个国家重点实验室</li>
+                        <li>{{ values['info']['ACADEMICIAN_NUM'] }}个院士</li>
                     </ul>
                 </div>
                 <div class="scholar">
                     <ul class="search-person">
-                    <li>
-                        <div class="row">
-                            <div class="col-lg-3" style="text-align:center;">
-                                <div id="image">郑</div>
+                        {%  for teacher in values['teachers'] %}
+                        <li>
+                            <div class="row">
+                                <div class="col-lg-3" style="text-align:center;">
+                                    <div id="image">郑</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <p>{{ teacher['NAME'] }}</p>
+                                    <ul class="search-perpendicular">
+                                        <li>{{ teacher['YEAROLD'] }}</li>
+                                        <li>{{ teacher['TITLE'] }}</li>
+                                        <li>{{ teacher['ACADEMICIAN'] }}</li>
+                                        <li>{{ teacher['OUTYOUTH'] }}</li>
+                                        <li>{{ teacher['CHANGJIANG'] }}</li>
+                                    </ul>
+                                    <ul class="search-pill">
+                                        <li>{{ teacher['FIELDS'] }}</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="col-lg-9">
-                                <p>郑龙玉</p>
-                                <ul class="search-perpendicular">
-                                    <li>36岁</li>
-                                    <li>副教授</li>
-                                    <li>中国工程院院士</li>
-                                    <li>长江学者</li>
-                                    <li>杰出青年</li>
-                                </ul>
-                                <ul class="search-pill">
-                                    <li>成虫产卵</li>
-                                    <li>产卵行为</li>
-                                    <li>肠道微生物</li>
-                                    <li>行为影响</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="row">
-                            <div class="col-lg-3" style="text-align:center;">
-                                <div id="image">郑</div>
-                            </div>
-                            <div class="col-lg-9">
-                                <p>郑龙玉</p>
-                                <ul class="search-perpendicular">
-                                    <li>36岁</li>
-                                    <li>副教授</li>
-                                    <li>中国工程院院士</li>
-                                    <li>长江学者</li>
-                                    <li>杰出青年</li>
-                                </ul>
-                                <ul class="search-pill">
-                                    <li>成虫产卵</li>
-                                    <li>产卵行为</li>
-                                    <li>肠道微生物</li>
-                                    <li>行为影响</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
+                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
-
             </li>
-
-            <li>
-                <div class="college">计算机学院</div>
-                <div class="tags">
-                    <ul class="search-pill">
-                        <li>1个国家重点学科</li>
-                        <li>2位院士</li>
-                        <li>3位杰青</li>
-                        <li>4位长江学者</li>
-                    </ul>
-                </div>
-                <div class="scholar">
-                    <ul class="search-person">
-                    <li>
-                        <div class="row">
-                            <div class="col-lg-3" style="text-align:center;">
-                                <div id="image">郑</div>
-                            </div>
-                            <div class="col-lg-9">
-                                <p>郑龙玉</p>
-                                <ul class="search-perpendicular">
-                                    <li>36岁</li>
-                                    <li>副教授</li>
-                                    <li>中国工程院院士</li>
-                                    <li>长江学者</li>
-                                    <li>杰出青年</li>
-                                </ul>
-                                <ul class="search-pill">
-                                    <li>成虫产卵</li>
-                                    <li>产卵行为</li>
-                                    <li>肠道微生物</li>
-                                    <li>行为影响</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="row">
-                            <div class="col-lg-3" style="text-align:center;">
-                                <div id="image">郑</div>
-                            </div>
-                            <div class="col-lg-9">
-                                <p>郑龙玉</p>
-                                <ul class="search-perpendicular">
-                                    <li>36岁</li>
-                                    <li>副教授</li>
-                                    <li>中国工程院院士</li>
-                                    <li>长江学者</li>
-                                    <li>杰出青年</li>
-                                </ul>
-                                <ul class="search-pill">
-                                    <li>成虫产卵</li>
-                                    <li>产卵行为</li>
-                                    <li>肠道微生物</li>
-                                    <li>行为影响</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    </ul>
-                </div>
-
-            </li>
+            {% endfor %}
         </ul>
     </div>
 

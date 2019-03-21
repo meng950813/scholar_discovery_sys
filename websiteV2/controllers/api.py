@@ -162,7 +162,7 @@ def get_teachers_by_school(school_name, keyword):
     :return: dict
     """
     # 查询
-    results = utils.query.query_all('老师', keyword)
+    results = utils.query.query_all('老师', keyword, school_name)
     teacher_ids = []
     # 获取学校id
     school_id = None
@@ -171,8 +171,6 @@ def get_teachers_by_school(school_name, keyword):
     # 学院id和学院名称映射表
     id_institutions = {}
     for result in results:
-        if result['school_name'] != school_name:
-            continue
         school_id = result['school_id']
         # 添加学院id、学院名映射表
         id_institutions[result['institution_id']] = result['institution_name']
@@ -213,3 +211,4 @@ def get_teachers_by_school(school_name, keyword):
         'number': teacher_count,
         'institutions': institutions,
     }
+

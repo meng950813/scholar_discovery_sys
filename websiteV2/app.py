@@ -90,22 +90,26 @@ def manageLogin():
 @app.route('/search',methods=['GET','POST'])
 def search():
     keyword = request.form.get("simple-input")
-    school_name = '中山大学'
+    school_name = '湖南大学'
 
     data = api.get_teachers_by_school(school_name, keyword)
     # 学者个数
     number = data['number']
     institutions = data['institutions']
+    print(type(institutions.items()))
     # 遍历
-    for name, values in institutions.items():
-        print(name)
-        for teacher in values['teachers']:
-            print(teacher['NAME'], teacher['TITLE'])
-            print(teacher['YEAROLD'] if 'YEAROLD' in teacher else '年龄未知')
-            print(teacher['FIELDS'] if teacher['FIELDS'] is not None else '领域未知')
-        print(values['info'])
+    # for name, values in institutions.items():
+        # print(name)
+        # for teacher in values['teachers']:
+        #     print(teacher['NAME'], teacher['TITLE'])
+        #     print(teacher['YEAROLD'] if 'YEAROLD' in teacher else '年龄未知')
+        #     print(teacher['ACADEMICIAN'] if teacher['ACADEMICIAN'] == 1 else "不是院士")
+        #     print(teacher['OUTYOUTH'] if teacher['OUTYOUTH'] == 1 else "不是杰出青年")
+        #     print(teacher['CHANGJIANG'] if teacher['CHANGJIANG'] == 1 else "不是长江学者")
+        #     print(teacher['FIELDS'] if teacher['FIELDS'] is not None else '领域未知')
+        # print(values['info'])
     # 渲染，并传递参数
-    return render_template('./components/schoolScholar.html' , user=session.get('username'))
+    return render_template('./components/schoolScholar.html' , user=session.get('username'),keyword=keyword,number=number,intstitutions = institutions)
 
 
 @app.route("/logout/")
