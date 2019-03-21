@@ -48,7 +48,7 @@ def handle_relations(teachers, relations, academic_titles, total_categories):
                 # 如果该头衔不在总头衔中，默认为第一个
                 if title not in total_categories:
                     categories[title] = 0
-                    titles.append(total_categories[0])
+                    # titles.append(total_categories[0])
                 else:
                     categories[title] = total_categories.index(title)
                     titles.append(title)
@@ -61,7 +61,7 @@ def handle_relations(teachers, relations, academic_titles, total_categories):
                     node['radius'] += paper_num
                     break
             else:
-                nodes.append({'category': titles.index(data['title']), 'name': data['name'],
+                nodes.append({'category': titles.index(total_categories[categories[data['title']]]), 'name': data['name'],
                               'radius': paper_num, 'id': data['id']})
                 id_index_map[data['id']] = len(nodes) - 1
         # 确定为无向边，添加边

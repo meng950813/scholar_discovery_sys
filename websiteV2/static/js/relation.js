@@ -11,13 +11,13 @@
  ];
 
  let nodes = [
- {category: 0, name: '桂林'},
- {category: 1, name: '广州'},
- {category: 2, name: '厦门'},
- {category: 1, name: '杭州'},
- {category: 0, name: '上海'},
- {category: 1, name: '青岛'},
- {category: 0, name: '天津'}
+ {category: 0, name: '桂林', id:1},
+ {category: 1, name: '广州', id:2},
+ {category: 2, name: '厦门', id:3},
+ {category: 1, name: '杭州', id:4},
+ {category: 0, name: '上海', id:5},
+ {category: 1, name: '青岛', id:6},
+ {category: 0, name: '天津', id:7}
  ];
  let edges = [
  {source: 0, target: 1},
@@ -135,7 +135,7 @@ class RelationGraph{
         //添加节点、连线和文本标签
         this.addNodes();
         this.addLinks();
-        this.addLabels();
+        this.updateLabels();
     }
 
     /**
@@ -290,34 +290,44 @@ class RelationGraph{
             })
     }
 
-    addLabels(){
+    /**
+     * 更新节点对应的标签，会先更新标签，如果需要的话会添加标签。多余的则会删除
+     */
+    updateLabels(){
         let that = this;
+        let texts =this.labels_group.selectAll('text');
+        //绑定数据后，不同类型，不同操作
+        let update = texts.data(this.nodes);
+        updateLabels(update, this);
+        let enter = update.enter().append('text');
+        updateLabels(enter, this);
+        //移除不需要的文本
+        update.exit().remove();
+
+        function updateLabels(labels, that) {
         let fontSize = 25;
-        this.labels_group.selectAll('text')
-            .data(this.nodes)
-            .enter()
-            .append('text')
-            .attr('fill', 'white')
-            .attr('display', 'none')
-            .attr('dx', d => -d.name.length * fontSize / 2)
-            .attr('dy', fontSize / 4)
-            .attr('font-size', fontSize)
-            .attr('stroke-width', 0.8)
-            .attr('stroke', d => this.categories[d.category].color)
-            .text(d => d.name)
-            .call(this.dragNodesCallback(this.simulation))
-            .on('mouseover', function (d) {
-                that.mouseOver2Node(d);
-            })
-            .on('mousemove', function () {
-                that.setVisibleOfToolTip(true);
-            })
-            .on('mouseout', function () {
-                that.mouseOut();
-            })
-            .on('click', function (d) {
-                RelationGraph.clickNodeHook(this, d);
-            });
+        labels.attr('fill', 'white')
+                .attr('display', 'none')
+                .attr('dx', d => -d.name.length * fontSize / 2)
+                .attr('dy', fontSize / 4)
+                .attr('font-size', fontSize)
+                .attr('stroke-width', 0.8)
+                .attr('stroke', d => that.categories[d.category].color)
+                .text(d => d.name)
+                .call(that.dragNodesCallback(that.simulation))
+                .on('mouseover', function (d) {
+                    that.mouseOver2Node(d);
+                })
+                .on('mousemove', function () {
+                    that.setVisibleOfToolTip(true);
+                })
+                .on('mouseout', function () {
+                    that.mouseOut();
+                })
+                .on('click', function (d) {
+                    RelationGraph.clickNodeHook(this, d);
+                });
+        }
     }
 
     /**
@@ -396,18 +406,18 @@ class RelationGraph{
         //添加节点
         this.nodes = this.nodes.concat(this.nodes_map[category]);
         this.nodes_map[category] = [];
-        let elimination = ['target_name'];
+        let elimination = ['target_id'];
         //添加线
         for (let i = 0; i < this.nodes.length; i++){
             let node1 = this.nodes[i];
-            let links = this.links_map[node1.name];
+            let links = this.links_map[node1.id];
             if (links == undefined)
                 continue;
             let len = links.length;
             for (let j = 0;j >= 0 && j < len; j++){
                 for (let k = 0; k < this.nodes.length; k++){
                     let node2 = this.nodes[k];
-                    if (j >= 0 && j < len && links[j].target_name == node2.name){
+                    if (j >= 0 && j < len && links[j].target_id == node2.id){
                         let obj = copy(links[j], elimination);
                         obj['source'] = i;
                         obj['target'] = k;
@@ -423,6 +433,7 @@ class RelationGraph{
         //添加节点和联系
         this.addNodes();
         this.addLinks();
+        this.updateLabels();
     }
 
     /**
@@ -438,14 +449,14 @@ class RelationGraph{
             .filter(function (d, i) {
                 if (d.source.category == category || d.target.category == category){
                     let link = that.links.splice(i - count, 1)[0];
-                    let source_name = link.source.name;
-                    let target_name = link.target.name;
+                    let source_id = link.source.id;
+                    let target_id = link.target.id;
 
-                    if (!(source_name in that.links_map))
-                        that.links_map[source_name] = [];
+                    if (!(source_id in that.links_map))
+                        that.links_map[source_id] = [];
                     let obj = copy(link, elimination);
-                    obj['target_name'] = target_name;
-                    that.links_map[source_name].push(obj);
+                    obj['target_id'] = target_id;
+                    that.links_map[source_id].push(obj);
                     count++;
                     return true;
                 }
@@ -599,28 +610,29 @@ class RelationGraph{
         //显示提示文本
         let html = RelationGraph.getToolTipHook('node', datum);
         this.setVisibleOfToolTip(true, html);
+        //暂存节点的id
         let temp_nodes = new Set();
         //获取与该节点相连的所有的连线
         for (let i = 0; i < this.links.length; i++){
             let link = this.links[i];
-            if (link.source.name == datum.name || link.target.name == datum.name){
-                temp_nodes.add(link.source.name);
-                temp_nodes.add(link.target.name);
+            if (link.source.id == datum.id || link.target.id == datum.id){
+                temp_nodes.add(link.source.id);
+                temp_nodes.add(link.target.id);
             }
         }
-        let node_name = datum.name;
+        let node_id = datum.id;
         //隐藏其他节点
-        this.setOpacityOfNodes(0.2, d => !temp_nodes.has(d.name));
+        this.setOpacityOfNodes(0.2, d => !temp_nodes.has(d.id));
         //隐藏其他连线
         this.setOpacityOfLinks(0.2, function (d) {
-            return d.source.name != node_name && d.target.name != node_name;
+            return d.source.id != node_id && d.target.id != node_id;
         });
         //加宽连线
         this.setWidthOfLinks(RelationGraph.getEmphasisLinkWidthHook, function (d) {
-            return d.source.name == node_name || d.target.name == node_name;
+            return d.source.id == node_id || d.target.id == node_id;
         });
         //显示文本
-        this.setVisibleOfLabels(true, d => temp_nodes.has(d.name));
+        this.setVisibleOfLabels(true, d => temp_nodes.has(d.id));
     }
 
     /**
@@ -735,7 +747,6 @@ class RelationGraph{
             levels[3] = [minWidth, minWidth + step];
             levels[2] = [minWidth + step, minWidth + step * 2];
             levels[1] = [minWidth + step * 2, maxWidth];
-            console.log(minWidth, maxWidth, step);
             for (let j in temp_links)
             {
                 var temp_link = temp_links[j];
@@ -756,6 +767,5 @@ class RelationGraph{
                 }
             }
         }
-        console.log(this.links);
     }
 }
