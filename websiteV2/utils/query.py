@@ -427,6 +427,7 @@ def query_all(range, words, limit=None):
         result = query.do_query(words, filer)
         result_info = query.prints_for_institution(result, limit)
         return result_info
+
     if query_range == '老师':
         filer = {}
         school_name = limit

@@ -20,6 +20,7 @@ class TeacherDao:
         return results
 
 
+
     def get_teachers_by_ids(self, id_list):
         """
         根据老师id数组获取所有的老师

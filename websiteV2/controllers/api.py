@@ -166,6 +166,7 @@ def get_teachers_by_school(school_name, keyword):
     teacher_ids = []
     # 获取学校id
     school_id = None
+
     # 学院用得到的键名
     institution_keys = ['NKD_NUM', 'SKL_NUM', 'ACADEMICIAN_NUM']
     # 学院id和学院名称映射表
