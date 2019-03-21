@@ -119,12 +119,12 @@ class Subject:
                 else:
                     rank[r] *= 1e-6
             for wd in lda:
-                if wd not in res:
+                if wd not in res and r in lda[wd]:
                     rank[r] *= lda[wd][r]
                 else:
                     rank[r] *= 1e-6
             if self.pagerank.get(r):
-                rank[r] *= self.pagerank[r] * self.id_name[r]["total"]
+                rank[r] *= self.pagerank[r] * self.id_name[r]["composite_score"]
         return rank
 
     def do_query(self, words, teacher_id):
