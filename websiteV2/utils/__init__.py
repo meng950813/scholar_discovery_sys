@@ -3,7 +3,6 @@ author: xiaoniu
 date: 2019-03-14
 desc: 实用工具包包含着一些常用的函数
 """
-import utils.wordcloud
 
 
 def db2python(results, key):

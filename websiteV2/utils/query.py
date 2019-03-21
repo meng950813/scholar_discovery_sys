@@ -308,7 +308,14 @@ class Query:
                 # 学院id
                 institution_id = self.id_name[teacher_id]['INSTITUTION_ID']
 
-                teacher_info.append({'teacher_name': self.id_name[teacher_id]["NAME"],'institution_name': self.institution_info[institution_id]['NAME'],'school_name':self.institution_info[institution_id]['SCHOOL_NAME']})
+                teacher_info.append({
+                    'teacher_id': teacher_id,
+                    'teacher_name': self.id_name[teacher_id]["NAME"],
+                    'institution_name': self.institution_info[institution_id]['NAME'],
+                    'institution_id': institution_id,
+                    'school_name':self.institution_info[institution_id]['SCHOOL_NAME'],
+                    'school_id': self.id_name[teacher_id]['SCHOOL_ID']
+                })
 
         return teacher_info
 
@@ -333,7 +340,7 @@ class Query:
                 # 是名词且不是停用词，将其纳入搜索列表
                 words.append(word)
         if "school" in filer and len(filer["school"]) > 0:
-            teacher_id = {t for t in self.id_name if self.id_name[t]['school_id'] in filer['school']}
+            teacher_id = {t for t in self.id_name if str(self.id_name[t]['SCHOOL_ID']) in filer['school']}
         else:
             teacher_id = None
 
@@ -388,7 +395,12 @@ subject = [
     {"code": '0830', "k": 18}, {"code": '0831', "k": 10}, {"code": '0832', "k": 12}]
 
 
-query = Query(subject, path = os.path.join(os.getcwd(),'static'))
+if __name__ == '__main__':
+    path = os.path.join(os.getcwd(), '..', 'static')
+else:
+    path = os.path.join(os.getcwd(), 'static')
+
+query = Query(subject, path=path)
 
 
 
@@ -428,6 +440,10 @@ def query_all(range, words, limit=None):
         return result_info
 
 
-
 if __name__ == '__main__':
-    print(query_all("老师","计算机"))
+    results = query_all('老师', '计算机')
+
+    for result in results:
+        if result['school_name'] == '中山大学':
+            print(result)
+    # print(query_all("老师","计算机"))
