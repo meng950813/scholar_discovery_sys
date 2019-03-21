@@ -98,7 +98,7 @@ function showAlert(msg, TYPE){
 
     $(".alert-container").addClass("show-opacity");
 
-    // 设置 2s 后关闭弹出窗
+    // 设置 2.5s 后关闭弹出窗
     setTimeout(hideAlert,2500);
 }
 

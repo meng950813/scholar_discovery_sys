@@ -68,6 +68,28 @@ class UserDao:
         return db.insert(sql , info_dict)
 
 
+    def getUserRelation(self,user_id,user_type):
+        """
+        根据用户id及用户类型获取用户关系数据
+        """
+        sql = None
+        if user_type == "1":
+            # 企商
+            sql = """select *,
+            COMPANY_NAME as level_one_name,DEPART_NAME as level_two_name,CONTACT_NAME as name 
+            from sys_net_of_bussiness_agent where U_ID = ? and STATUS = 1
+            """
+        else:
+            sql = """select *,
+            TEACHER_NAME as name,COLLEGE_NAME as level_two_name,SCHOOL_NAME as level_one_name
+            from sys_net_of_school_agent where U_ID = ? and STATUS = 1
+            """
+
+        result = db.select(sql,user_id)
+
+        print("in userdao.py , getUserRelation : user_id = ",user_id)
+        print(result)
+        return result
 
 user_dao = UserDao()
 
@@ -80,7 +102,7 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG)
     # 需要预先调用，且只调用一次
-    db.create_engine(DB_CONFIG['user'], DB_CONFIG['pwd'], DB_CONFIG['db_name'])
+    db.create_engine(**DB_CONFIG)
 
     print(user_dao.dologin(telphone = 123 , pwd = "1f89eaa608f335e37869c84d856bf235"))
     print(user_dao.dologin(email = 123 , pwd = "1f89eaa608f335e37869c84d856bf235"))

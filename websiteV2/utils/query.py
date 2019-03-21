@@ -119,7 +119,7 @@ class Subject:
                 else:
                     rank[r] *= 1e-6
             for wd in lda:
-                if wd not in res:
+                if wd not in res and r in lda[wd]:
                     rank[r] *= lda[wd][r]
                 else:
                     rank[r] *= 1e-6
