@@ -7,6 +7,8 @@ from flask import Blueprint, request
 import json
 import logging
 import os
+import time
+import utils.query
 from utils.query import query
 import utils.relation
 import utils.wordcloud
@@ -150,3 +152,64 @@ def get_wordcloud():
         handle_data.append({'text': key, 'size': value / max_score * 100})
     # 取前100个
     return json.dumps(handle_data[:50])
+
+
+def get_teachers_by_school(school_name, keyword):
+    """
+    根据学校名和关键字获得该学校的相关的所有老师，并按照学院进行聚合
+    :param school_name: 学校名
+    :param keyword: 关键字
+    :return: dict
+    """
+    # 查询
+    results = utils.query.query_all('老师', keyword, school_name)
+    teacher_ids = []
+    # 获取学校id
+    school_id = None
+
+    # 学院用得到的键名
+    institution_keys = ['NKD_NUM', 'SKL_NUM', 'ACADEMICIAN_NUM']
+    # 学院id和学院名称映射表
+    id_institutions = {}
+    for result in results:
+        school_id = result['school_id']
+        # 添加学院id、学院名映射表
+        id_institutions[result['institution_id']] = result['institution_name']
+        # 保存老师id
+        teacher_ids.append(result['teacher_id'])
+    # 查表获取老师的信息
+    teachers = teacher_service.get_teachers_by_ids(teacher_ids) if len(teacher_ids) > 0 else {}
+    # 获取学院信息
+    infos = school_service.get_institutions_by_ids(school_id, id_institutions.keys()) if len(id_institutions) > 0 else {}
+    # 筛选出该学校的老师，并按照学院划分
+    institutions = {}
+    # 老师个数
+    teacher_count = 0
+    # 把键BIRTHYEAR转为年龄
+    for _, teacher in teachers.items():
+        teacher_count += 1
+        # 尝试把出生日期转为年龄
+        if teacher['BIRTHYEAR'] is not None:
+            teacher['YEAROLD'] = time.localtime(time.time()).tm_year - int(teacher['BIRTHYEAR'])
+        # 转换关键字 json格式必须为双引号
+        if teacher['FIELDS'] is not None:
+            fields = teacher['FIELDS'].replace("\'", "\"")
+            teacher['FIELDS'] = json.loads(fields)
+        # 把老师添加到对应的学院之中
+        institution_name = id_institutions[teacher['INSTITUTION_ID']]
+
+        if institution_name not in institutions:
+            institutions[institution_name] = {}
+            institutions[institution_name]['teachers'] = []
+            info = infos[teacher['INSTITUTION_ID']]
+            institutions[institution_name]['info'] = {}
+            for key in institution_keys:
+                institutions[institution_name]['info'][key] = 0 if info[key] is None else info[key]
+        # 添加老师
+        institutions[institution_name]['teachers'].append(teacher)
+
+    return {
+        'number': teacher_count,
+        'institutions': institutions,
+    }
+

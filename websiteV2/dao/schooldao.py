@@ -35,6 +35,19 @@ class SchoolDao:
             results = db.select(sql, school_id, institution_id)
         return results
 
+    def get_institutions_by_ids(self, school_id, institution_ids):
+        """
+        给定学校id，和学院id数组来获取所有的学院信息
+        :param school_id: 学校id
+        :param institution_ids: 学校id下的学院id数组
+        :return:学院信息
+        """
+        string = 'select * from es_institution where SCHOOL_ID = ? and ID in (%s)'
+        sql = string % (','.join(['?' for name in institution_ids]))
+        # 查找
+        results = db.select(sql, school_id, *institution_ids)
+        return results
+
 
 school_dao = SchoolDao()
 
@@ -50,4 +63,7 @@ if __name__ == '__main__':
 
     print(school_dao.get_position_by_names(['清华大学', '北京大学']))
     print(school_dao.get_teachers_by_school(17134, 557))
+    institutions = school_dao.get_institutions_by_ids(17134, [547, 548])
+    for institution in institutions:
+        print(institution)
 

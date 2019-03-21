@@ -135,8 +135,17 @@
             
             </div>
         {% endif %}
-    </main>
 
+        
+    </main>
+    <div class="alert-container">
+        <div class="alert alert-error">
+            {% if error %}
+                <div id="error-msg"></div>
+            {% endif %}
+            
+        </div>
+    </div>
     <footer>
         <div class="copyright container">&copy;copyright 2019 东南大学 Five五团队</div>
     </footer>

@@ -58,6 +58,7 @@ def createRelationship():
         "contract_name" : request.form['contract_name'],
         "link_method" : request.form['link_method'],
         "remark" : request.form['remark'],
+        "create_time" : request.form["create_time"]
     }
 
     # 企业商务
@@ -66,8 +67,9 @@ def createRelationship():
         pass
     # 高校商务
     else:
-        print("in user.py")
-        return json.dumps(user_service.createSchoolRelation(info))
+        result = user_service.createSchoolRelation(info)
+        print("in user.py , " , result )
+        return json.dumps(result)
 
 if __name__ == '__main__':
     pass
