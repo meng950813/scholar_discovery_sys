@@ -119,12 +119,12 @@ class Subject:
                 else:
                     rank[r] *= 1e-6
             for wd in lda:
-                if wd not in res:
+                if wd not in res and r in lda[wd]:
                     rank[r] *= lda[wd][r]
                 else:
                     rank[r] *= 1e-6
             if self.pagerank.get(r):
-                rank[r] *= self.pagerank[r] * self.id_name[r]["total"]
+                rank[r] *= self.pagerank[r] * self.id_name[r]["composite_score"]
         return rank
 
     def do_query(self, words, teacher_id):
@@ -290,7 +290,7 @@ class Query:
                          'city': school_infomation['CITY'], 'score': school_rank[school_id]})
         return query_result
 
-    def prints_for_teacher(self, result):
+    def prints_for_teacher(self, result,school_name):
         '''
         根据搜索到的老师信息得到老师所在的学院名，学校名，并打印
         :param result:进行搜索后返回的老师信息，包括老师姓名及老师学院，以老师得分降序排序
@@ -307,15 +307,15 @@ class Query:
                 teacher_id = teacher_info1[0]
                 # 学院id
                 institution_id = self.id_name[teacher_id]['INSTITUTION_ID']
-
-                teacher_info.append({
-                    'teacher_id': teacher_id,
-                    'teacher_name': self.id_name[teacher_id]["NAME"],
-                    'institution_name': self.institution_info[institution_id]['NAME'],
-                    'institution_id': institution_id,
-                    'school_name':self.institution_info[institution_id]['SCHOOL_NAME'],
-                    'school_id': self.id_name[teacher_id]['SCHOOL_ID']
-                })
+                if self.institution_info[institution_id]['SCHOOL_NAME'] == school_name:
+                    teacher_info.append({
+                        'teacher_id': teacher_id,
+                        'teacher_name': self.id_name[teacher_id]["NAME"],
+                        'institution_name': self.institution_info[institution_id]['NAME'],
+                        'institution_id': institution_id,
+                        'school_name':self.institution_info[institution_id]['SCHOOL_NAME'],
+                        'school_id': self.id_name[teacher_id]['SCHOOL_ID']
+                    })
 
         return teacher_info
 
@@ -427,10 +427,12 @@ def query_all(range, words, limit=None):
         result = query.do_query(words, filer)
         result_info = query.prints_for_institution(result, limit)
         return result_info
+
     if query_range == '老师':
         filer = {}
+        school_name = limit
         result = query.do_query(words, filer)
-        result_info = query.prints_for_teacher(result)
+        result_info = query.prints_for_teacher(result,school_name)
         return result_info
     if query_range == '教师':
         filer = {}
@@ -441,9 +443,7 @@ def query_all(range, words, limit=None):
 
 
 if __name__ == '__main__':
-    results = query_all('老师', '计算机')
+    results = query_all('老师', '计算机',"中山大学")
 
-    for result in results:
-        if result['school_name'] == '中山大学':
-            print(result)
+    print(results)
     # print(query_all("老师","计算机"))
