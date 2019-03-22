@@ -1,15 +1,15 @@
 
-#  author   ：feng
-#  time     ：2018/1/25
+#  author   ：dxy
+#  time     ：2019/3/12
 #  function : 数据库配置文件
 import time
 import pymysql
 import threading
 from DBUtils.PooledDB import PooledDB, SharedDBConnection
-
+cofig={
 "local":{
     "host":'localhost',
-    "password":'dpfsss456',
+    "password":'123456',
     "database":"w_project"
 }}
 db=cofig["local"]
