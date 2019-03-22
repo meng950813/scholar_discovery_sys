@@ -194,7 +194,8 @@ def get_teachers_by_school(school_name, keyword):
         # 转换关键字 json格式必须为双引号
         if teacher['FIELDS'] is not None:
             fields = teacher['FIELDS'].replace("\'", "\"")
-            teacher['FIELDS'] = json.loads(fields)
+            teacher['FIELDS'] = list(json.loads(fields).keys())
+            # teacher['FIELDS'] = json.loads(fields)
         # 把老师添加到对应的学院之中
         institution_name = id_institutions[teacher['INSTITUTION_ID']]
 
@@ -206,7 +207,8 @@ def get_teachers_by_school(school_name, keyword):
             for key in institution_keys:
                 institutions[institution_name]['info'][key] = 0 if info[key] is None else info[key]
         # 添加老师
-        institutions[institution_name]['teachers'].append(teacher)
+        if teacher['FIELDS'] is not None:
+            institutions[institution_name]['teachers'].append(teacher)
 
     return {
         'number': teacher_count,

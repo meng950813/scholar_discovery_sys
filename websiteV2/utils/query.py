@@ -294,14 +294,34 @@ class Query:
         '''
         根据搜索到的老师信息得到老师所在的学院名，学校名，并打印
         :param result:进行搜索后返回的老师信息，包括老师姓名及老师学院，以老师得分降序排序
-        :return:院系的搜索结果，老师+学院名+学校名
+        :return:院系的搜索结果，老师id+老师名+学院id+学院名+学校id+学校名
         '''
 
         teacher_info = []
+
+        #获取老师所在的所有学院
+        institution_name = []
         for code in result:
             # 学科代码code下的教师权值信息
             teacher_info_s = result[code]
+            for teacher_info1 in teacher_info_s:
+                teacher_id = teacher_info1[0]
+                institution_id = self.id_name[teacher_id]['INSTITUTION_ID']
+                if self.institution_info[institution_id]['NAME'] not in institution_name and self.institution_info[institution_id]['SCHOOL_NAME'] == school_name:
+                    institution_name.append(self.institution_info[institution_id]['NAME'])
 
+        #初始化所有学院的老师总分
+        institution_dict = []
+        for i in institution_name:
+             institution_dict.append({
+                "teacher_rank":0,
+                "institution_name":i
+             })
+
+        #获取老师的分数和学院名
+        for code in result:
+            # 学科代码code下的教师权值信息
+            teacher_info_s = result[code]
             for teacher_info1 in teacher_info_s:
                 # 教师id
                 teacher_id = teacher_info1[0]
@@ -309,6 +329,45 @@ class Query:
                 institution_id = self.id_name[teacher_id]['INSTITUTION_ID']
                 if self.institution_info[institution_id]['SCHOOL_NAME'] == school_name:
                     teacher_info.append({
+                        'teacher_rank': teacher_info1[1],
+                        'institution_name': self.institution_info[institution_id]['NAME']
+                    })
+
+        #计算学院中老师的总分
+        for i in teacher_info:
+            for j in institution_dict:
+                if i['institution_name'] == j['institution_name']:
+                    j["teacher_rank"] = j["teacher_rank"] + i["teacher_rank"]
+
+        #按学院中老师的总分对学院排名
+        for i in institution_dict:
+            for j in institution_dict:
+                if i['teacher_rank'] > j['teacher_rank']:
+                    a = i['teacher_rank']
+                    b = i['institution_name']
+                    i['institution_name'] = j['institution_name']
+                    i['teacher_rank'] = j['teacher_rank']
+                    j['institution_name'] = b
+                    j['teacher_rank'] = a
+
+        #取排名前三的学院
+        three_institution = []
+        for i in institution_dict[0:3]:
+            three_institution.append(i['institution_name'])
+
+
+        #获取学院前三的老师信息
+        teacher_info_true = []
+        for code in result:
+            # 学科代码code下的教师权值信息
+            teacher_info_s = result[code]
+            for teacher_info1 in teacher_info_s:
+                # 教师id
+                teacher_id = teacher_info1[0]
+                # 学院id
+                institution_id = self.id_name[teacher_id]['INSTITUTION_ID']
+                if self.institution_info[institution_id]['SCHOOL_NAME'] == school_name and self.institution_info[institution_id]['NAME'] in three_institution:
+                    teacher_info_true.append({
                         'teacher_id': teacher_id,
                         'teacher_name': self.id_name[teacher_id]["NAME"],
                         'institution_name': self.institution_info[institution_id]['NAME'],
@@ -317,9 +376,7 @@ class Query:
                         'school_id': self.id_name[teacher_id]['SCHOOL_ID']
                     })
 
-        return teacher_info
-
-
+        return teacher_info_true
 
     def do_query(self, text, filer):
         '''
@@ -382,17 +439,18 @@ def queryForTeacher(words, institution_id='1526'):
 
 
 subject = [
-    {"code": '0801', "k": 16},
-    {"code": '0802', "k": 10}, {"code": '0803', "k": 10}, {"code": '0804', "k": 12},
-    {"code": '0805', "k": 10}, {"code": '0806', "k": 12}, {"code": '0807', "k": 14},
-    {"code": '0808', "k": 12}, {"code": '0809', "k": 18}, {"code": '080901', "k": 16}, {"code": '0810', "k": 18},
-    {"code": '0811', "k": 12}, {"code": '081101', "k": 28}, {"code": '0812', "k": 10}, {"code": '081202', "k": 12},
-    {"code": '0814', "k": 20}, {"code": '0815', "k": 12},
-    {"code": '0817', "k": 10}, {"code": '0818', "k": 14},
-    {"code": '0822', "k": 10}, {"code": '0823', "k": 10},
-    {"code": '0824', "k": 12}, {"code": '0825', "k": 20}, {"code": '0826', "k": 10},
-    {"code": '0827', "k": 10}, {"code": '0828', "k": 10},
-    {"code": '0830', "k": 18}, {"code": '0831', "k": 10}, {"code": '0832', "k": 12}]
+    {"code": '0801', "k": 12},
+    {"code": '0802', "k": 18}, {"code": '0803', "k": 10}, {"code": '0804', "k": 18},
+    {"code": '0805', "k": 12}, {"code": '0806', "k": 10}, {"code": '0807', "k": 22},
+    {"code": '0808', "k": 12}, {"code": '0809', "k": 14}, {"code": '080901', "k": 12}, {"code": '0810', "k": 12},
+    {"code": '0811', "k": 16}, {"code": '081101', "k": 10}, {"code": '0812', "k": 10}, {"code": '081202', "k": 10},
+    {"code": '0814', "k": 14}, {"code": '0815', "k": 20},
+    {"code": '0817', "k": 16}, {"code": '0818', "k": 12},
+    {"code": '0822', "k": 18}, {"code": '0823', "k": 14},
+    {"code": '0824', "k": 20}, {"code": '0825', "k": 10}, {"code": '0826', "k": 10},
+    {"code": '0827', "k": 10}, {"code": '0828', "k": 12},
+    {"code": '0830', "k": 20}, {"code": '0831', "k": 14}, {"code": '0832', "k": 10}]
+
 
 
 if __name__ == '__main__':
@@ -443,7 +501,6 @@ def query_all(range, words, limit=None):
 
 
 if __name__ == '__main__':
-    results = query_all('老师', '计算机',"中山大学")
-
+    results = query_all('老师', '计算机',"南京大学")
     print(results)
     # print(query_all("老师","计算机"))
