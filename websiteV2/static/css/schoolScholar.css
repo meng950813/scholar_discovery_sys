@@ -171,6 +171,7 @@ ul.search-person>li:hover{
 
 ul.search-pill{
     padding-top:5px;
+    padding-left: 0px;
 }
 
 ul.search-pill li{
@@ -187,6 +188,7 @@ ul.search-pill li{
 
 ul.search-perpendicular{
     padding-top:5px;
+    padding-left: 0px;
 }
 
 ul.search-perpendicular li{

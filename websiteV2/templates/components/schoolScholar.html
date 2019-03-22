@@ -27,18 +27,28 @@
         <div class="part1">根据关键词 <b>"{{ keyword }}"</b>，为您推荐 <b> {{ number }}</b> 名专家</div>
         <ul>
             {% for name,values in intstitutions.items()  %}
-            <li>
+                {% if values['teachers']|length > 0  %}
+                <li>
                 <div class="college">{{ name }}</div>
-                <div class="tags">
-                    <ul class="search-pill">
-                        <li>{{ values['info']['NKD_NUM'] }}个重点学科</li>
-                        <li>{{ values['info']['SKL_NUM'] }}个国家重点实验室</li>
-                        <li>{{ values['info']['ACADEMICIAN_NUM'] }}个院士</li>
-                    </ul>
-                </div>
+                {% if values['info']['NKD_NUM'] > 0 or values['info']['SKL_NUM'] > 0 or values['info']['ACADEMICIAN_NUM'] > 0%}
+                    <div class="tags">
+                        <ul class="search-pill">
+                            {% if values['info']['NKD_NUM'] > 0 %}
+                                <li>{{ values['info']['NKD_NUM'] }}个重点学科</li>
+                            {% endif %}
+                            {% if values['info']['SKL_NUM'] > 0 %}
+                                <li>{{ values['info']['SKL_NUM'] }}个国家重点实验室</li>
+                            {% endif %}
+                            {% if values['info']['ACADEMICIAN_NUM'] > 0 %}
+                                <li>{{ values['info']['ACADEMICIAN_NUM'] }}个院士</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
                 <div class="scholar">
                     <ul class="search-person">
-                        {%  for teacher in values['teachers'] %}
+                        {%  for teacher in values['teachers'][0:3] %}
+                            {% if teacher['FIELDS'] %}
                         <li>
                             <div class="row">
                                 <div class="col-lg-3" style="text-align:center;">
@@ -47,22 +57,37 @@
                                 <div class="col-lg-9">
                                     <p>{{ teacher['NAME'] }}</p>
                                     <ul class="search-perpendicular">
-                                        <li>{{ teacher['YEAROLD'] }}</li>
-                                        <li>{{ teacher['TITLE'] }}</li>
-                                        <li>{{ teacher['ACADEMICIAN'] }}</li>
-                                        <li>{{ teacher['OUTYOUTH'] }}</li>
-                                        <li>{{ teacher['CHANGJIANG'] }}</li>
+                                        {% if teacher['YEAROLD'] %}
+                                            <li>{{ teacher['YEAROLD'] }}岁</li>
+                                        {% endif %}
+                                        {% if teacher['TITLE'] %}
+                                            <li>{{ teacher['TITLE'] }}</li>
+                                        {% endif %}
+                                        {% if teacher['ACADEMICIAN'] == 1 %}
+                                            <li>院士</li>
+                                        {% endif %}
+                                        {% if teacher['CHANGJIANG'] == 1 %}
+                                            <li>长江学者</li>
+                                        {% endif %}
+                                        {% if teacher['OUTYOUTH'] == 1 %}
+                                            <li>杰出青年</li>
+                                        {% endif %}
+
                                     </ul>
                                     <ul class="search-pill">
-                                        <li>{{ teacher['FIELDS'] }}</li>
+                                        {% for i in teacher['FIELDS'][0:5] %}
+                                        <li>{{ i }}</li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
                         </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
             </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </div>
