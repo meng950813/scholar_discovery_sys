@@ -71,6 +71,12 @@ def word_cloud():
     return render_template('wordcloud.html')
 
 
+@app.route('/map')
+def map():
+    """测试地图v2的路由函数"""
+    return render_template('map2.html')
+
+
 @app.route('/login/')
 def login():
     # 商务登录
