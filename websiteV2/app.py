@@ -3,6 +3,7 @@ import logging
 import controllers.api as api
 from controllers.api import api_blueprint
 from controllers.user import user_blueprint
+from controllers.api_agent import agent_blueprint
 from utils import db
 from config import DB_CONFIG
 from config import SESSION_KEY
@@ -11,6 +12,7 @@ from config import SESSION_KEY
 app = Flask(__name__)
 app.register_blueprint(api_blueprint)
 app.register_blueprint(user_blueprint)
+app.register_blueprint(agent_blueprint)
 # 打印logging输出
 logging.basicConfig(level=logging.DEBUG)
 
@@ -139,16 +141,11 @@ def governPersonal():
 
 
 @app.route("/schoolPersonal/")
-
 def schoolPersonal():
+
+    print(session['username'])
     # 转到个人页面
     return render_template("./components/schoolPersonal.html" , user = session.get('username'))
-
-
-@app.route('/schoolBasic')
-def school_basic():
-    return render_template('schoolBasic.html')
-
 
 
 if __name__ == '__main__':

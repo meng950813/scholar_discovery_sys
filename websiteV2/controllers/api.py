@@ -17,6 +17,8 @@ from service.teacherservice import teacher_service
 
 
 api_blueprint = Blueprint('api', __name__, url_prefix='/api')
+# 全局变量 用于地图名和对应的文件路径的映射
+mapping = None
 
 
 @api_blueprint.route('/school/address', methods=['POST'])
@@ -73,7 +75,37 @@ def get_mapdata(filename):
     return data
 
 
-@api_blueprint.route('/person/relation', methods=['POST'])
+@api_blueprint.route('/mapdata/mapping/<name>')
+def get_mapdata_by_mapping(name):
+    """
+    根据名称获取对应的地图数据，并返回数据
+    依赖于get_mapdata()函数
+    :param name: "中国" 则是中国地图数据，"中国,江苏"则是江苏地图数据
+    :return: 若存在该文件，则返回该文件的数据；若不存在，则返回一个空的数组
+    """
+    base_path = os.path.join(os.getcwd(), 'static', 'mapdata')
+    global mapping
+    data = []
+    # 尝试加载映射数据
+    if mapping is None:
+        try:
+            fp = open(os.path.join(base_path, 'mapping.json'), 'r', encoding='utf-8')
+            mapping = json.loads(fp.read())
+            fp.close()
+        except FileNotFoundError as e:
+            print(e)
+            return []
+    # 是否存在地图对应的路径
+    try:
+        filename = mapping[name]
+    except KeyError as e:
+        print(e)
+        return []
+    # 获取地图数据
+    return get_mapdata(filename)
+
+
+@api_blueprint.route('/teacher/relation', methods=['POST'])
 def person_relation():
     """
     获取个人与其他人的关系,请求格式如下
