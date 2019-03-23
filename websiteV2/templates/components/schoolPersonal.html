@@ -1,11 +1,15 @@
 {% extends 'template.html' %}
 {% block title %}个人中心{% endblock %}
 
+{% block head %}
+    <link href="../static/css/index.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
 
 {% block main %}
 <div class="container">
     <h3>关系网络</h3>
-    <div class="social-net"></div>
+    <svg class="social-net" width="900" height="600"></svg>
     <h3>联系列表</h3>
     <div class="list">
         <table class="table table-hover">
@@ -20,23 +24,44 @@
                     <th>操作</th>
                 </tr>
             </thead>
-            <tbody id="contract_list">
-                <tr>
-                    <td>南京大学</td>
-                    <td>计算机学院</td>
-                    <td>周志华</td>
-                    <td>11111111</td>
-                    <td>人工智能学院院长</td>
-                    <td>2019/3/3</td>
-                    <td>
-                        <button type="button" class="btn btn-danger">删除</button>
-                        <button type="button" class="btn btn-info" >修改</button>
-                    </td>
-                </tr>
+            <tbody id="relation_list">
             </tbody>
         </table>
     </div>
     
 </div>
 
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/relation.js') }}"></script>
+<script src="{{ url_for('static', filename='js/relation_agent.js') }}"></script>
+
+<script type="text/javascript">
+    let url = '/api/agent/relation';
+    let self = {"id": 100000, "name": '赵钱孙李', "type": 0};
+
+    let svg = d3.select('.social-net');
+    let relationGraph = new RelationGraph(svg);
+    //字段映射
+    let mapping = ['SCHOOL_NAME', 'COLLEGE_NAME', 'TEACHER_NAME', 'LINK', 'REMARK', 'CREATION_TIME'];
+    //用于更新联系列表
+    let relation_list = d3.select('#relation_list');
+    //异步获取数据
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: self,
+        dataType: 'json',
+        success: loadDataSuccess,
+    });
+    function loadDataSuccess(json_data) {
+        let handled_data = handle_school_agent_relations(self, json_data);
+        relationGraph.setData(handled_data);
+        //更新联系列表
+        updateAgentRelationList(relation_list, mapping, json_data);
+    }
+</script>
 {% endblock %}

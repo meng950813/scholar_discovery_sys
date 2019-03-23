@@ -36,9 +36,9 @@
     let height = 800;
 
     let svg = d3.select('svg');
-    let relationGraph = new RelationGraph(d3.select('svg'));
+    let relationGraph = new RelationGraph(svg);
     //异步调用
-    let urls = ['/api/person/relation', '/api/institution/relation'];
+    let urls = ['/api/teacher/relation', '/api/institution/relation'];
     let data = [{teacher_id: 137950}, {school_id: 17134, institution_id: 577}];
     let index = 0;
 
