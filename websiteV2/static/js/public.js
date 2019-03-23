@@ -98,7 +98,7 @@ function showAlert(msg, TYPE){
 
     $(".alert-container").addClass("show-opacity");
 
-    // 设置 2s 后关闭弹出窗
+    // 设置 2.5s 后关闭弹出窗
     setTimeout(hideAlert,2500);
 }
 
@@ -145,17 +145,27 @@ function showModal(mod_id){
  */
 $("#submit-connect").on("click",function(e){
     e.preventDefault();
+
+    // 不能为空的元素的 jQuery 列表
+    let not_empty_target_JQ_list = [$("#name_level_one"),$("#name_level_two"), $("#contract_name"),$("#link_method")];
+
     let info = {
-        "level_one" : $("#name_level_one").val(),
-        "level_two" : $("#name_level_two").val(),
-        "contract_name" : $("#contract_name").val(),
-        "link_method" : $("#link_method").val(),
+        // "level_one" : $("#name_level_one").val(),
+        "level_one" : not_empty_target_JQ_list[0].val(),
+        // "level_two" : $("#name_level_two").val(),
+        "level_two" : not_empty_target_JQ_list[1].val(),
+        // "contract_name" : $("#contract_name").val(),
+        "contract_name" : not_empty_target_JQ_list[2].val(),
+        // "link_method" : $("#link_method").val(),
+        "link_method" : not_empty_target_JQ_list[3].val(),
         "remark" : $("#remark").val(),
         "create_time" : (new Date()).Format("yyyy-MM-dd hh:mm:ss")
 
     };
     // TODO checkout is there any empty
-    // checkUseful(info);
+    if ( checkFromEmpty(not_empty_target_JQ_list) ){
+        return false;
+    }
 
     $.ajax({
         "type" : "post",
@@ -181,6 +191,26 @@ $("#submit-connect").on("click",function(e){
         }
     });
 });
+
+
+/**
+ * 检查提交内容是否为空
+ * @param {array} target_list 需要判断元素的 jquery 样式
+ * @return true(has empty) / false(not empty)
+ */
+function checkFormEmpty(target_list) {
+    target_list.forEach($target => {
+        if($target.val() == ""){
+            $target.addClass("has-error");
+            return true;
+        }
+        else{
+            $target.removeClass("has-error");
+        }
+    });
+    
+    return false;
+}
 
 
 /**

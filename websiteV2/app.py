@@ -3,7 +3,11 @@ import logging
 import controllers.api as api
 from controllers.api import api_blueprint
 from controllers.user import user_blueprint
+<<<<<<< HEAD
+from service.userservice import user_service
+=======
 from controllers.api_agent import agent_blueprint
+>>>>>>> origin/xiaoniu
 from utils import db
 from config import DB_CONFIG
 from config import SESSION_KEY
@@ -150,7 +154,13 @@ def governPersonal():
 @app.route("/schoolPersonal/")
 def schoolPersonal():
 
-    print(session['username'])
+    user = None
+    if "username" in session:
+        user = session.get("username")
+    else:
+        return redirect(url_for("login"))
+
+    # user_service.
     # 转到个人页面
     return render_template("./components/schoolPersonal.html" , user = session.get('username'))
 

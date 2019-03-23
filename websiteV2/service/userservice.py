@@ -98,6 +98,12 @@ class UserService:
         return {"success" : False}
         
 
+    def getUserRelation(self):
+        """
+        获取用户的关系网
+        """
+        # TODO
+        # user_dao
 
 
 user_service = UserService()
@@ -110,7 +116,7 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG)
     # 需要预先调用，且只调用一次
-    db.create_engine(DB_CONFIG['user'], DB_CONFIG['pwd'], DB_CONFIG['db_name'])
+    db.create_engine(**DB_CONFIG)
 
     # u_id
     print( user_service.dologin('111111', 'a') )
