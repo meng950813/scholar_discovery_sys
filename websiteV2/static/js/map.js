@@ -199,11 +199,11 @@ class ChinaMap{
             //重新绘制地图
             that.redrawMap(jsondata);
             //二级后开始显示学校标记
-            if (that.scaleLevel > 0)
-                that.redrawInstitutions();
+            //if (that.scaleLevel > 0)
+            that.svg.select('#tag').selectAll('g').remove();
+            that.redrawInstitutions();
             //中国地图删除标记
-            else
-                that.svg.select('#tag').selectAll('g').remove();
+            //else
             //更新面包屑导航栏
             let texts = [];
             for (let i = 0; i < that.stack.length; i++)
@@ -257,7 +257,8 @@ class ChinaMap{
             .attr('stroke', '#000')
             .attr('stroke-width', 1)
             .attr('fill', function (d) {
-                return that.mapColor(d.weight);
+                //return that.mapColor(0);
+                return '#acc2ff';
             })
             .attr('d', that.path)
             .on('mouseover', function (d, i) {
@@ -416,7 +417,7 @@ class ChinaMap{
         this.svg.select('#tag').selectAll('g').remove();
         let group = this.svg.select('#tag')
             .selectAll('g')
-            .data(schools)
+            .data([schools[0]])
             .enter()
             .append('g')
             .attr('transform', function (d, i) {
@@ -429,12 +430,14 @@ class ChinaMap{
             .attr('stroke-width', '1')
             .attr('fill', 'red');
         //添加数字
+        /*
         group.append('text')
             .attr('transform', 'translate(-6,-12)')
             .attr('fill', 'white')
             .text(function (d, i) {
                 return (i + 1);
             });
+            */
     }
     /**
      * 私有函数 点击面包屑导航 仅仅用于地图回退

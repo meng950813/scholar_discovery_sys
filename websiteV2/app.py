@@ -3,7 +3,11 @@ import logging
 import controllers.api as api
 from controllers.api import api_blueprint
 from controllers.user import user_blueprint
+<<<<<<< HEAD
 from service.userservice import user_service
+=======
+from controllers.api_agent import agent_blueprint
+>>>>>>> origin/xiaoniu
 from utils import db
 from config import DB_CONFIG
 from config import SESSION_KEY
@@ -12,6 +16,7 @@ from config import SESSION_KEY
 app = Flask(__name__)
 app.register_blueprint(api_blueprint)
 app.register_blueprint(user_blueprint)
+app.register_blueprint(agent_blueprint)
 # 打印logging输出
 logging.basicConfig(level=logging.DEBUG)
 
@@ -70,6 +75,12 @@ def relation():
 def word_cloud():
     """测试词云的路由函数"""
     return render_template('wordcloud.html')
+
+
+@app.route('/map')
+def map():
+    """测试地图v2的路由函数"""
+    return render_template('map2.html')
 
 
 @app.route('/login/')
@@ -152,12 +163,6 @@ def schoolPersonal():
     # user_service.
     # 转到个人页面
     return render_template("./components/schoolPersonal.html" , user = session.get('username'))
-
-
-@app.route('/schoolBasic')
-def school_basic():
-    return render_template('schoolBasic.html')
-
 
 
 if __name__ == '__main__':
