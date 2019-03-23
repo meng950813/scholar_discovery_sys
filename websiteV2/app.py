@@ -91,24 +91,31 @@ def manageLogin():
 @app.route('/search',methods=['GET','POST'])
 def search():
     keyword = request.form.get("simple-input")
-    school_name = '湖南大学'
+    school_name = '南京大学'
 
     data = api.get_teachers_by_school(school_name, keyword)
     # 学者个数
-    number = data['number']
+    number = 0
+    #学院信息
     institutions = data['institutions']
-    print(type(institutions.items()))
+    for name,values in institutions.items():
+        if len(values["teachers"]) > 3:
+            number = number + 3
+        else:
+            number = number + len(values["teachers"])
+    # print(institutions)
     # 遍历
     # for name, values in institutions.items():
-        # print(name)
-        # for teacher in values['teachers']:
-        #     print(teacher['NAME'], teacher['TITLE'])
-        #     print(teacher['YEAROLD'] if 'YEAROLD' in teacher else '年龄未知')
-        #     print(teacher['ACADEMICIAN'] if teacher['ACADEMICIAN'] == 1 else "不是院士")
-        #     print(teacher['OUTYOUTH'] if teacher['OUTYOUTH'] == 1 else "不是杰出青年")
-        #     print(teacher['CHANGJIANG'] if teacher['CHANGJIANG'] == 1 else "不是长江学者")
-        #     print(teacher['FIELDS'] if teacher['FIELDS'] is not None else '领域未知')
-        # print(values['info'])
+    #     print(name)
+    #     for teacher in values['teachers']:
+    #
+    #         print( type(teacher['TITLE']))
+    #         print(teacher['YEAROLD'] if 'YEAROLD' in teacher else '年龄未知')
+    #         print(teacher['ACADEMICIAN'] if teacher['ACADEMICIAN'] == 1 else "不是院士")
+    #         print(teacher['OUTYOUTH'] if teacher['OUTYOUTH'] == 1 else "不是杰出青年")
+    #         print(teacher['CHANGJIANG'] if teacher['CHANGJIANG'] == 1 else "不是长江学者")
+    #         print(teacher['FIELDS'] if teacher['FIELDS'] is not None else '领域未知')
+    #     print(values['info'])
     # 渲染，并传递参数
     return render_template('./components/schoolScholar.html' , user=session.get('username'),keyword=keyword,number=number,intstitutions = institutions)
 

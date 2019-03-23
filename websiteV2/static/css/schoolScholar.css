@@ -103,7 +103,8 @@ body{
     width: 750px;
     height: auto;
     margin-top: 5px;
-    border-bottom: 1px solid #000000;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #000000;
 }
 
 
@@ -158,7 +159,7 @@ ul.search-person>li:hover{
 }
 
 .search-li{
-    border-bottom:solid 1px transparent;
+    border-bottom: 1px solid transparent;
     border-color: #888888;
     margin-top:none;
 }
@@ -171,6 +172,7 @@ ul.search-person>li:hover{
 
 ul.search-pill{
     padding-top:5px;
+    padding-left: 0px;
 }
 
 ul.search-pill li{
@@ -187,15 +189,16 @@ ul.search-pill li{
 
 ul.search-perpendicular{
     padding-top:5px;
+    padding-left: 0px;
 }
 
-ul.search-perpendicular li{
-    display:inline-block;
-    border-right:solid 1px transparent;
+ul.search-perpendicular li {
+    display: inline-block;
+    border-right: solid 1px transparent;
     border-color: #d0d0d0;
     margin-right: 5px;
     margin-bottom: 4px;
-    padding: 1px 10px 1px 5px!important;
+    padding: 1px 10px 1px 5px !important;
 }
 
 ul.search-perpendicular li:last-child{
@@ -206,10 +209,13 @@ ul.search-line{
     margin-top:5px;
 }
 
+ul.search-person{
+    padding-left: 0;
+}
+
 ul.search-person>li{
     margin-top:31px;
-    border-bottom:solid 1px transparent;
-    border-color: #f0f0f0;
+    border-bottom:1px solid transparent;
 }
 
 ul.search-person>li:last-child{
@@ -221,6 +227,7 @@ ul.search-person>li:last-child{
 ul.search-person p{
     font-size:16px;
     font-weight:600;
+
 }
 
 ul.search-more{
