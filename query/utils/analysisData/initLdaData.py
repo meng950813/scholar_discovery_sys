@@ -49,7 +49,6 @@ def getPaperAndTecher():
     #获得论文id,论文author_id 作者name a是论文 b是老师名字
 
     print('paper-teacher and teacher-paper..')
-    #sql="SELECT a.id,a.author_id,b.`name` FROM `paper2` a JOIN teacher b on a.author_id=b.id"
     sql = "SELECT a.paper_id,a.teacher_id,b.`name` FROM `teacher_paper` a ,es_teacher b where a.teacher_id=b.ID"
     paper={}
     teacher={}
