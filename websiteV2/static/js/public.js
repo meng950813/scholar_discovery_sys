@@ -163,7 +163,7 @@ $("#submit-connect").on("click",function(e){
 
     };
     // TODO checkout is there any empty
-    if ( checkFromEmpty(not_empty_target_JQ_list) ){
+    if ( checkFormEmpty(not_empty_target_JQ_list) ){
         return false;
     }
 
