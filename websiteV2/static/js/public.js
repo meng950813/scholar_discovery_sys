@@ -163,7 +163,8 @@ $("#submit-connect").on("click",function(e){
 
     };
     // TODO checkout is there any empty
-    if ( checkFormEmpty(not_empty_target_JQ_list) ){
+    if (checkRelationFormEmpty(not_empty_target_JQ_list) ){
+        console.log("checkRelationFormEmpty is true");
         return false;
     }
 
@@ -177,7 +178,7 @@ $("#submit-connect").on("click",function(e){
             if(data.success){
                 $("#addContractModal").modal("hide");
                 
-                showAlert("操作成功",ALERT_TYPE.success);
+    //             showAlert("操作成功",ALERT_TYPE.success);
                 
                 clearModal();
 
@@ -197,16 +198,18 @@ $("#submit-connect").on("click",function(e){
  * @param {array} target_list 需要判断元素的 jquery 样式
  * @return true(has empty) / false(not empty)
  */
-function checkFormEmpty(target_list) {
-    target_list.forEach($target => {
-        if($target.val() == ""){
-            $target.addClass("has-error");
+function checkRelationFormEmpty(target_list) {
+    for(let i in target_list){
+        let $target = target_list[i];
+        if(!$target.val()){
+            console.log("this is $tagert.val : ",$target.attr("id"),$target.val())
+            $target.parent().parent().addClass("has-error");
             return true;
         }
         else{
-            $target.removeClass("has-error");
+            $target.parent().parent().removeClass("has-error");
         }
-    });
+    };
     
     return false;
 }
@@ -294,4 +297,4 @@ function testInsert() {
     }
     console.log("in testInsert : ", testData)
     creatNewRecord(testData);
-  }
+}
