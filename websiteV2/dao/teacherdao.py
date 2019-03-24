@@ -1,6 +1,6 @@
 """
 author: xiaoniu
-date: 2019-03-18
+date: 2019-03-24
 desc: 主要用在TeacherService类中，简单封装了和数据库的交互的SQL语句
 """
 import utils.db as db
@@ -19,15 +19,16 @@ class TeacherDao:
 
         return results
 
-
-
-    def get_teachers_by_ids(self, id_list):
+    def get_teachers_by_ids(self, id_list, keys=None):
         """
         根据老师id数组获取所有的老师
         :param id_list: 老师id所组成的数组
-        :return:
+        :param keys: 要获得的键值数组 如['ID', 'NAME'] 为空则获取所有的键值对
+        :return: 查询成功的结果数组
         """
-        string = 'select * from es_teacher where ID in (%s)'
+        string = "select %s from es_teacher where ID in (%s)" %\
+                 (','.join(keys) if keys is not None else '*', '%s')
+        # 设置占位符
         sql = string % (','.join(['?' for id in id_list]))
 
         results = db.select(sql, *id_list)
@@ -56,13 +57,10 @@ class TeacherDao:
         return results
 
 
-
-
 teacher_dao = TeacherDao()
 
 
 if __name__ == '__main__':
-    import utils.db as db
     from config import DB_CONFIG
     import logging
 
@@ -70,12 +68,13 @@ if __name__ == '__main__':
     # 需要预先调用，且只调用一次
     db.create_engine(**DB_CONFIG)
     # 获取该老师的所有关系
-    self_relations = teacher_dao.get_relations_by_id(150896)
+    self_relations = teacher_dao.get_relations_by_ids([150896])
     print(self_relations)
     # 获取teacher2_id的所有id
     teacher_ids = [relation['teacher2_id'] for relation in self_relations]
     # 获取老师相关信息
     teacher_list = teacher_dao.get_teachers_by_ids(teacher_ids)
+    # teacher_list = teacher_dao.get_teachers_by_ids(teacher_ids, ['ID', 'NAME'])
     print('老师信息')
     print(teacher_list)
     # 获取老师对应的存在的学术头衔
