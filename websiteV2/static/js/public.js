@@ -163,24 +163,23 @@ $("#submit-connect").on("click",function(e){
 
     };
     // TODO checkout is there any empty
-    if ( checkFromEmpty(not_empty_target_JQ_list) ){
+    if ( checkFormEmpty(not_empty_target_JQ_list) ){
         return false;
     }
 
     $.ajax({
         "type" : "post",
-        "url" : 
-        "/user/createRelationship",
+        "url" : '/api/agent/relation',
         "dataType" : "json",
         "data" : info,
         success : function (data) { 
-            console.log("success , data = " , data)
+            console.log("success , data = " , data);
             if(data.success){
                 $("#addContractModal").modal("hide");
                 
                 showAlert("操作成功",ALERT_TYPE.success);
                 
-                clearModal()
+                clearModal();
 
                 info.id = data.id;
                 creatNewRecord(info);
