@@ -3,8 +3,8 @@ import logging
 import controllers.api as api
 from controllers.api import api_blueprint
 from controllers.user import user_blueprint
+from service.userservice import user_service
 from controllers.api_agent import agent_blueprint
-
 from utils import db
 from config import DB_CONFIG
 from config import SESSION_KEY
@@ -160,7 +160,6 @@ def schoolPersonal():
     # user_service.
     # 转到个人页面
     return render_template("./components/schoolPersonal.html" , user = session.get('username'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)
