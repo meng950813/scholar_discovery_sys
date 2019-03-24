@@ -10,27 +10,25 @@ DELETE /api/agent/relation 删除联系
 from flask import Blueprint, request, session, redirect, url_for
 import json
 from service.agentservice import school_agent_service
+from controllers.user import login_required
 
-agent_blueprint = Blueprint('api/agent', __name__, url_prefix='/api')
+api_agent_blueprint = Blueprint('api/agent', __name__, url_prefix='/api')
 
 
-@agent_blueprint.route('/agent/relation', methods=['GET'])
+@api_agent_blueprint.route('/agent/relation', methods=['GET'])
+@login_required
 def get_agent_relations():
     """
         url: /api/bussiness/relation,
         type: 'GET',
-        data: {id: 10000, type: 0},
         dataType: 'json'
     获取该商务所有学院的联系，并生成d3封装的RelationGraph类可用的数据格式，json
     :return: json格式的数据
     """
-    user = session.get("username")
-    # TODO:判断是否登陆
-    if not user:
-        return redirect(url_for("login"))
-
-    uid = request.args.get('id', type=int)
-    utype = request.args.get('type', type=int)
+    current_user = session['username']
+    # 获取具体数据
+    uid = int(current_user['ID'])
+    utype = int(current_user['TYPE'])
 
     results = None
     # 学校商务
@@ -40,19 +38,17 @@ def get_agent_relations():
     return json.dumps(results)
 
 
-@agent_blueprint.route('/agent/relation', methods=['POST'])
+@api_agent_blueprint.route('/agent/relation', methods=['POST'])
+@login_required
 def append_agent_relation():
     """
     创建当前登陆者和别人的联系
     :return: dict : { success:True,create_time:"2019/3/4",id:"123" }
     """
-    user = session.get("username")
-    # TODO:判断是否登陆
-    if not user:
-        return redirect(url_for("login"))
-
+    current_user = session['username']
+    # 获取信息
     info = {
-        "user_id": user["ID"],
+        "user_id": current_user["ID"],
         "level_one": request.form['level_one'],
         "level_two": request.form['level_two'],
         "contract_name": request.form['contract_name'],
@@ -60,10 +56,8 @@ def append_agent_relation():
         "remark": request.form['remark'],
         "create_time": request.form["create_time"]
     }
-
     # 企业商务
-    if user["TYPE"] == "1":
-        # user_service
+    if current_user["TYPE"] == "1":
         pass
     # 高校商务
     else:
@@ -71,16 +65,13 @@ def append_agent_relation():
         return json.dumps(result)
 
 
-@agent_blueprint.route('/agent/relation', methods=['DELETE'])
+@api_agent_blueprint.route('/agent/relation', methods=['DELETE'])
+@login_required
 def delete_agent_relation():
     """
     “删除”联系，并不是真正的删除，
     :return:
     """
-    user = session.get("username")
-    # TODO:判断是否登陆
-    if not user:
-        return redirect(url_for("login"))
     # 状态码
     ret = {'success': False}
     # 获取参数
@@ -90,22 +81,20 @@ def delete_agent_relation():
     return ret
 
 
-@agent_blueprint.route('/agent/relation', methods=['PUT'])
+@api_agent_blueprint.route('/agent/relation', methods=['PUT'])
+@login_required
 def update_agent_relation():
     """
     更新当前登陆者和别人的联系
     需要 relation_id
     :return: dict : { success:True }
     """
-    user = session.get("username")
-    if not user:
-        return redirect(url_for("login"))
-
+    current_user = session['username']
     relation_id = request.form.get('relation_id', type=int)
     ret = {'success': False}
 
     info = {
-        "user_id": user["ID"],
+        "user_id": int(current_user["ID"]),
         "level_one": request.form['level_one'],
         "level_two": request.form['level_two'],
         "contract_name": request.form['contract_name'],
@@ -113,8 +102,7 @@ def update_agent_relation():
         "remark": request.form['remark'],
     }
     # 企业商务
-    if user["TYPE"] == "1":
-        # user_service
+    if current_user["TYPE"] == "1":
         pass
     # 高校商务
     else:
