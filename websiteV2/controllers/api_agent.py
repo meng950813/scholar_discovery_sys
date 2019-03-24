@@ -5,7 +5,7 @@ desc: 代理蓝图，有以下几种
 GET /api/agent/relation/<int:uid> 获取该uid对应的所有联系
 POST /api/agent/relation/ 添加新的资源
 PUT /api/agent/relation 修改哪个资源
-DELETE /api/agent/relation/<int:id> 删除联系
+DELETE /api/agent/relation 删除联系
 """
 from flask import Blueprint, request, session, redirect, url_for
 import json
