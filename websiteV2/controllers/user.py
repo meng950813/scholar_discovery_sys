@@ -7,6 +7,7 @@ desc: login蓝图，主要负责登陆相关的路由函数
 from flask import Blueprint, request, redirect, url_for, session, render_template
 import functools
 from service.userservice import user_service
+import json
 
 user_blueprint = Blueprint('user', __name__, url_prefix='/user')
 
@@ -42,6 +43,9 @@ def do_login():
         return redirect(url_for("user.login", error=1))
 
     session["username"] = result
+
+    # print(result)
+    
     # TODO 根据用户身份重定向
     if result["TYPE"] == "1":
         return redirect(url_for("agent.govern_personal"))

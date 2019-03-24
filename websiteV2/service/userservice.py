@@ -32,13 +32,18 @@ class UserService:
 
         back = None
 
-        # 输入电话
-        if self.tel.match(username):
-            back = user_dao.dologin(telphone=username, pwd=password)
+        # 利用正则判断用户名是否符合标准，以减少 sql 注入可能性
+        if self.tel.match(username) :
+            # 以电话登陆
+            back = user_dao.dologin(telphone = username , pwd = password)
         elif self.email.match(username):
-            back = user_dao.dologin(email=username, pwd=password)
+             # 以邮件登陆
+            back = user_dao.dologin(email = username , pwd = password)
         elif self.u_id.match(username):
-            back = user_dao.dologin(u_id=username, pwd=password)
+            # 以 id 登陆
+            back = user_dao.dologin(u_id = username , pwd = password)
+        else:
+            return {'error':True}
 
         # 未查询到结果
         if not back:

@@ -38,9 +38,10 @@ Session(app)
 @app.route('/')
 @app.route('/index')
 def index():
-    # 是否登陆
-    if "username" in session:
-        user = session.get("username")
+    # 若无，为 None
+    user = session.get("username")
+
+    if user:
         if user["TYPE"] == "1":
             return render_template("index.html", user=user)
         else:
