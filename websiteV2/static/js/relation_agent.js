@@ -94,9 +94,11 @@ function handle_school_agent_relations(self, json_data) {
 function updateAgentRelationList(relation_list, mapping, json_data){
     relation_list.selectAll('tr').remove();
 
+    console.log(json_data);
     for (let index = 0; index < json_data.length; index++){
         let datum = json_data[index];
-        let tr = relation_list.append('tr');
+        let tr = relation_list.append('tr')
+            .attr('data-index', datum['ID']);
         tr.selectAll('td')
             .data(mapping)
             .enter()

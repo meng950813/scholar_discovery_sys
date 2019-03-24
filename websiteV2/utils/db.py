@@ -6,7 +6,6 @@ desc: 简单提供了数据库常用的语句
 import pymysql, logging
 from DBUtils.PooledDB import PooledDB
 
-
 POOL = None
 
 
@@ -42,7 +41,7 @@ def create_engine(user, password, database, host='127.0.0.1', port=3306, **kw):
         creator=pymysql,  # 使用pymysql连接数据库
         maxconnections=6,  # 连接池允许的最大连接数目，为0或None时表示不限制连接数目
         mincached=2,  # 初始化时连接池的最少空闲链接
-        blocking=True, # 连接池中如果没有可用连接后，是否阻塞等待，为False则报错
+        blocking=True,  # 连接池中如果没有可用连接后，是否阻塞等待，为False则报错
         maxusage=None,  # 一个连接最多被复用的次数
         setsession=[],  # 开始会话前执行的命令列表
         ping=0,
@@ -105,8 +104,7 @@ def select(sql, *args):
     return _select(sql, False, *args)
 
 
-
-def _insert(sql, insertMany , args):
+def _insert(sql, insertMany, args):
     """
     insert语句
     :param sql: SQL语句 内部变量使用?
@@ -135,20 +133,20 @@ def _insert(sql, insertMany , args):
 
         # 返回最后插入行的主键ID
         return cursor.lastrowid
-        
+
     except Exception as e:
         print(e)
         connection.rollback()  # 事务回滚
 
     finally:
         cursor.close()
-        
+
         connection.commit()
 
         connection.close()
 
 
-def insert(sql , args):
+def insert(sql, args):
     """
     执行SQL语句
     :param sql:  insert的SQL语句，可含?
@@ -158,19 +156,60 @@ def insert(sql , args):
     return _insert(sql, False, args)
 
 
-def insert_many(sql , *args):
+def insert_many(sql, *args):
     """
     执行SQL语句
     :param sql:  insert的SQL语句，可含?
     :param args: insert的SQL语句所对应的值
     :return: 最后插入行的主键ID
     """
-    return _insert(sql , True , *args)
+    return _insert(sql, True, *args)
+
+
+def _update(sql, *args):
+    """
+    select语句
+    :param sql: SQL语句 内部变量使用?
+    :param args: SQL语句中要使用的变量
+    :return: 返回
+    """
+    global POOL
+    connection = None
+    cursor = None
+    logging.info('SQL: %s %s' % (sql, args if len(args) > 0 else ""))
+    sql = sql.replace('?', '%s')
+    row_count = 0
+
+    try:
+        connection = POOL.connection()
+        cursor = connection.cursor(cursor=pymysql.cursors.DictCursor)
+        # 利用本身的 execute 函数的特性，传入两个参数：sql语句与tuple类型的参数，以避免sql注入
+        cursor.execute(sql, args)
+        # 获取影响的行
+        row_count = cursor.rowcount
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        print(e)
+    finally:
+        cursor.close()
+        connection.close()
+    return row_count
+
+
+def update(sql, *args):
+    """
+    执行SQL语句
+    :param sql:  SQL语句，可含?
+    :param args: select的SQL语句所对应的值
+    :return: 返回受影响的行数
+    """
+    return _update(sql, *args)
 
 
 if __name__ == '__main__':
-    
     import sys
+
     sys.path.append("..")
 
     from config import DB_CONFIG
@@ -186,23 +225,25 @@ if __name__ == '__main__':
 
     # print(select( sql_base, "%测试账号" ))
 
-    sql_base = """insert into sys_net_of_school_agent
-            (U_ID,TEACHER_ID,TEACHER_NAME,COLLEGE_ID,COLLEGE_NAME,SCHOOL_ID,SCHOOL_NAME,REMARK,LINK)
-            value(%(user_id)s,%(teacher_id)s,%(teacher_name)s,%(college_id)s,%(college_name)s,%(school_id)s,%(school_name)s,%(remark)s,%(link_method)s)"""
-    
-    info = (100000,73930,"张晖",1355,"马克思主义学院",19024,"中国农业大学","备注，dd","12345678908")
-    info_dict = {
-        "user_id" : 100000,
-        "teacher_id" : 73994,
-        "teacher_name" : "谢光辉",
-        "college_id" : 1341,
-        "college_name" : "农学院",
-        "school_id" : 19024,
-        "school_name" : "中国农业大学",
-        "remark" : "备注-  33",
-        "link_method" : "123@123.com"
-    }
-    print(insert(sql_base , info_dict))
+    # 测试插入语句
+    # sql_base = """insert into sys_net_of_school_agent
+    #         (U_ID,TEACHER_ID,TEACHER_NAME,COLLEGE_ID,COLLEGE_NAME,SCHOOL_ID,SCHOOL_NAME,REMARK,LINK)
+    #         value(%(user_id)s,%(teacher_id)s,%(teacher_name)s,%(college_id)s,%(college_name)s,%(school_id)s,%(school_name)s,%(remark)s,%(link_method)s)"""
 
+    # info = (100000, 73930, "张晖", 1355, "马克思主义学院", 19024, "中国农业大学", "备注，dd", "12345678908")
+    # info_dict = {
+    #     "user_id": 100000,
+    #     "teacher_id": 73994,
+    #     "teacher_name": "谢光辉",
+    #     "college_id": 1341,
+    #     "college_name": "农学院",
+    #     "school_id": 19024,
+    #     "school_name": "中国农业大学",
+    #     "remark": "备注-  33",
+    #     "link_method": "123@123.com"
+    # }
+    # print(insert(sql_base, info_dict))
 
-
+    # 测试更新语句
+    sql = 'update sys_net_of_school_agent set TEACHER_ID = ? where TEACHER_NAME=?'
+    print('修改成功' if update(sql, 100, '崇志宏') == 1 else '修改失败')

@@ -168,28 +168,28 @@ $("#submit-connect").on("click",function(e){
         return false;
     }
 
-    // $.ajax({
-    //     "type" : "post",
-    //     "url" :  "/user/createRelationship",
-    //     "dataType" : "json",
-    //     "data" : info,
-    //     success : function (data) { 
-    //         console.log("success , data = " , data)
-    //         if(data.success){
-    //             $("#addContractModal").modal("hide");
+    $.ajax({
+        "type" : "post",
+        "url" : '/api/agent/relation',
+        "dataType" : "json",
+        "data" : info,
+        success : function (data) { 
+            console.log("success , data = " , data);
+            if(data.success){
+                $("#addContractModal").modal("hide");
                 
     //             showAlert("操作成功",ALERT_TYPE.success);
                 
-    //             clearModal()
+                clearModal();
 
-    //             info.id = data.id;
-    //             creatNewRecord(info);
-    //         }
-    //         else{
-    //             showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
-    //         }
-    //     }
-    // });
+                info.id = data.id;
+                creatNewRecord(info);
+            }
+            else{
+                showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
+            }
+        }
+    });
 });
 
 
