@@ -152,8 +152,10 @@ $("#submit-connect").on("click",function(e){
  * 添加联系列表操作的监听函数
  */
 $("#relation_list").on("click",function(e){
-    // 获取响应对象
+    // 获取响应对象 ==> button > td>tr
     let $target = $(e.target);
+
+    console.log("this is #relation_list , ", $target);
 
     // 点击 修改 按钮
     if($target.hasClass("modify-relation")){
@@ -161,9 +163,10 @@ $("#relation_list").on("click",function(e){
     }
     // 点击 删除 按钮
     else if($target.hasClass("delete-relation")){
+        console.log("in delete");
         // TODO 删除操作
         // 设置记录id
-        $("#relation-id").val($target.attr("data"));
+        $("#relation-id").val($target.parent().parent().attr("data-index"));
         // 显示模态窗
         showModal("delRelationModal");
     }
@@ -209,7 +212,7 @@ function clearRelationModal(){
  * @param {object} info 用于填充的数据
  */
 function creatNewRecord(info){
-    let html = `<tr>
+    let html = `<tr data-index="${info.id}">
         <td>${info.level_one}</td>
         <td>${info.level_two}</td>
         <td>${info.contract_name}</td>
@@ -217,8 +220,8 @@ function creatNewRecord(info){
         <td>${info.remark}</td>
         <td>${info.create_time}</td>
         <td>
-            <button type="button" class="btn btn-danger delete-relation" data ="${info.id}">删除</button>
-            <button type="button" class="btn btn-info modify-relation" data ="${info.id}">修改</button>
+            <button type="button" class="btn btn-danger delete-relation">删除</button>
+            <button type="button" class="btn btn-info modify-relation">修改</button>
         </td>
     </tr>`;
 
@@ -231,22 +234,29 @@ function creatNewRecord(info){
 /**
  * 设置删除联系按钮的点击事件
  */
-$("deleteRelationBtn").on("click",function(){ 
+$("#deleteRelationBtn").on("click",function(){ 
     // 获取记录id
     let relatioin_id = $("#relation-id").val();
+
+    console.log("relatioin_id , ", relatioin_id);
 
     // id 有效
     if(relatioin_id){
         $.ajax({
             "url" : "/api/agent/relation",
-            "type" : "delete",
+            "type" : "DELETE",
             "data" : {"relation_id" : relatioin_id},
+            "dataType" : "json",
             success : function (data) {
+                console.log(data,typeof(data),data.success);
                 // 返回 {success ：true / false}
+                // 隐藏模态框
+                showModal("delRelationModal",true);
                 if(data.success){
+                    console.log("success");
                     showAlert("删除成功",ALERT_TYPE.success);
                     //  隐藏被删除的记录
-                    $(`#relation_list td button[data=${relatioin_id}]`).parent().parent().hide();
+                    $(`#relation_list tr[data-index=${relatioin_id}]`).hide();
                 }
                 else{
                     showAlert("删除失败", ALERT_TYPE.error);
@@ -303,7 +313,7 @@ function hideAlert(){
  * 显示模态窗
  * @param {string} mod_id 模态窗id
  */
-function showModal(mod_id){
+function showModal(mod_id , hide = false){
     let modal = document.getElementById(mod_id);
     
     // 若找不到对应模态窗
@@ -312,8 +322,14 @@ function showModal(mod_id){
         return;
     }
 
+    // 隐藏模态框
+    if(hide){
+        $(modal).modal("hide");
+    }
     // 显示模态窗
-    $(modal).modal();
+    else{
+        $(modal).modal();
+    }
 
 }
 
