@@ -1,3 +1,9 @@
+/**
+ * created by chen
+ * 2019/3/10
+ * 
+ *  */
+
 // 弹出窗类型
 const ALERT_TYPE = {
     "info" : "info",
@@ -6,10 +12,11 @@ const ALERT_TYPE = {
     "success" : "success",
 };
 
-$("#submit").on("click",checkForm);
 
+/////////////////////// start of login model //////////////////////////////
+$("#submit").on("click",checkLoginForm);
 
-function checkForm(){   
+function checkLoginForm(){   
     let name = $("#username").val();
     let password = $("#password").val();
 
@@ -24,47 +31,34 @@ function checkForm(){
         return false;
     }
 
-    // if(checkUsername(name)){
-    //     $.ajax({
-    //         "type" : "post",
-    //         "url" : "/user/dologin",
-    //         "data" : {"username" : name , "password" : password},
-    //         success : function (data) { 
-    //             /**
-    //              * 若登陆成功，后端重定向到新页面 
-    //              * 
-    //              * ==> 若有返回值，则表示请求失败
-    //              * 此时： data = {'error':True,"msg":"请输入正确的账户或密码"}
-    //              *  */ 
-    //             console.log(data)
-    //             // data = JSON.parse(data);
-    //             showAlert(data.msg , ALERT_TYPE.error);
-    //         },
-    //         error : function (param) { 
-    //             console.log(param);
-    //             showAlert("请求失败",ALERT_TYPE.error);
-    //         }
-    //     })
-    // }
-    
-
-    return checkUsername(name);
-    // return true;
-}
-
-//判断校商首页搜索框是否为空
-function checkForm1() {
-
-    let keyword = $("#simple-input").val();
-    console.log(keyword);
-    if(keyword == ""){
-        return false;
+    if(checkUsername(name)){
+        $.ajax({
+            "type" : "post",
+            "url" : "/user/dologin",
+            "data" : {"username" : name , "password" : password},
+            success : function (data) { 
+                /**
+                 * 若登陆成功，后端重定向到新页面 
+                 * 
+                 * ==> 若有返回值，则表示请求失败
+                 * 此时： data = {'error':True,"msg":"请输入正确的账户或密码"}
+                 *  */ 
+                console.log(data)
+                // data = JSON.parse(data);
+                showAlert(data.msg , ALERT_TYPE.error);
+            },
+            error : function (param) { 
+                console.log(param);
+                showAlert("请求失败",ALERT_TYPE.error);
+            }
+        })
     }
 }
 
 /**
  * 利用正则表达式判断用户输入是否为 手机号/ 邮箱 / 6-8位 user_id 
- * @param {*} username 
+ * @param {*} username 用户输入
+ * @return true(符合规则) / false(不符合规则)
  */
 function checkUsername(username){
     // 正则表达式
@@ -81,64 +75,24 @@ function checkUsername(username){
     return false;
 }
 
+/////////////////////// end of login model //////////////////////////////
 
-/**
- * 显示弹出窗，并设置延时关闭
- * @param {*} msg 显示弹出内容
- * @param {*} TYPE 弹出窗类型 ：源于 ALERT_TYPE info,error,warning,success
- */
-function showAlert(msg, TYPE){
-    
-    if(!(TYPE in ALERT_TYPE)){
-        console.log("参数有误");
-        return;
+
+
+//判断校商首页搜索框是否为空
+function checkForm1() {
+
+    let keyword = $("#simple-input").val();
+    console.log(keyword);
+    if(keyword == ""){
+        return false;
     }
-
-    $(".alert-container .alert").removeClass().addClass(`alert alert-${TYPE}`).html(msg);
-
-    $(".alert-container").addClass("show-opacity");
-
-    // 设置 2.5s 后关闭弹出窗
-    setTimeout(hideAlert,2500);
-}
-
-/**
- * 隐藏弹出窗
- */
-function hideAlert(){
-    $(".alert-container").removeClass("show-opacity");
 }
 
 
-/**
- * 自执行函数，用于确定是否需要显示后端传回的登陆错误信息
- */
-(function hasMsg(){
-    if(document.getElementById("error-msg")){
-        showAlert("请输入正确的账户或密码", ALERT_TYPE.error);
-    }
-})();
 
 
-/**
- * 显示模态窗
- * @param {string} mod_id 模态窗id
- */
-function showModal(mod_id){
-    let modal = document.getElementById(mod_id);
-    
-    // 若找不到对应模态窗
-    if(!modal){
-        console.log("id 有误，找不到对应模态窗");
-        return;
-    }
-
-    // 显示模态窗
-    $(modal).modal();
-
-}
-
-
+/////////////////////// start of relation operation model //////////////////////////////
 
 /**
  * 添加联系人的模态框提交响应事件
@@ -178,12 +132,14 @@ $("#submit-connect").on("click",function(e){
             if(data.success){
                 $("#addContractModal").modal("hide");
                 
-    //             showAlert("操作成功",ALERT_TYPE.success);
+                showAlert("操作成功",ALERT_TYPE.success);
                 
-                clearModal();
+                clearRelationModal();
 
                 info.id = data.id;
                 creatNewRecord(info);
+
+                // TODO 关系图操作函数
             }
             else{
                 showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
@@ -191,6 +147,27 @@ $("#submit-connect").on("click",function(e){
         }
     });
 });
+
+/**
+ * 添加联系列表操作的监听函数
+ */
+$("#relation_list").on("click",function(e){
+    // 获取响应对象
+    let $target = $(e.target);
+
+    // 点击 修改 按钮
+    if($target.hasClass("modify-relation")){
+        // TODO 修改操作 
+    }
+    // 点击 删除 按钮
+    else if($target.hasClass("delete-relation")){
+        // TODO 删除操作
+        // 设置记录id
+        $("#relation-id").val($target.attr("data"));
+        // 显示模态窗
+        showModal("delRelationModal");
+    }
+})
 
 
 /**
@@ -218,7 +195,7 @@ function checkRelationFormEmpty(target_list) {
 /**
  * 清空模态框中的内容
  */
-function clearModal(){
+function clearRelationModal(){
     // $("#name_level_one").val("");
     // $("#name_level_two").val("");
     $("#contract_name").val("");
@@ -240,8 +217,8 @@ function creatNewRecord(info){
         <td>${info.remark}</td>
         <td>${info.create_time}</td>
         <td>
-            <button type="button" class="btn btn-danger" data ="${info.id}">删除</button>
-            <button type="button" class="btn btn-info" data ="${info.id}">修改</button>
+            <button type="button" class="btn btn-danger delete-relation" data ="${info.id}">删除</button>
+            <button type="button" class="btn btn-info modify-relation" data ="${info.id}">修改</button>
         </td>
     </tr>`;
 
@@ -251,14 +228,107 @@ function creatNewRecord(info){
 
 
 
-// 对Date的扩展，将 Date 转化为指定格式的String
-// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
-// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
-// 例子： 
-// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
-// (new Date()).Format("yyyy-MM-dd hh:mm:ss") ==> 2006-07-02 08:09:04
-// (new Date()).Format("yyyy-M-d h:m:s")      ==> 2006-7-2 8:9:4
-// (new Date()).Format("yyyy-MM-dd ")      ==> 2006-7-2
+/**
+ * 设置删除联系按钮的点击事件
+ */
+$("deleteRelationBtn").on("click",function(){ 
+    // 获取记录id
+    let relatioin_id = $("#relation-id").val();
+
+    // id 有效
+    if(relatioin_id){
+        $.ajax({
+            "url" : "/api/agent/relation",
+            "type" : "delete",
+            "data" : {"relation_id" : relatioin_id},
+            success : function (data) {
+                // 返回 {success ：true / false}
+                if(data.success){
+                    showAlert("删除成功",ALERT_TYPE.success);
+                    //  隐藏被删除的记录
+                    $(`#relation_list td button[data=${relatioin_id}]`).parent().parent().hide();
+                }
+                else{
+                    showAlert("删除失败", ALERT_TYPE.error);
+                }
+            }
+        })
+    }
+});
+
+
+/////////////////////// end of relation operation model //////////////////////////////
+
+
+
+/////////////////////// start of public model //////////////////////////////
+/**
+ * 显示弹出窗，并设置延时关闭
+ * @param {*} msg 显示弹出内容
+ * @param {*} TYPE 弹出窗类型 ：源于 ALERT_TYPE info,error,warning,success
+ */
+function showAlert(msg, TYPE){
+    
+    if(!(TYPE in ALERT_TYPE)){
+        console.log("参数有误");
+        return;
+    }
+
+    $(".alert-container .alert").removeClass().addClass(`alert alert-${TYPE}`).html(msg);
+
+    $(".alert-container").addClass("show-opacity");
+
+    // 设置 2.5s 后关闭弹出窗
+    setTimeout(hideAlert,2500);
+}
+
+/**
+ * 隐藏弹出窗
+ */
+function hideAlert(){
+    $(".alert-container").removeClass("show-opacity");
+}
+
+/**
+ * 自执行函数，用于确定是否需要显示后端传回的登陆错误信息
+ */
+(function hasMsg(){
+    if(document.getElementById("error-msg")){
+        showAlert("请输入正确的账户或密码", ALERT_TYPE.error);
+    }
+})();
+
+
+/**
+ * 显示模态窗
+ * @param {string} mod_id 模态窗id
+ */
+function showModal(mod_id){
+    let modal = document.getElementById(mod_id);
+    
+    // 若找不到对应模态窗
+    if(!modal){
+        console.log("id 有误，找不到对应模态窗");
+        return;
+    }
+
+    // 显示模态窗
+    $(modal).modal();
+
+}
+
+
+/**
+ * 对Date的扩展，将 Date 转化为指定格式的String
+ * 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
+ * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
+ * 例子： 
+ *  (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
+ *  (new Date()).Format("yyyy-MM-dd hh:mm:ss") ==> 2006-07-02 08:09:04
+ *  (new Date()).Format("yyyy-M-d h:m:s")      ==> 2006-7-2 8:9:4
+ *  (new Date()).Format("yyyy-MM-dd ")      ==> 2006-7-2
+ * 
+ */
 Date.prototype.Format = function (fmt) { 
     let option = {
         "M+": this.getMonth() + 1, //月份 
@@ -269,13 +339,13 @@ Date.prototype.Format = function (fmt) {
         "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
         "S": this.getMilliseconds() //毫秒 
     };
-
+    
     // 将 y 替换为 具体年份
     if (/(y+)/.test(fmt)){
         fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
     }
-
-
+    
+    
     for (var k in option){
         if (new RegExp("(" + k + ")").test(fmt)){
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (option[k]) : (("00" + option[k]).substr(("" + option[k]).length)));
@@ -284,17 +354,4 @@ Date.prototype.Format = function (fmt) {
     return fmt;
 }
 
-
-
-function testInsert() {
-    var testData = {
-        "level_one" : `$("#name_level_one").val()`,
-        "level_two" : `$("#name_level_two").val()`,
-        "contract_name" :` $("#contract_name").val()`,
-        "link_method" : `$("#link_method").val()`,
-        "remark" :` $("#remark").val()`,
-        "create_time" : "2019/3/4"
-    }
-    console.log("in testInsert : ", testData)
-    creatNewRecord(testData);
-}
+/////////////////////// end of public model //////////////////////////////

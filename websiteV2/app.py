@@ -37,23 +37,18 @@ Session(app)
 
 
 @app.route('/')
+@app.route('/index')
 def index():
-    user = None
-    if "username" in session:
-        user = session.get("username")
+    # 若无，为 None
+    user = session.get("username")
+
+    if user:
         if user["TYPE"] == "1":
             return render_template("index.html",user = user)
         else:
             return render_template("schoolBasic.html",user = user)
+
     return render_template("index.html")
-
-
-@app.route('/index')
-def index_2():
-    user = None
-    if "username" in session:
-        user = session.get("username")
-    return render_template("index.html", user = user)
 
 @app.route('/schoolBasic')
 def schoolBasic():

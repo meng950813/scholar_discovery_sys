@@ -5,8 +5,8 @@ desc: user蓝图，主要负责获取请求并返回需要的数据，格式为j
 """
 
 from flask import Blueprint, request,redirect,url_for,session
-import json
 from service.userservice import user_service
+import json
 
 user_blueprint = Blueprint('user', __name__, url_prefix='/user')
 
@@ -19,7 +19,6 @@ def dologin():
     name = request.form['username']
     pwd = request.form['password']
     
-    # TODO 添加 session 部分
 
     result = user_service.dologin(name,pwd)
 
@@ -29,7 +28,7 @@ def dologin():
 
     session["username"] = result
 
-    print(result)
+    # print(result)
     
     # TODO 根据用户身份重定向
     if result["TYPE"] == "1":
