@@ -106,7 +106,7 @@ def get_mapdata_by_mapping(name):
 
 
 @api_blueprint.route('/teacher/relation', methods=['POST'])
-def person_relation():
+def teacher_relation():
     """
     获取个人与其他人的关系,请求格式如下
         url: '/api/person/relation',
@@ -123,7 +123,7 @@ def person_relation():
     teacher_id_set = set([relation['teacher2_id'] for relation in relations])
     teacher_id_set.add(teacher_id)
     # 获取所有老师
-    teachers = teacher_service.get_teachers_by_ids(teacher_id_set)
+    teachers = teacher_service.get_teachers_by_ids(teacher_id_set, ['ID', 'NAME', 'TITLE'])
     # 获取老师的头衔，如果有的话
     academic_titles = teacher_service.get_academic_titles_by_ids(teacher_id_set)
     # 总的学术头衔
@@ -182,7 +182,7 @@ def get_wordcloud():
         if max_score is None:
             max_score = value
         handle_data.append({'text': key, 'size': value / max_score * 100})
-    # 取前100个
+    # 取前若干个
     return json.dumps(handle_data[:50])
 
 
@@ -198,9 +198,10 @@ def get_teachers_by_school(school_name, keyword):
     teacher_ids = []
     # 获取学校id
     school_id = None
-
+    school = {}
+    teacher_count = 0
     # 学院用得到的键名
-    institution_keys = ['NKD_NUM', 'SKL_NUM', 'ACADEMICIAN_NUM']
+    institution_keys = ['ID', 'NKD_NUM', 'SKL_NUM', 'ACADEMICIAN_NUM']
     # 学院id和学院名称映射表
     id_institutions = {}
     for result in results:
@@ -210,40 +211,20 @@ def get_teachers_by_school(school_name, keyword):
         # 保存老师id
         teacher_ids.append(result['teacher_id'])
     # 查表获取老师的信息
-    teachers = teacher_service.get_teachers_by_ids(teacher_ids) if len(teacher_ids) > 0 else {}
-    # 获取学院信息
-    infos = school_service.get_institutions_by_ids(school_id, id_institutions.keys()) if len(id_institutions) > 0 else {}
-    # 筛选出该学校的老师，并按照学院划分
-    institutions = {}
-    # 老师个数
-    teacher_count = 0
-    # 把键BIRTHYEAR转为年龄
-    for _, teacher in teachers.items():
-        teacher_count += 1
-        # 尝试把出生日期转为年龄
-        if teacher['BIRTHYEAR'] is not None:
-            teacher['YEAROLD'] = time.localtime(time.time()).tm_year - int(teacher['BIRTHYEAR'])
-        # 转换关键字 json格式必须为双引号
-        if teacher['FIELDS'] is not None:
-            fields = teacher['FIELDS'].replace("\'", "\"")
-            teacher['FIELDS'] = list(json.loads(fields).keys())
-            # teacher['FIELDS'] = json.loads(fields)
-        # 把老师添加到对应的学院之中
-        institution_name = id_institutions[teacher['INSTITUTION_ID']]
-
-        if institution_name not in institutions:
-            institutions[institution_name] = {}
-            institutions[institution_name]['teachers'] = []
-            info = infos[teacher['INSTITUTION_ID']]
-            institutions[institution_name]['info'] = {}
-            for key in institution_keys:
-                institutions[institution_name]['info'][key] = 0 if info[key] is None else info[key]
-        # 添加老师
-        if teacher['FIELDS'] is not None:
-            institutions[institution_name]['teachers'].append(teacher)
-
+    if len(teacher_ids) > 0:
+        keys = ['ID', 'NAME', 'TITLE', 'SCHOOL_ID', 'INSTITUTION_ID', 'BIRTHYEAR', 'FIELDS', 'ACADEMICIAN', 'OUTYOUTH', 'CHANGJIANG']
+        data = teacher_service.get_teachers_grouping_institutions(teacher_ids, keys, lambda t: t['FIELDS'] is None)
+        # 获取学院信息
+        infos = school_service.get_institutions_by_ids(school_id, id_institutions.keys(), institution_keys) if len(id_institutions) > 0 else {}
+        # 获取学校
+        school = data[school_id]
+        # 转换学院id=> 学院名
+        for institution_id, values in school.items():
+            if isinstance(institution_id, int):
+                institution_name = id_institutions[institution_id]
+                teacher_count += len(values['teachers'])
+                school[institution_name] = {'teachers': school.pop(institution_id)['teachers'], 'info': infos[institution_id]}
     return {
-        'number': teacher_count,
-        'institutions': institutions,
+             'number': teacher_count,
+             'institutions': school,
     }
-

@@ -9,6 +9,10 @@ import utils
 
 
 class SchoolService:
+
+    def __init__(self):
+        self.NUMBER_KEYS = ['NKD_NUM', 'SKL_NUM', 'ACADEMICIAN_NUM']
+
     def get_position_by_names(self, school_names):
         """
         根据学校名获取到学校名对应的经纬度，并返回
@@ -22,7 +26,6 @@ class SchoolService:
         for result in results:
             name = result['SCHOOL_NAME']
             position = result['POSITION']
-
             # 切割出经纬度
             arr = position.split(',')
             schools[name] = {'longitude': float(arr[0]), 'latitude': float(arr[1])}
@@ -47,16 +50,36 @@ class SchoolService:
             teachers[teacher_id] = result
         return teachers
 
-    def get_institutions_by_ids(self, school_id, institution_ids):
+    def get_institutions_by_ids(self, school_id, institution_ids, keys=None):
         """
         给定学校id，和学院id数组来获取所有的学院信息
         :param school_id: 学校id
         :param institution_ids: 学校id下的学院id数组
+        :param keys: 需要的键 至少包含键ID
         :return:以学院id为键，其余信息为值的字典
         """
-        results = school_dao.get_institutions_by_ids(school_id, institution_ids)
+        results = school_dao.get_institutions_by_ids(school_id, institution_ids, keys=keys)
+        data = {}
+        key = 'ID'
+        # 转换成字典，键为ID
+        for result in results:
+            result_id = result[key]
+            result.pop(key)
+            self.normalization_institution(result)
+            data[result_id] = result
 
-        return utils.db2python(results, 'ID')
+        return data
+
+    def normalization_institution(self, institution):
+        """
+        对学院的信息进行标准化，如把出生日期转为年龄
+        :param institution: 学院的信息字典
+        :return: 转换好的学院信息，和参数institution相同
+        """
+        for key, value in institution.items():
+            if key in self.NUMBER_KEYS:
+                institution[key] = 0 if value is None else value
+        return institution
 
 
 school_service = SchoolService()
