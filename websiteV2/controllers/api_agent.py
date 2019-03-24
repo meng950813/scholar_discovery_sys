@@ -78,7 +78,7 @@ def delete_agent_relation():
     relation_id = request.form.get('relation_id', type=int)
     ret['success'] = school_agent_service.delete_relation(relation_id)
 
-    return ret
+    return json.dumps(ret)
 
 
 @api_agent_blueprint.route('/agent/relation', methods=['PUT'])
