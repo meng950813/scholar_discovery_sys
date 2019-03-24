@@ -24,15 +24,15 @@
                     {% if user %}
                         {% if user["TYPE"] == '1' %}
                             <li><a href="javascript:void(0)"  onclick="showModal('addContractModal')">添加联系人</a></li>
-                            <li  id="username"><a href="{{ url_for('governPersonal') }}">{{ user["NAME"] }}</a></li>
-                            <li><a href="{{ url_for('logout') }}">注销</a></li>
+                            <li  id="username"><a href="{{ url_for('agent.govern_personal') }}">{{ user["NAME"] }}</a></li>
+                            <li><a href="{{ url_for('user.logout') }}">注销</a></li>
                         {% else %}
                             <li><a href="javascript:void(0)"  onclick="showModal('addContractModal')">添加联系人</a></li>
-                            <li  id="username"><a href="{{ url_for('schoolPersonal') }}">{{ user["NAME"] }}</a></li>
-                            <li><a href="{{ url_for('logout') }}">注销</a></li>
+                            <li  id="username"><a href="{{ url_for('agent.school_personal') }}">{{ user["NAME"] }}</a></li>
+                            <li><a href="{{ url_for('user.logout') }}">注销</a></li>
                         {% endif %}
                     {% else %}
-                        <li><a href="{{ url_for('login') }}">登录</a></li>
+                        <li><a href="{{ url_for('user.login') }}">登录</a></li>
                     {% endif %}
                 </ul>
             </div>
