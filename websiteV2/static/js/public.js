@@ -163,33 +163,33 @@ $("#submit-connect").on("click",function(e){
 
     };
     // TODO checkout is there any empty
-    if ( checkFormEmpty(not_empty_target_JQ_list) ){
+    if (checkRelationFormEmpty(not_empty_target_JQ_list) ){
+        console.log("checkRelationFormEmpty is true");
         return false;
     }
 
-    $.ajax({
-        "type" : "post",
-        "url" : 
-        "/user/createRelationship",
-        "dataType" : "json",
-        "data" : info,
-        success : function (data) { 
-            console.log("success , data = " , data)
-            if(data.success){
-                $("#addContractModal").modal("hide");
+    // $.ajax({
+    //     "type" : "post",
+    //     "url" :  "/user/createRelationship",
+    //     "dataType" : "json",
+    //     "data" : info,
+    //     success : function (data) { 
+    //         console.log("success , data = " , data)
+    //         if(data.success){
+    //             $("#addContractModal").modal("hide");
                 
-                showAlert("操作成功",ALERT_TYPE.success);
+    //             showAlert("操作成功",ALERT_TYPE.success);
                 
-                clearModal()
+    //             clearModal()
 
-                info.id = data.id;
-                creatNewRecord(info);
-            }
-            else{
-                showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
-            }
-        }
-    });
+    //             info.id = data.id;
+    //             creatNewRecord(info);
+    //         }
+    //         else{
+    //             showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
+    //         }
+    //     }
+    // });
 });
 
 
@@ -198,16 +198,18 @@ $("#submit-connect").on("click",function(e){
  * @param {array} target_list 需要判断元素的 jquery 样式
  * @return true(has empty) / false(not empty)
  */
-function checkFormEmpty(target_list) {
-    target_list.forEach($target => {
-        if($target.val() == ""){
-            $target.addClass("has-error");
+function checkRelationFormEmpty(target_list) {
+    for(let i in target_list){
+        let $target = target_list[i];
+        if(!$target.val()){
+            console.log("this is $tagert.val : ",$target.attr("id"),$target.val())
+            $target.parent().parent().addClass("has-error");
             return true;
         }
         else{
-            $target.removeClass("has-error");
+            $target.parent().parent().removeClass("has-error");
         }
-    });
+    };
     
     return false;
 }
@@ -295,4 +297,4 @@ function testInsert() {
     }
     console.log("in testInsert : ", testData)
     creatNewRecord(testData);
-  }
+}
