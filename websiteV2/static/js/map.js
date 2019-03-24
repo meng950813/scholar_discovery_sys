@@ -257,8 +257,7 @@ class ChinaMap{
             .attr('stroke', '#000')
             .attr('stroke-width', 1)
             .attr('fill', function (d) {
-                //return that.mapColor(0);
-                return '#acc2ff';
+                return that.mapColor(0);
             })
             .attr('d', that.path)
             .on('mouseover', function (d, i) {
