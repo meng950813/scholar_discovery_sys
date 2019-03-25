@@ -59,7 +59,9 @@
 
 <script type="text/javascript">
     let url = '/api/agent/relation';
-    let self = {"id": 100000, "name": '赵钱孙李', "type": 0};
+    //获取用户名
+    let username = d3.select('#username');
+    let self = {"name": username.text()};
 
     let svg = d3.select('.social-net');
     let relationGraph = new RelationGraph(svg);
