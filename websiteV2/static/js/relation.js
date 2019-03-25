@@ -11,13 +11,13 @@
  ];
 
  let nodes = [
- {category: 0, name: '桂林', id:1},
- {category: 1, name: '广州', id:2},
- {category: 2, name: '厦门', id:3},
- {category: 1, name: '杭州', id:4},
- {category: 0, name: '上海', id:5},
- {category: 1, name: '青岛', id:6},
- {category: 0, name: '天津', id:7}
+ {category: 0, name: '桂林'},
+ {category: 1, name: '广州'},
+ {category: 2, name: '厦门'},
+ {category: 1, name: '杭州'},
+ {category: 0, name: '上海'},
+ {category: 1, name: '青岛'},
+ {category: 0, name: '天津'}
  ];
  let edges = [
  {source: 0, target: 1},
@@ -134,6 +134,8 @@ class RelationGraph{
         this.updateLinks();
         this.updateNodes();
         this.updateLabels();
+        //力导向图重新模拟
+        this.simulation.alpha(1).restart();
     }
 
     /**
