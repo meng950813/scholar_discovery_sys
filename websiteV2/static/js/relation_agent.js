@@ -109,11 +109,11 @@ function updateAgentRelationList(relation_list, mapping, json_data){
         let td = tr.append('td');
         td.append('button')
             .attr('type', 'button')
-            .attr('class', 'btn btn-danger')
+            .attr('class', 'btn btn-danger delete-relation')
             .text('删除');
         td.append('button')
             .attr('type', 'button')
-            .attr('class', 'btn btn-info')
+            .attr('class', 'btn btn-info modify-relation')
             .text('修改');
     }
 }

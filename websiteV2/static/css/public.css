@@ -60,7 +60,7 @@ footer .copyright {
 /* 信息提示窗 */
 .alert-container{
 	/* 实现水平居中 垂直1/3位置 */
-	position: absolute;
+	position: fixed;
 	top: 10%;
 	left: 50%;
 	transform: translate(-50%,-50%);
@@ -81,11 +81,11 @@ footer .copyright {
 }
 
 .alert-container > .alert{
-	padding-left: 50px;
+	padding-left: 60px;
 	margin: 0;
 	background-repeat: no-repeat;
 	background-size: 30px 30px;
-	background-position: left center;
+	background-position: 15px center;
 }
 
 .alert-container > .alert-info {
