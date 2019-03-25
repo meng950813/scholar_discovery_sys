@@ -3,7 +3,6 @@ author: xiaoniu
 date: 2019-03-18
 desc: 主要用在TeacherService类中，简单封装了和数据库的交互的SQL语句
 """
-import utils
 from dao.teacherdao import teacher_dao
 import json
 import time
@@ -105,7 +104,6 @@ class TeacherService:
         return teacher
 
 
-
 teacher_service = TeacherService()
 
 
@@ -128,5 +126,5 @@ if __name__ == '__main__':
 
     # print(teacher_service.get_total_academic_titles())
     id_arr = [159822, 159729, 159835, 159805, 159742, 159842, 159739, 159808, 159737, 159828, 99181, 99236, 99318, 99329, 99304, 99234, 99252, 99259]
-    keys = ['ID', 'NAME', 'TITLE', 'SCHOOL_ID', 'INSTITUTION_ID', 'BIRTHYEAR', 'FIELDS', 'ACADEMICIAN', 'OUTYOUTH', 'CHANGJIANG']
-    print(teacher_service.get_teachers_grouping_institutions(id_arr, keys, lambda t: t['FIELDS'] is None))
+    tkeys = ['ID', 'NAME', 'TITLE', 'SCHOOL_ID', 'INSTITUTION_ID', 'BIRTHYEAR', 'FIELDS', 'ACADEMICIAN', 'OUTYOUTH', 'CHANGJIANG']
+    print(teacher_service.get_teachers_grouping_institutions(id_arr, tkeys, lambda t: t['FIELDS'] is None))

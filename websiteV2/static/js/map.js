@@ -257,7 +257,7 @@ class ChinaMap{
             .attr('stroke', '#000')
             .attr('stroke-width', 1)
             .attr('fill', function (d) {
-                return that.mapColor(0);
+                return that.mapColor(d.weight);
             })
             .attr('d', that.path)
             .on('mouseover', function (d, i) {
@@ -363,6 +363,7 @@ class ChinaMap{
         for (let i = 0; i < schools.length; i++){
             schools[i].position = this.projection([schools[i].longitude, schools[i].latitude]);
         }
+        /*
         //用作判断矩形碰撞的两个变量
         let r1 = {x1:0, y1:0, x2:0, y2:0};
         let r2 = {x1:0, y1:0, x2:0, y2:0};
@@ -402,7 +403,7 @@ class ChinaMap{
             if (ret){
                 schools[i].position = pos1;
             }
-        }
+        }*/
         return schools;
     }
 
@@ -416,7 +417,7 @@ class ChinaMap{
         this.svg.select('#tag').selectAll('g').remove();
         let group = this.svg.select('#tag')
             .selectAll('g')
-            .data([schools[0]])
+            .data(schools)
             .enter()
             .append('g')
             .attr('transform', function (d, i) {
@@ -429,14 +430,13 @@ class ChinaMap{
             .attr('stroke-width', '1')
             .attr('fill', 'red');
         //添加数字
-        /*
         group.append('text')
-            .attr('transform', 'translate(-6,-12)')
+            .attr('transform', 'translate(-2,-12)')
             .attr('fill', 'white')
+            .attr('text-anchor', 'middle')
             .text(function (d, i) {
                 return (i + 1);
             });
-            */
     }
     /**
      * 私有函数 点击面包屑导航 仅仅用于地图回退
