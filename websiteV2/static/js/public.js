@@ -160,6 +160,14 @@ $("#relation_list").on("click",function(e){
     // 点击 修改 按钮
     if($target.hasClass("modify-relation")){
         // TODO 修改操作 
+        // 设置记录id
+        $("#modify-relation-id").val($target.parent().parent().attr("data-index"));
+        
+        // 向模态框中填充数据
+        fillDataToModal();
+
+        // 显示模态窗
+        showModal("addContractModal");
     }
     // 点击 删除 按钮
     else if($target.hasClass("delete-relation")){
@@ -194,6 +202,13 @@ function checkRelationFormEmpty(target_list) {
 
 
 /**
+ * 
+ */
+function fillDataToModal(){
+
+}
+
+/**
  * 设置模态框中的内容，若 data 为空，则为清空模态框中内容
  * data 的结构：{ “input-id” : value }
  * @param {object} data 
@@ -211,12 +226,14 @@ function setRelationModal(data){
             console.log("typeof data is not object");
             return;
         }
+        // 根据 input 的 id 设置内容
         for(let input_id in data){
             console.log("input_id = ",input_id, "  and the val is " , data[input_id]);
             $(`#${input_id}`).val(data[input_id]);
         }
     }
 }
+
 
 
 /**
@@ -304,9 +321,9 @@ $("#deleteRelationBtn").on("click",function(){
 
 /**
  * 从GRAPH_DATA 中删除节点数据
- * @param {number} uid 需要删除的 节点的 U_ID
+ * @param {number} id 需要删除的 节点的 ID
  */
-function deleteRelationNode(uid){
+function deleteRelationNode(id){
     if(!GRAPH_DATA){
         console.log("节点列表为空，错误操作");
         return false;
@@ -314,7 +331,8 @@ function deleteRelationNode(uid){
 
     // 确定被删元素的下标
     for(var index = 0 ; index < GRAPH_DATA.length; index++){
-        if(GRAPH_DATA[index].U_ID == uid){
+        
+        if(GRAPH_DATA[index].ID == id){
             // 删除元素
             GRAPH_DATA.splice(index,1);
 
