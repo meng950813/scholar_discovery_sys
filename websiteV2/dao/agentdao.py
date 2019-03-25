@@ -9,33 +9,28 @@ import utils.db as db
 
 class SchoolAgentDao:
 
-    def get_relations_by_id(self, uid):
+    def get_relations_by_id(self, uid , isSchoolAgent = False):
         """
         获取id数组对应的所有有联系的人
         :param uid: 商务的id
+        :param isSchoolAgent: 是否是学校商务操作
         :return: 所有和该商务有联系的数组
         """
+
         sql = 'select * from sys_net_of_school_agent where U_ID = ? and STATUS = 1'
+        # 企商操作
+        if not isSchoolAgent:
+            sql = 'select * from sys_net_of_business_agent where U_ID = ? and STATUS = 1'
+
         results = db.select(sql, uid)
 
         return results
 
-    def append_relation(self, info_dict):
+    def append_relation(self, info_dict , isSchoolAgent = False):
         """
         创建新的关系学校商务与高校老师的关系
-        :param info_dict : 字典类型参数: 格式如下：
-        info_dict = {
-            "user_id" : 100000,
-            "teacher_id" : 73994,
-            "teacher_name" : "谢光辉",
-            "college_id" : 1341,
-            "college_name" : "农学院",
-            "school_id" : 19024,
-            "school_name" : "中国农业大学",
-            "remark" : "备注-  33",
-            "link_method" : "123@123.com",
-            "create_time" : "2019-03-04 14:21:23"
-        }
+        :param info_dict : 字典类型参数: 
+        :param isSchoolAgent : 是否是学校商务操作
         :return: 插入的id / None
         """
 
@@ -46,27 +41,39 @@ class SchoolAgentDao:
         values = ','.join(['?'] * len(info_dict))
 
         string = 'insert into sys_net_of_school_agent ({keys}) values({values})'
+
+        # 企商操作,更换数据库
+        if not isSchoolAgent:
+            string = 'insert into sys_net_of_business_agent ({keys}) values({values})'
+
         sql = string.format(keys=keys, values=values)
 
         return db.insert(sql, tuple(info_dict.values()))
 
-    def update_relation(self, relation_id, info_dict):
+    def update_relation(self, relation_id, info_dict , isSchoolAgent = False):
         """
         更新已经存在的联系
         :param relation_id: 联系的id
         :param info_dict: 要更新的数据，为字典，键表示数据库名；值为要更新的值
+        :param isSchoolAgent: 是否是学校商务操作
         :return: 影响的行数
         """
         values = ['%s=?' % key for key in info_dict.keys()]
         params = ','.join(values)
-
+        
         string = 'update sys_net_of_school_agent set {params} where ID = ?'
+        
+        # 企商操作,更换数据库
+        if not isSchoolAgent:
+            string = 'update sys_net_of_business_agent set {params} where ID = ?'
+
         sql = string.format(params=params)
 
+        # 将字典转为列表, 目的是 保证将 relation_id 放于最后
         data = list(info_dict.values())
+        # 添加 relation_id 于列表最后
         data.append(relation_id)
 
-        # return db.update(sql, tuple(info_dict.values()), relation_id)
         return db.update(sql, *data)
 
 
