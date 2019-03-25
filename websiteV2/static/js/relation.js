@@ -128,16 +128,11 @@ class RelationGraph{
         });
         //生成类别
         //根据类别和颜色生成
-        this.categories_group = this.svg.append('g')
-            .attr('id', 'categories');
-        this.generateCategories();
+        this.updateCategories();
         //添加链接group和节点group
-        this.links_group = this.group.append('g').attr('id', 'lines');
-        this.nodes_group = this.group.append('g').attr('id', 'nodes');
-        this.labels_group = this.group.append('g').attr('id', 'labels');
         //添加节点、连线和文本标签
-        this.addNodes();
-        this.addLinks();
+        this.updateLinks();
+        this.updateNodes();
         this.updateLabels();
     }
 
@@ -189,8 +184,14 @@ class RelationGraph{
     /**
      * 私有函数 会在this.svg中生成一个g来保存所有的类别
      */
-    generateCategories(){
+    updateCategories(){
+        if (this.categories_group == null){
+            this.categories_group = this.svg.append('g').attr('id', 'categories');
+        }
         let that = this;
+        //先移除原先的类别
+        this.categories_group.selectAll('g').remove();
+
         let group = this.categories_group.selectAll('g')
             .data(this.categories)
             .enter()
@@ -235,68 +236,89 @@ class RelationGraph{
     /**
      * 私有函数 根据this.nodes添加节点this.nodes_group中
      */
-    addNodes(){
-        let that = this;
-        //添加节点，并使得节点可拖拽
-        this.nodes_group.selectAll('circle')
-            .data(this.nodes)
-            .enter()
-            .append('circle')
-            .each(function (d) {
-                //设置节点的默认半径
-                if (d.radius == undefined)
-                    d.radius = 10;
-            })
-            .attr('r', d => d.radius)
-            .attr('fill', d => this.categories[d.category].color)
-            .call(this.dragNodesCallback(this.simulation))
-            .on('mouseover', function (d) {
-                that.mouseOver2Node(d);
-            })
-            .on('mousemove', function () {
-                that.setVisibleOfToolTip(true);
-            })
-            .on('mouseout', function () {
-                that.mouseOut();
-            })
-            .on('click', function (d) {
-                RelationGraph.clickNodeHook(this, d);
-            });
+    updateNodes(){
+        if (this.nodes_group == null){
+            this.nodes_group = this.group.append('g').attr('id', 'nodes');
+        }
+        let circles = this.nodes_group.selectAll('circle');
+        //更新已有的节点
+        let update = circles.data(this.nodes);
+        updateNodes(update, this);
+        //设置新增的节点
+        let enter = update.enter().append('circle');
+        updateNodes(enter, this);
+        //删除不需要的节点
+        update.exit().remove();
+
+        function updateNodes(nodes, that) {
+            //添加节点，并使得节点可拖拽
+                nodes.each(function (d) {
+                    //设置节点的默认半径
+                    if (d.radius == undefined)
+                        d.radius = 10;
+                })
+                .attr('r', d => d.radius)
+                .attr('fill', d => that.categories[d.category].color)
+                .call(that.dragNodesCallback(that.simulation))
+                .on('mouseover', function (d) {
+                    that.mouseOver2Node(d);
+                })
+                .on('mousemove', function () {
+                    that.setVisibleOfToolTip(true);
+                })
+                .on('mouseout', function () {
+                    that.mouseOut();
+                })
+                .on('click', function (d) {
+                    RelationGraph.clickNodeHook(this, d);
+                });
+        }//end function
     }
 
     /**
      * 私有函数 this.links添加连线到this.links_group
      */
-    addLinks(){
-        let that = this;
-        //添加连线
-        this.links_group.selectAll('path')
-            .data(this.links)
-            .enter()
-            .append('path')
-            .attr('fill', 'none')
-            .style('stroke', '#ccc')
-            .each(function (d) {
-                //设置线的默认宽度
-                if (d.width == undefined)
-                    d.width = 2;
-            })
-            .style('stroke-width', d => d.width)
-            .on('mouseover', function (d) {
-                that.mouseOver2Link(d);
-            })
-            .on('mousemove', function () {
-                that.setVisibleOfToolTip(true);
-            })
-            .on('mouseout', function () {
-                that.mouseOut();
-            })
+    updateLinks(){
+        if (this.links_group == null){
+            this.links_group = this.group.append('g').attr('id', 'lines');
+        }
+        let links =this.links_group.selectAll('path');
+        //绑定数据后，不同类型，不同操作
+        let update = links.data(this.links);
+        let enter = update.enter().append('path');
+        updateLinks(update, this);
+        updateLinks(enter, this);
+        //移除不需要的联系
+        update.exit().remove();
+        function updateLinks(links, that) {
+            //添加连线
+                links.attr('fill', 'none')
+                .style('stroke', '#ccc')
+                .each(function (d) {
+                    //设置线的默认宽度
+                    if (d.width == undefined)
+                        d.width = 2;
+                })
+                .style('stroke-width', d => d.width)
+                .on('mouseover', function (d) {
+                    that.mouseOver2Link(d);
+                })
+                .on('mousemove', function () {
+                    that.setVisibleOfToolTip(true);
+                })
+                .on('mouseout', function () {
+                    that.mouseOut();
+                });
+        }//end function
     }
 
     /**
      * 更新节点对应的标签，会先更新标签，如果需要的话会添加标签。多余的则会删除
      */
     updateLabels(){
+        if (this.labels_group == null){
+            this.labels_group = this.group.append('g').attr('id', 'labels');
+        }
         let that = this;
         let texts =this.labels_group.selectAll('text');
         //绑定数据后，不同类型，不同操作
@@ -434,8 +456,8 @@ class RelationGraph{
             }
         }
         //添加节点和联系
-        this.addNodes();
-        this.addLinks();
+        this.updateNodes();
+        this.updateLinks();
         this.updateLabels();
     }
 
