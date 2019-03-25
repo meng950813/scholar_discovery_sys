@@ -1,8 +1,3 @@
-body{
-    background-color: #ffffff;
-    color: black;
-}
-
 .search-area{
     width: 900px;
 	margin:0 auto ;
@@ -67,8 +62,9 @@ body{
     margin-top: 20px;
 }
 
+
 .part1{
-    width:750px;
+    /* width:750px; */
     height: 100px;
     margin-left: 10px;
     line-height: 100px;
@@ -80,7 +76,7 @@ body{
 }
 
 .college{
-    width: 750px;
+    /* width: 750px; */
     height: 60px;
     margin-top: 5px;
     border-bottom: 1px solid #b9b0a3;
@@ -90,7 +86,7 @@ body{
 }
 
 .tags{
-    width: 750px;
+    /* width: 750px; */
     height: auto;
     margin-top: 5px;
     font-size: 18px;
@@ -100,7 +96,7 @@ body{
 }
 
 .scholar{
-    width: 750px;
+    /* width: 750px; */
     height: auto;
     margin-top: 5px;
     padding-bottom: 10px;
@@ -133,12 +129,12 @@ ul.search-person>li:hover{
     cursor: auto;
 }
 
-.search-container {
+/* .search-container {
     width:900px;
     margin-left: auto;
     margin-right: auto;
     background-color: #fff;
-}
+} */
 
 .search-head{
     padding-top:20px;
