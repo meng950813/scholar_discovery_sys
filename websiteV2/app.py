@@ -55,6 +55,12 @@ def relation():
     return render_template('relation.html')
 
 
+@app.route('/school')
+def school():
+    """测试学校使用的路由函数"""
+    return render_template('school.html')
+
+
 @app.route('/word_cloud')
 def word_cloud():
     """测试词云的路由函数"""
