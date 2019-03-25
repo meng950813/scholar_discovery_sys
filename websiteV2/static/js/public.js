@@ -134,7 +134,7 @@ $("#submit-connect").on("click",function(e){
                 
                 showAlert("操作成功",ALERT_TYPE.success);
                 
-                clearRelationModal();
+                setRelationModal();
 
                 info.id = data.id;
                 creatNewRecord(info);
@@ -163,8 +163,6 @@ $("#relation_list").on("click",function(e){
     }
     // 点击 删除 按钮
     else if($target.hasClass("delete-relation")){
-        console.log("in delete");
-        // TODO 删除操作
         // 设置记录id
         $("#relation-id").val($target.parent().parent().attr("data-index"));
         // 显示模态窗
@@ -196,14 +194,28 @@ function checkRelationFormEmpty(target_list) {
 
 
 /**
- * 清空模态框中的内容
+ * 设置模态框中的内容，若 data 为空，则为清空模态框中内容
+ * data 的结构：{ “input-id” : value }
+ * @param {object} data 
  */
-function clearRelationModal(){
-    // $("#name_level_one").val("");
-    // $("#name_level_two").val("");
-    $("#contract_name").val("");
-    $("#link_method").val("");
-    $("#remark").val("");
+function setRelationModal(data){
+
+    // data 无值，清空几个输入框中的内容
+    if(!data){
+        $("#contract_name").val("");
+        $("#link_method").val("");
+        $("#remark").val("");
+    }
+    else{
+        if(typeof(data) !== "object"){
+            console.log("typeof data is not object");
+            return;
+        }
+        for(let input_id in data){
+            console.log("input_id = ",input_id, "  and the val is " , data[input_id]);
+            $(`#${input_id}`).val(data[input_id]);
+        }
+    }
 }
 
 
@@ -212,6 +224,24 @@ function clearRelationModal(){
  * @param {object} info 用于填充的数据
  */
 function creatNewRecord(info){
+    let relaton_item_obj  = {
+        "SCHOOL_NAME" : info.level_one,
+        "COLLEGE_NAME" : info.level_two,
+        "TEACHER_NAME" : info.contract_name
+    };
+
+    // 若关系表不为空
+    if(GRAPH_DATA){
+        GRAPH_DATA.push(relaton_item_obj);
+    }
+    // 创建
+    else{
+        GRAPH_DATA = [relaton_item_obj];
+    }
+
+    reloadRelationGraph();
+
+
     let html = `<tr data-index="${info.id}">
         <td>${info.level_one}</td>
         <td>${info.level_two}</td>
@@ -225,8 +255,9 @@ function creatNewRecord(info){
         </td>
     </tr>`;
 
+    
     // 插入到第一行
-    $("#contract_list tr:first").before(html);
+    $("#relation_list tr:first").before(html);
 }
 
 
@@ -253,10 +284,14 @@ $("#deleteRelationBtn").on("click",function(){
                 // 隐藏模态框
                 showModal("delRelationModal",true);
                 if(data.success){
-                    console.log("success");
+                    // console.log("success");
                     showAlert("删除成功",ALERT_TYPE.success);
+                    
                     //  隐藏被删除的记录
                     $(`#relation_list tr[data-index=${relatioin_id}]`).hide();
+
+                    // 删除节点，重绘关系网
+                    deleteRelationNode(relatioin_id);
                 }
                 else{
                     showAlert("删除失败", ALERT_TYPE.error);
@@ -266,6 +301,41 @@ $("#deleteRelationBtn").on("click",function(){
     }
 });
 
+
+/**
+ * 从GRAPH_DATA 中删除节点数据
+ * @param {number} uid 需要删除的 节点的 U_ID
+ */
+function deleteRelationNode(uid){
+    if(!GRAPH_DATA){
+        console.log("节点列表为空，错误操作");
+        return false;
+    }
+
+    // 确定被删元素的下标
+    for(var index = 0 ; index < GRAPH_DATA.length; index++){
+        if(GRAPH_DATA[index].U_ID == uid){
+            // 删除元素
+            GRAPH_DATA.splice(index,1);
+
+            // 重绘关系图
+            reloadRelationGraph();
+        }
+    }
+
+
+}
+
+
+/**
+ * 重绘关系图
+ */
+function reloadRelationGraph(){
+    // self 为全局变量，保存当前用户信息
+    // GRAPH_DATA 为全局变量，保存关系信息
+    let handled_data = handle_school_agent_relations(self, GRAPH_DATA);
+    relationGraph.setData(handled_data);
+}
 
 /////////////////////// end of relation operation model //////////////////////////////
 

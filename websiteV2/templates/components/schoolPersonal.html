@@ -58,6 +58,9 @@
 <script src="{{ url_for('static', filename='js/relation_agent.js') }}"></script>
 
 <script type="text/javascript">
+    // 用于保存关系图的数据
+    var GRAPH_DATA = undefined;
+
     let url = '/api/agent/relation';
     let self = {"id": 100000, "name": '赵钱孙李', "type": 0};
 
@@ -75,6 +78,8 @@
         success: loadDataSuccess,
     });
     function loadDataSuccess(json_data) {
+        GRAPH_DATA = json_data;
+        
         let handled_data = handle_school_agent_relations(self, json_data);
         relationGraph.setData(handled_data);
         //更新联系列表
