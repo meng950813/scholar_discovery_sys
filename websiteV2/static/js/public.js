@@ -277,10 +277,10 @@ function clearRelationModal(){
  */
 function creatAndUpdateRecord(info, $update_target = undefined){
     let relaton_item_obj  = {
-        "ID" : info.id,
-        "SCHOOL_NAME" : info.level_one,
-        "COLLEGE_NAME" : info.level_two,
-        "TEACHER_NAME" : info.contract_name
+        "id" : info.id,
+        "level_one" : info.level_one,
+        "level_two" : info.level_two,
+        "contract_name" : info.contract_name
     };
 
     // 若关系表不为空
@@ -388,7 +388,7 @@ function deleteRelationNode(id){
     // 确定被删元素的下标
     for(var index = 0 ; index < GRAPH_DATA.length; index++){
         
-        if(GRAPH_DATA[index].ID == id){
+        if(GRAPH_DATA[index].id == id){
             // 删除元素
             GRAPH_DATA.splice(index,1);
 

@@ -85,7 +85,7 @@
         let handled_data = handle_school_agent_relations(self, json_data);
         relationGraph.setData(handled_data);
         //更新联系列表
-        updateAgentRelationList(relation_list, mapping, json_data);
+        updateAgentRelationList(json_data);
     }
 </script>
 {% endblock %}
