@@ -58,6 +58,9 @@
 <script src="{{ url_for('static', filename='js/relation_agent.js') }}"></script>
 
 <script type="text/javascript">
+    // 用于保存关系图的数据
+    var GRAPH_DATA = undefined;
+
     let url = '/api/agent/relation';
     //获取用户名
     let username = d3.select('#username');
@@ -77,6 +80,8 @@
         success: loadDataSuccess,
     });
     function loadDataSuccess(json_data) {
+        GRAPH_DATA = json_data;
+        
         let handled_data = handle_school_agent_relations(self, json_data);
         relationGraph.setData(handled_data);
         //更新联系列表
