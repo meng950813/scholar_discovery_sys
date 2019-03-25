@@ -190,7 +190,7 @@ def _update(sql, *args):
         connection.commit()
     except Exception as e:
         connection.rollback()
-        print(e)
+        print("db operation error is : ",e)
     finally:
         cursor.close()
         connection.close()

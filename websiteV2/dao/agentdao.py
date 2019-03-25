@@ -63,7 +63,11 @@ class SchoolAgentDao:
         string = 'update sys_net_of_school_agent set {params} where ID = ?'
         sql = string.format(params=params)
 
-        return db.update(sql, tuple(info_dict.values()), relation_id)
+        data = list(info_dict.values())
+        data.append(relation_id)
+
+        # return db.update(sql, tuple(info_dict.values()), relation_id)
+        return db.update(sql, *data)
 
 
 school_agent_dao = SchoolAgentDao()

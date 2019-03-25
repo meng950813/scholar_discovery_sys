@@ -62,13 +62,23 @@ class SchoolAgentService:
 
         return row_count == 1
 
-    def update_relation(self, relation_id, info_dict):
+    def update_relation(self, relation_id, info_data):
         """
         更新relation_id 对应的关系的值
         :param relation_id: 该条关系对应的id
-        :param info_dict:{ dict}
+        :param info_data:{ dict}
         :return: 操作成功则返回True,否则返回False
         """
+
+        info_dict = {
+            "TEACHER_NAME": info_data["contract_name"],
+            "COLLEGE_NAME": info_data["level_two"],
+            "SCHOOL_NAME": info_data['level_one'],
+            "REMARK": info_data['remark'],
+            "LINK": info_data["link_method"],
+            "CREATION_TIME": info_data["create_time"]
+        }
+
         row_count = school_agent_dao.update_relation(relation_id, info_dict)
         return row_count == 1
 

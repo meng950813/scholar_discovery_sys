@@ -122,30 +122,73 @@ $("#submit-connect").on("click",function(e){
         return false;
     }
 
-    $.ajax({
-        "type" : "post",
-        "url" : '/api/agent/relation',
-        "dataType" : "json",
-        "data" : info,
-        success : function (data) { 
-            console.log("success , data = " , data);
-            if(data.success){
-                $("#addContractModal").modal("hide");
-                
-                showAlert("操作成功",ALERT_TYPE.success);
-                
-                setRelationModal();
+    
+    // 有 记录id , 修改
+    if($("#modify-relation-id").val()){
+        
+        info['id'] = parseInt($("#modify-relation-id").val());
+        
+        console.log("#modify-relation-id",info);
+        $.ajax({
+            "url" : "/api/agent/relation",
+            "type" : "PUT",
+            "dataType" : "json",
+            "data" : info,
+            success : function(data) { 
+                if(data.success){
+                    // 隐藏模态框
+                    toggleModal("addContractModal" , true);
 
-                info.id = data.id;
-                creatNewRecord(info);
+                    // 显示结果
+                    showAlert("操作成功" , ALERT_TYPE.success);
+                    
+                    // 清空模态框中输入内容
+                    clearRelationModal();
 
-                // TODO 关系图操作函数
-            }
-            else{
+                    // 填充新内容到列表中
+                    creatAndUpdateRecord(info,$(`#relation_list tr[data-index=${info.id}]`))
+                }
+                else{
+                    showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
+                }
+            },
+            error : function() { 
                 showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
             }
-        }
-    });
+        });
+    }
+    // 创建新记录
+    else{
+        $.ajax({
+            "type" : "post",
+            "url" : '/api/agent/relation',
+            "dataType" : "json",
+            "data" : info,
+            success : function (data) { 
+                console.log("success , data = " , data);
+                if(data.success){
+                    // 隐藏模态框
+                    toggleModal("addContractModal" , true);
+                    
+                    // 显示结果
+                    showAlert("操作成功",ALERT_TYPE.success);
+                    
+                    // 清空模态框中输入内容
+                    clearRelationModal();
+    
+                    info['id'] = data.id;
+                    // 在关系表格中添加一条数据 & 重新生成关系网络
+                    creatAndUpdateRecord(info);
+                }
+                else{
+                    showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
+                }
+            },
+            error : function(){
+                showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
+            }
+        });
+    }
 });
 
 /**
@@ -155,26 +198,21 @@ $("#relation_list").on("click",function(e){
     // 获取响应对象 ==> button > td>tr
     let $target = $(e.target);
 
-    console.log("this is #relation_list , ", $target);
-
     // 点击 修改 按钮
     if($target.hasClass("modify-relation")){
-        // TODO 修改操作 
-        // 设置记录id
-        $("#modify-relation-id").val($target.parent().parent().attr("data-index"));
         
         // 向模态框中填充数据
-        fillDataToModal();
+        fillModifyDataToModal($target.parent().parent());
 
         // 显示模态窗
-        showModal("addContractModal");
+        toggleModal("addContractModal");
     }
     // 点击 删除 按钮
     else if($target.hasClass("delete-relation")){
         // 设置记录id
         $("#relation-id").val($target.parent().parent().attr("data-index"));
         // 显示模态窗
-        showModal("delRelationModal");
+        toggleModal("delRelationModal");
     }
 })
 
@@ -202,45 +240,46 @@ function checkRelationFormEmpty(target_list) {
 
 
 /**
+ * 获取关系表中的数据,结构化为相应格式,填充到 模态框中
+ * @param {jquery对象} $tr 需要修改的记录 的 tr 元素
+ */
+function fillModifyDataToModal($tr){
+
+    // 设置记录id
+    $("#modify-relation-id").val($tr.attr("data-index"));
+        
+    let tds = $tr.children();
+    
+    $("#name_level_one").val(tds[0].textContent);
+    $("#name_level_two").val(tds[1].textContent);
+    $("#contract_name").val(tds[2].textContent);
+    $("#link_method").val(tds[3].textContent);
+    $("#remark").val(tds[4].textContent);
+}
+
+/**
+ * 清空模态框中内容
+ */
+function clearRelationModal(){
+
+    $("#contract_name").val("");
+    $("#link_method").val("");
+    $("#remark").val("");
+    $("#modify-relation-id").val("");
+}
+
+
+
+/**
  * 
+ * @param {object} info 
  */
-function fillDataToModal(){
-
-}
-
 /**
- * 设置模态框中的内容，若 data 为空，则为清空模态框中内容
- * data 的结构：{ “input-id” : value }
- * @param {object} data 
+ * 在联系列表里插入 / 修改 一条新的联系记录
+ * @param {*} info 用于填充的数据
+ * @param {*} $update_target 修改的目标元素 ==> 将修改后的内容插入其中
  */
-function setRelationModal(data){
-
-    // data 无值，清空几个输入框中的内容
-    if(!data){
-        $("#contract_name").val("");
-        $("#link_method").val("");
-        $("#remark").val("");
-    }
-    else{
-        if(typeof(data) !== "object"){
-            console.log("typeof data is not object");
-            return;
-        }
-        // 根据 input 的 id 设置内容
-        for(let input_id in data){
-            console.log("input_id = ",input_id, "  and the val is " , data[input_id]);
-            $(`#${input_id}`).val(data[input_id]);
-        }
-    }
-}
-
-
-
-/**
- * 在联系列表里添加一条新的联系记录
- * @param {object} info 用于填充的数据
- */
-function creatNewRecord(info){
+function creatAndUpdateRecord(info, $update_target = undefined){
     let relaton_item_obj  = {
         "SCHOOL_NAME" : info.level_one,
         "COLLEGE_NAME" : info.level_two,
@@ -258,8 +297,9 @@ function creatNewRecord(info){
 
     reloadRelationGraph();
 
+    let tr_start = `<tr data-index="${info.id}">`, tr_end = "</tr>";
 
-    let html = `<tr data-index="${info.id}">
+    let content = `
         <td>${info.level_one}</td>
         <td>${info.level_two}</td>
         <td>${info.contract_name}</td>
@@ -269,12 +309,19 @@ function creatNewRecord(info){
         <td>
             <button type="button" class="btn btn-danger delete-relation">删除</button>
             <button type="button" class="btn btn-info modify-relation">修改</button>
-        </td>
-    </tr>`;
+        </td>`;
 
+
+    // 若目标tr不为空,即为修改元素,
+    if($update_target){
+        $update_target.html(content);
+    }
+
+    // $update_target 为空则将新数据 插入到第一行
+    else{
+        $("#relation_list tr:first").before(tr_start + content + tr_end);
+    }
     
-    // 插入到第一行
-    $("#relation_list tr:first").before(html);
 }
 
 
@@ -299,7 +346,7 @@ $("#deleteRelationBtn").on("click",function(){
                 console.log(data,typeof(data),data.success);
                 // 返回 {success ：true / false}
                 // 隐藏模态框
-                showModal("delRelationModal",true);
+                toggleModal("delRelationModal",true);
                 if(data.success){
                     // console.log("success");
                     showAlert("删除成功",ALERT_TYPE.success);
@@ -398,10 +445,16 @@ function hideAlert(){
 
 
 /**
- * 显示模态窗
- * @param {string} mod_id 模态窗id
+ * 显示 / 隐藏 模态窗
+ * @param {string} mod_id 
  */
-function showModal(mod_id , hide = false){
+
+ /**
+  * 显示 / 隐藏 模态窗
+  * @param {string} mod_id 需要操作的模态窗id
+  * @param {bool} hide 是否隐藏 模态框
+  */
+function toggleModal(mod_id , hide = false){
     let modal = document.getElementById(mod_id);
     
     // 若找不到对应模态窗

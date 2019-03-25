@@ -90,21 +90,23 @@ def update_agent_relation():
     :return: dict : { success:True }
     """
     current_user = session['username']
-    relation_id = request.form.get('relation_id', type=int)
+    relation_id = request.form.get('id', type=int)
     ret = {'success': False}
 
     info = {
-        "user_id": int(current_user["ID"]),
         "level_one": request.form['level_one'],
         "level_two": request.form['level_two'],
         "contract_name": request.form['contract_name'],
         "link_method": request.form['link_method'],
         "remark": request.form['remark'],
+        "create_time": request.form['create_time'],
     }
+
     # 企业商务
     if current_user["TYPE"] == "1":
         pass
     # 高校商务
     else:
         ret['success'] = school_agent_service.update_relation(relation_id, info)
-    return ret
+
+    return json.dumps(ret)
