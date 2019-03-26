@@ -633,7 +633,7 @@ class RelationGraph{
      */
     mouseOver2Node(datum){
         //显示提示文本
-        let html = RelationGraph.getToolTipHook('node', datum);
+        let html = this.getToolTipHook('node', datum);
         this.setVisibleOfToolTip(true, html);
         //暂存节点的id
         let temp_nodes = new Set();
@@ -678,7 +678,7 @@ class RelationGraph{
 
     mouseOver2Link(datum){
         //显示关系
-        let html = RelationGraph.getToolTipHook('link', datum);
+        let html = this.getToolTipHook('link', datum);
         this.setVisibleOfToolTip(true, html);
         //其他节点半透明
         this.setOpacityOfNodes(0.2, function (d) {
