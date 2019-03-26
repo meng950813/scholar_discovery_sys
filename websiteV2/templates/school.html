@@ -44,9 +44,8 @@
                     <div class="btn btn-block btn-default" data-toggle="modal" data-target="#schoolCompareModal"> 显示综合对比图 </div>
                    
                     <h4>华中科技大学 实力图</h4>
-                    <div class="school-chart">
-                        <img src="../static/images/charts/chart_small_5_item_upper.png" alt="" class="img-fluid img-responsive">
-                    </div>
+                    <svg id="school-chart" width="400" height="200">
+                    </svg>
                     
                 </div>
             </div>
@@ -122,6 +121,7 @@
     <script src="{{ url_for('static', filename='js/d3.my_common.js') }}"></script>
     <script src="{{ url_for('static', filename='js/map02.js') }}"></script>
     <script src="{{ url_for('static', filename='js/map_govern.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bar_graph.js') }}"></script>
 
     <script>
         $(".map-change").on("click",function(e){
@@ -131,6 +131,13 @@
         })
         // let bodyHeight = document.body.clientHeight;
         // $(".outer").height(bodyHeight / 2  - 70 ) ;
+    </script>
+    <script type="text/javascript">
+        let svg = d3.select('#school-chart');
+        let xTexts = [ "重点实验室", "重点学科","院士","长江学者","杰出青年" ];
+        let verticalGraph = new VerticalBarGraph(svg, xTexts);
+
+        verticalGraph.setData([7, 12, 16, 9, 3]);
     </script>
 </body>
 </html>
