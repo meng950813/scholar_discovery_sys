@@ -28,6 +28,9 @@ class Subject:
         #教师PageRank评分 {teacher_id:value,...}
         self.pagerank = pickle.load(open(self.path+'/teacherRank', 'rb'))
 
+        #教师对应的词：
+        self.teacher_word = pickle.load(open(self.path + '/teacherWord', 'rb'))
+
         self.cal = 0.9
 
     def cal_lda_one_word(self, word, teacher_id):
@@ -85,7 +88,7 @@ class Subject:
         if lm != None:
             #lm    {teacher_id1: word1出现的次数 / 总词数，teacher_id2: word1出现的次数 / 总词数, col_fre: word[w] / length}
             if teacher_id is not None:
-                lm = {k: lm[k] for k in lm if k in teacher_id or k=="col_fre"}
+                lm = {k: lm[k] for k in lm if k in teacher_id or k == "col_fre"}
             for l in lm.keys():
                 #l teacher_id
                 if l != 'col_fre':
@@ -94,7 +97,7 @@ class Subject:
         #res =  {'teacher_id':value,...,col:lm['col_fre']}
         return res
 
-    def cal_rank(self,res,lda,cof):
+    def cal_rank(self, res, lda, cof):
         '''
         """计算专家排序"""
         :param res: {word1:{'teacher_id':value,...,col:lm['col_fre'],...}
@@ -107,7 +110,32 @@ class Subject:
         #wd是res的key,代表词，res[wd]还是字典，代表词对应的老师及其对该词的值，r是res[wd]中的key,代表老师id
         #exp_list [teacher_id1,teacher_id2,...]
         exp_list = [r for wd in res.keys() for r in res[wd]]
+
+        # ------------------------------------------------------------------
+        for wd in lda.keys():
+            for r in lda[wd]:
+                exp_list.append(r)
+
+        # ------------------------------------------------------------------
+
+        '''
+        len(exp_list):   3
+        len(exp_list):   4
+        len(exp_list):   0
+        len(exp_list):   0
+        len(exp_list):   0
+        len(exp_list):   2
+        len(exp_list):   2
+        len(exp_list):   4
+        len(exp_list):   3
+        len(exp_list):   2
+        len(exp_list):   0
+        
+        '''
+
+
         exp_list = set(exp_list)
+        print("len(exp_list):  ", len(exp_list))
         if 'col' in exp_list:
             #教师名单，所以去掉cof
             exp_list.remove('col')
@@ -132,12 +160,14 @@ class Subject:
             for wd in lda:
                 if wd not in res and r in lda[wd]:
                     rank[r] *= lda[wd][r]
+                else:  #这句是我自己加的
+                    rank[r] *= 10e-6
             if self.pagerank.get(r):
                 # rank[r] *= self.pagerank[r] * self.id_name[r]["total"]
                 rank[r] *= self.pagerank[r] * self.id_name[r]["composite_score"]
         return rank
 
-    def do_query(self,words,teacher_id):
+    def do_query(self, words, teacher_id):
         #words为搜索的关键字集合的列表，teacher_id默认为空
         #temp_res  {word1:{'teacher_id':value,...,col:lm['col_fre']},word2:{'teacher_id':value,...,col:lm['col_fre']},...}
         temp_res = {}
@@ -145,9 +175,9 @@ class Subject:
         temp_lda = {}
 
         for word in words:
-            temp_res[word] = self.cal_one_word(word,teacher_id)
+            temp_res[word] = self.cal_one_word(word, teacher_id)
 
-            temp_lda[word] = self.cal_lda_one_word(word,teacher_id)
+            temp_lda[word] = self.cal_lda_one_word(word, teacher_id)
         for word in words:
             if word in temp_res and not temp_res[word]:
             #Python 字典 pop() 方法删除字典给定键 key 及对应的值，返回值为被删除的值。key 值必须给出。 否则，返回 default 值。
@@ -156,7 +186,7 @@ class Subject:
                 temp_lda.pop(word)
         if not temp_res and not temp_lda:
             return []
-        #返回xy（x的y次方） 的值。
+        #返回xy（x的y次方）的值。
         cof = math.pow(10e-6, len(words) - max(len(temp_res), len(temp_lda)))
         level = math.pow(10e-6, len(words)+1)
         rank = self.cal_rank(temp_res, temp_lda, cof)
@@ -165,26 +195,35 @@ class Subject:
         #result [(teacher_id,'权值'),(),..]
         return result
 
+
+    def get_teacher_word(self):
+        print("teacher_word: ", self.teacher_word[94720])
+
 class Query:
     def __init__(self, subs):
+
+
         # [{"code": '01', "k": 46}, {"code": '02', "k": 98}]
-        self.subs=subs
+        self.subs = subs
         #{teacher_id1:{id:xx,name:xxx},...}
         self.id_name = pickle.load(open(root + '/teacherName', 'rb'))
         self.institution_info = pickle.load(open(root+'/institutionName', 'rb'))
         self.school_info = pickle.load(open(root+'/SchoolName', 'rb'))
-        self.Subject = {sub['code']:Subject(sub,self.id_name) for sub in self.subs}
+        self.Subject = {sub['code']: Subject(sub, self.id_name) for sub in self.subs}
         self.stop = []
         stopword = [line.strip() for line in open('fenci/stopwords.txt', encoding='utf-8').readlines()]
         stopword1 = [line.strip() for line in open('fenci/stop_word_4.txt', encoding='utf-8').readlines()]
         stopwords = [i.split(':')[0] for i in stopword1]
         self.stop.extend(stopword)
         self.stop.extend(stopwords)
-        self.fill = ['vn', 'n', 'nr', 'nr1', 'nr2', 'nrj', 'nrf', 'ns', 'nsf',
-                'nt', 'nz', 'nl', 'ng']
+        self.fill = ['vn', 'n', 'nr', 'nr1', 'nr2', 'nrj', 'nrf', 'ns', 'nsf', 'nt', 'nz', 'nl', 'ng']
         jieba.load_userdict('fenci/userdict.txt')
 
-    def prints(self,result):
+        s = Subject(subs[0], self.id_name)
+        print("------------", s.teacher_word[116226])
+
+
+    def prints(self, result):
         # {'0828': [(23711, 0.031088879496921837), (23721, 0.003430221466157156), (143479, 0.00010151384288551602)],
         #  '0829': [],
         #  '0830': [(126955, 0.0007021102104810927), (68129, 0.00013266169457311943), (22286, 0.00011640344697493587),
@@ -194,7 +233,7 @@ class Query:
             if size == 0:
                 continue
             #教师个数
-            print("学科:%s,有关教师个数：%d" %(code,size))
+            print("学科:%s,有关教师个数：%d" % (code, size))
             teacher = result[code]
             for t in teacher:
                 #教师名字：（id:权重)
@@ -254,17 +293,25 @@ class Query:
                 else:
                     school_info[school_id] = teacher_info[1]
         #学院按权值从大到小排序
-        school_rank = dict(sorted(school_info.items(),key=lambda x:x[1],reverse=True))
+        # print(school_info)
+        # print(sorted(school_info.items(),key=lambda x: x[1], reverse=True))
+        # print(dict(sorted(school_info.items(),key=lambda x: x[1], reverse=True)))
+        # school_rank = dict(sorted(school_info.items(), key=lambda x: x[1],reverse=True))
+        school_rank = sorted(school_info.items(), key=lambda x: x[1],reverse=True)
         #输出学院的学校名+学院名+学院权值
-        if city== None:
+        if city == None:
+            print(school_rank)
             for school_id in school_rank:
-                print(self.school_info[school_id]['NAME']+str(school_rank[school_id]))
+                # print(self.school_info[school_id]['NAME']+str(school_rank[school_id]))
+                print(self.school_info[school_id[0]]['NAME']+str(school_id[1]))
+                # pass
         else:
+            print(school_rank)
             for school_id in school_rank:
                 city_name = self.school_info[school_id]['CITY']
                 if city_name == city:
-                    print(self.school_info[school_id]['NAME'] + str(school_rank[school_id]))
-
+                    # print(self.school_info[school_id]['NAME'] + str(school_rank[school_id]))
+                    print(self.school_info[school_id[0]]['NAME'] + str(school_id[1]))
 
 
 
@@ -284,9 +331,9 @@ class Query:
                 words.append(word)
         print(words)
         if "school" in filer and len(filer["school"])>0:
-            teacher_id={t for t in self.id_name if self.id_name[t]['school_id'] in filer['school']}
+            teacher_id = {t for t in self.id_name if self.id_name[t]['school_id'] in filer['school']}
         else:
-            teacher_id=None
+            teacher_id = None
 
         #筛选符合院系信息的老师
         if "institution" in filer and len(filer['institution'])>0:
@@ -294,7 +341,7 @@ class Query:
         else:
             teacher_id=None
 
-        if "name" in filer and len(filer["name"])>0:
+        if "name" in filer and len(filer["name"]) > 0:
             if teacher_id:
                 teacher_id={t for t in teacher_id if self.id_name[t]['name'].find(filer["name"])>=0}
             else:
@@ -302,7 +349,7 @@ class Query:
         result={}
         #teacher_id dict None
         for sub in self.Subject:
-            if "code" in filer and len(filer['code'])>0 and sub not in filer['code']:
+            if "code" in filer and len(filer['code']) > 0 and sub not in filer['code']:
                 continue
             else:
                 # self.Subject_for_teacher {code1:Subject_for_teacher(sub1),sode2:Subject_for_teacher2(sub2)}
@@ -318,7 +365,8 @@ def queryForCity(filer,province='北京'):
 
 def queryForSchool(filer,city = '北京市'):
     pass
-    t = input("请输入要搜索的内容")
+    # t = input("请输入要搜索的内容")
+    t = "电力电子与电力传动"
     start = time.time()
     filer['city'] = city
     r = query.do_query(t, filer)
@@ -377,7 +425,8 @@ if __name__ == '__main__':
 
     while True:
         # 查询范围
-        query_range = input('输入要查询的范围（省、市、学校、学院、教师）')
+        # query_range = input('输入要查询的范围（省、市、学校、学院、教师）')
+        query_range = "学校"
         # filer = {}
         if query_range == '省':
             filer = {}
