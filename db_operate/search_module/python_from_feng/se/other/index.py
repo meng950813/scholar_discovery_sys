@@ -51,12 +51,13 @@ def computer(code, k):
                 wordIndex[w] = {}
                 word[w] = 0
             word[w] += teacher[w] #该词在所有教师论文中出现的次数
-            length += teacher[w] #所有论文中的总词数
+            length += teacher[w] #该学科下所有论文中的总词数
             wordIndex[w][teacher_id] = teacher[w]/size #某个词在教师的词典中出现的概率
 
     for w in word:
         wordIndex[w]["col_fre"] = word[w]/length # 词索引 col_fre  : 这个词在总词典中出现的概率
     # print(wordIndex)
+    print("所有论文中出现的总词数：  ", length)
     pickle.dump(wordIndex, open(root+'/' + code+'/k' + str(k) + '/wordIndex', 'wb'))
 
 # if __name__ == '__main__':
