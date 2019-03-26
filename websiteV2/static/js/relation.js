@@ -117,7 +117,7 @@ class RelationGraph{
         this.normalizeLinks();
         //绑定力导向图对应的数据
         this.simulation.nodes(this.nodes)
-            .force('link', d3.forceLink(this.links).distance(RelationGraph.getDistanceHook))
+            .force('link', d3.forceLink(this.links).distance(this.getDistanceHook))
             .force('charge', d3.forceManyBody().strength(-100))
             .force('center', d3.forceCenter(this.width / 2, this.height / 2));
         //绑定tick回调函数
@@ -270,7 +270,7 @@ class RelationGraph{
                     that.mouseOut();
                 })
                 .on('click', function (d) {
-                    RelationGraph.clickNodeHook(this, d);
+                    that.clickNodeHook(this, d);
                 });
         }//end function
     }
@@ -350,7 +350,7 @@ class RelationGraph{
                     that.mouseOut();
                 })
                 .on('click', function (d) {
-                    RelationGraph.clickNodeHook(this, d);
+                    that.clickNodeHook(this, d);
                 });
         }
     }
@@ -538,7 +538,7 @@ class RelationGraph{
             this.removeNodesAndLinks(index);
         //力导向图重新模拟
         this.simulation.nodes(this.nodes);
-        this.simulation.force('link', d3.forceLink(this.links).distance(RelationGraph.getDistanceHook));
+        this.simulation.force('link', d3.forceLink(this.links).distance(this.getDistanceHook));
         this.simulation.alpha(1).restart();
     }
 
@@ -653,7 +653,7 @@ class RelationGraph{
             return d.source.name != node_name && d.target.name != node_name;
         });
         //加宽连线
-        this.setWidthOfLinks(RelationGraph.getEmphasisLinkWidthHook, function (d) {
+        this.setWidthOfLinks(this.getEmphasisLinkWidthHook, function (d) {
             return d.source.name == node_name || d.target.name == node_name;
         });
         //显示文本
@@ -687,7 +687,7 @@ class RelationGraph{
         //其他联系半透明
         this.setOpacityOfLinks(0.2, d => d != datum);
         //加宽连线
-        this.setWidthOfLinks(RelationGraph.getEmphasisLinkWidthHook, d => d == datum);
+        this.setWidthOfLinks(this.getEmphasisLinkWidthHook, d => d == datum);
         //显示有联系的节点的文本
         this.setVisibleOfLabels(true, function (d) {
             return d.name == datum.source.name || d.name == datum.target.name;
