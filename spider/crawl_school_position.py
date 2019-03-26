@@ -98,8 +98,8 @@ def main():
     spider = CrawlPositionSpider()
     # 获取所有的985和211学校
     # select_sql = 'select * from es_school where LEVEL in (985,211) order by CITY'
-    select_sql = 'select * from es_school where LEVEL in (985,211)'
-    update_sql = "update es_school set ADDRESS='%s',POSITION='%s' where ID=%d"
+    select_sql = 'select * from es_school where POSITION is null and LEVEL in (985,211)'
+    update_sql = "update es_school set ADDRESS='%s',POSITION='%s' where ID=%d;"
     total_schools = db.select(select_sql)
     # 当前所在市
     cur_city = '北京市'
