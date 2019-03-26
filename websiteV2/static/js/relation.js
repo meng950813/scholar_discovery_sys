@@ -95,9 +95,7 @@ class RelationGraph{
         this.nodes_map = {};
         this.links_map = [];
         //提示框
-        this.tooltip = d3.select('body')
-            .append('div')
-            .attr('id', 'tooltip');
+        this.tooltip = d3.select('body').append('div').attr('id', 'tooltip');
     }
 
     /**
@@ -144,7 +142,7 @@ class RelationGraph{
      * @param index 该联系所在的索引
      * @returns {number}
      */
-    static getDistanceHook(datum, index){
+    getDistanceHook(datum, index){
         return datum.level * 60;
     }
 
@@ -153,7 +151,7 @@ class RelationGraph{
      * @param datum 联系对应的数据项
      * @returns {number} 联系的宽度
      */
-    static getEmphasisLinkWidthHook(datum){
+    getEmphasisLinkWidthHook(datum){
         return 12;
     }
 
@@ -162,7 +160,7 @@ class RelationGraph{
      * @param node 节点
      * @param datum 节点对应的数据
      */
-    static clickNodeHook(node, datum){
+    clickNodeHook(node, datum){
         console.log(datum);
     }
 
@@ -172,7 +170,7 @@ class RelationGraph{
      * @param datum 节点/联系对应的数据项
      * @returns {string} 要生成的html字符串
      */
-    static getToolTipHook(type, datum){
+    getToolTipHook(type, datum){
         let html = null;
         if (type == 'node'){
             html = "<p>" + datum.name + '</p>';
