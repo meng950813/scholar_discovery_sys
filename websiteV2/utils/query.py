@@ -172,7 +172,7 @@ class Query:
         self.subs = subs
         # {teacher_id1:{id:xx,name:xxx},...}
         self.id_name = pickle.load(open(os.path.join(path,'querydata','teacherName'), 'rb'))
-        self.institution_info = pickle.load(open(os.path.join(path,'querydata','institutionName'), 'rb'))
+        self.institution_info = pickle.load(open(os.path.join(path,'querydata','InstitutionName'), 'rb'))
         self.school_info =pickle.load(open(os.path.join(path,'querydata','SchoolName'), 'rb'))
         # self.Subject {code1:Subject(sub1),sode2:Subject2(sub2)}
 
@@ -452,10 +452,8 @@ subject = [
     {"code": '0830', "k": 20}, {"code": '0831', "k": 14}, {"code": '0832', "k": 10}]
 
 
-if __name__ == '__main__':
-    path = os.path.join(os.getcwd(), '..', 'static')
-else:
-    path = os.path.join(os.getcwd(), 'static')
+
+path = os.path.join(os.getcwd(), 'static')
 
 query = Query(subject, path=path)
 
