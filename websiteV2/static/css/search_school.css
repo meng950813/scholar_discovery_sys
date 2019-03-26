@@ -1,0 +1,109 @@
+.row{
+	height: 500px;
+}
+.row_bottom{
+	height: 250px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dotted darkblue;
+}
+
+
+.bk_gray, .bk_red{
+	height: 100%;
+}
+.bk_gray,.bk_red{
+	padding: 15px;
+	margin: 0 auto;
+	font-size: 16px;
+}
+
+
+.bk_red{
+	padding: 20px; 
+	text-align: center;
+	/* background: #fafaf8; */
+	text-align: center;
+}
+
+.bk_red img{
+	max-width: 100%;
+	max-height: 100%;
+	display: inline-block;
+}
+.company_logo{
+	width: 72px;
+	border: none;
+	border-radius: 50%;
+}
+.company_logo span{
+	line-height: 16px;
+}
+
+
+/* .info-area,.bk_gray{
+	height: 100%;
+} */
+
+.bk_gray{
+	border: 1px dotted #777;
+	border-radius: 10px;
+	padding: 0 15px;
+}
+
+.bk_gray h3, .bk_gray h4{
+	line-height: 1.6;
+	padding: 5px;
+	border-bottom: 1px dotted #777;
+	background: ghostwhite;
+	border-radius: 5px;
+}
+
+.require{
+	padding: 10px 0;
+}
+.require a{
+	margin: 10px 10px 0 0;
+	font-size: 16px;
+}
+
+
+table.table{
+	table-layout: fixed;
+}
+
+.table tr > td:first-child{
+	width: 100px;
+}
+
+
+.text-left{
+	text-align: left;
+}
+.caret{
+	border-top: 10px dashed;
+    border-right: 8px solid transparent;
+	border-left: 8px solid transparent;
+	cursor: pointer;
+	float: right;
+}
+
+.card-body{
+	line-height: 24px;
+}
+
+
+
+/* school.html 专属样式 */
+.school-chart{
+	/* background: #2b81ff; */
+	min-height: 180px;
+	max-height: 200px;
+}
+
+.btn-yellow{
+	background: #fff50d;
+}
+.btn-red{
+	background: #ff0100;
+}
