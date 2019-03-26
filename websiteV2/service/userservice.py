@@ -17,7 +17,7 @@ class UserService:
         """
         self.tel = re.compile(r"^\d{11}$")
         self.email = re.compile(r"^[\w\d]+@[\w\d]+\.com$")
-        self.u_id = re.compile(r"\d{6,8}")
+        self.u_id = re.compile(r"^\d{6,8}$")
 
     def dologin(self, username, pwd=""):
         """
@@ -37,7 +37,7 @@ class UserService:
             # 以电话登陆
             back = user_dao.dologin(telphone = username , pwd = password)
         elif self.email.match(username):
-             # 以邮件登陆
+            # 以邮件登陆
             back = user_dao.dologin(email = username , pwd = password)
         elif self.u_id.match(username):
             # 以 id 登陆
