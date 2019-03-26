@@ -48,7 +48,7 @@ function handle_school_agent_relations(self, json_data) {
 
     for (let i = 0; i < json_data.length; i++){
         let datum = json_data[i];
-        let kind = datum['SCHOOL_NAME'] + '-' + datum['COLLEGE_NAME'];
+        let kind = datum['level_one'] + '-' + datum['level_two'];
         //不添加重复类别
         let index = kinds.indexOf(kind);
         if (index == -1){
@@ -66,9 +66,9 @@ function handle_school_agent_relations(self, json_data) {
         if (containsLink(links, link) == -1)
             links.push(link);
         //尝试添加学院的人节点
-        let agentIndex = contains(nodes, 'name', datum['TEACHER_NAME']);
+        let agentIndex = contains(nodes, 'name', datum['contract_name']);
         if (agentIndex == -1){
-            nodes.push({category: index, name: datum['TEACHER_NAME']});
+            nodes.push({category: index, name: datum['contract_name']});
             agentIndex = nodes.length - 1;
         }
         //尝试添加学院和学院中人的联系
@@ -91,29 +91,24 @@ function handle_school_agent_relations(self, json_data) {
     return data;
 }
 
-function updateAgentRelationList(relation_list, mapping, json_data){
-    relation_list.selectAll('tr').remove();
+function updateAgentRelationList(json_data){
+    let tbody_content = "";
 
-    console.log(json_data);
-    for (let index = 0; index < json_data.length; index++){
-        let datum = json_data[index];
-        let tr = relation_list.append('tr')
-            .attr('data-index', datum['ID']);
-        tr.selectAll('td')
-            .data(mapping)
-            .enter()
-            .append('td')
-            .text(function (_, i) {
-                return datum[mapping[i]];
-            });
-        let td = tr.append('td');
-        td.append('button')
-            .attr('type', 'button')
-            .attr('class', 'btn btn-danger delete-relation')
-            .text('删除');
-        td.append('button')
-            .attr('type', 'button')
-            .attr('class', 'btn btn-info modify-relation')
-            .text('修改');
-    }
+    for(let i = 0; i < json_data.length ; i++){
+        tbody_content +=`
+            <tr data-index=${json_data[i].id}>
+                <td>${json_data[i].level_one}</td>
+                <td>${json_data[i].level_two}</td>
+                <td>${json_data[i].contract_name}</td>
+                <td>${json_data[i].link_method}</td>
+                <td>${json_data[i].remark}</td>
+                <td>${json_data[i].create_time}</td>
+                <td>
+                    <button type="button" class="btn btn-danger delete-relation">删除</button>
+                    <button type="button" class="btn btn-info modify-relation">修改</button>
+                </td>
+            </tr>
+        `;
+   }
+   $("#relation_list").html(tbody_content);
 }

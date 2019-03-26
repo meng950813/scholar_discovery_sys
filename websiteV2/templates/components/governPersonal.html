@@ -5,7 +5,7 @@
 {% block main %}
 <div class="container">
     <h3>关系网络</h3>
-    <div class="social-net"></div>
+    <svg class="social-net" width="900" height="600"></svg>
 
     <h3>联系列表</h3>
     
@@ -21,33 +21,71 @@
                 <th>操作</th>
             </tr>
         </thead>
-        <tbody id="contract_list">
-            <tr>
-                <td>百里腾公司</td>
-                <td>产品部</td>
-                <td>马彦云</td>
-                <td>11111111</td>
-                <td>总经理</td>
-                <td>2019/3/3</td>
-                <td>
-                    <button type="button" class="btn btn-danger">删除</button>
-                    <button type="button" class="btn btn-info" >修改</button>
-                </td>
-            </tr>
-            <tr>
-                <td>百里腾公司</td>
-                <td>产品部</td>
-                <td>李云腾</td>
-                <td>12345678900</td>
-                <td>总经理</td>
-                <td>2019/3/3</td>
-                <td>
-                    <button type="button" class="btn btn-danger">删除</button>
-                    <button type="button" class="btn btn-info" >修改</button>
-                </td>
-            </tr>
+        <tbody id="relation_list">
+            
         </tbody>
     </table>
 </div>
 
+
+<!-- 确定删除关系的模态框 -->
+<div class="modal fade" id="delRelationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">删除记录</h4>
+            </div>
+            <div class="modal-body">确定删除本条记录？</div>
+            <input type="hidden" id="relation-id">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" id="deleteRelationBtn">确认删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block script %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/relation.js') }}"></script>
+<script src="{{ url_for('static', filename='js/relation_agent.js') }}"></script>
+
+<script type="text/javascript">
+    // 用于保存关系图的数据
+    var GRAPH_DATA = undefined;
+
+    let url = '/api/agent/relation';
+    //获取用户名
+    let username = d3.select('#username');
+    let self = {"name": username.text()};
+
+    let svg = d3.select('.social-net');
+    let relationGraph = new RelationGraph(svg);
+    //字段映射
+    // let mapping = ['name_level_one', 'name_level_two', 'contract_name', 'link_method', 'remark', 'create_time'];
+    //用于更新联系列表
+    let relation_list = d3.select('#relation_list');
+    //异步获取数据
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: loadDataSuccess,
+    });
+    function loadDataSuccess(json_data) {
+        GRAPH_DATA = json_data;
+        
+        let handled_data = handle_school_agent_relations(self, json_data);
+        console.log(handled_data);
+        relationGraph.setData(handled_data);
+        //更新联系列表
+        updateAgentRelationList(json_data);
+    }
+</script>
 {% endblock %}

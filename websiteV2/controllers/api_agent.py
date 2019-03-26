@@ -33,7 +33,12 @@ def get_agent_relations():
     results = None
     # 学校商务
     if utype == 0:
-        results = school_agent_service.get_relations_by_id(uid)
+        results = school_agent_service.get_relations_by_id(uid, isSchool = True)
+    
+    # 企业商务
+    else:
+        results = school_agent_service.get_relations_by_id(uid , isSchool = False)
+
 
     return json.dumps(results)
 
@@ -46,6 +51,7 @@ def append_agent_relation():
     :return: dict : { success:True,create_time:"2019/3/4",id:"123" }
     """
     current_user = session['username']
+
     # 获取信息
     info = {
         "user_id": current_user["ID"],
@@ -56,13 +62,15 @@ def append_agent_relation():
         "remark": request.form['remark'],
         "create_time": request.form["create_time"]
     }
+    
     # 企业商务
     if current_user["TYPE"] == "1":
-        pass
+        result = school_agent_service.append_relation(info , isSchool = False)
     # 高校商务
     else:
-        result = school_agent_service.append_relation(info)
-        return json.dumps(result)
+        result = school_agent_service.append_relation(info, isSchool = True)
+    
+    return json.dumps(result)
 
 
 @api_agent_blueprint.route('/agent/relation', methods=['DELETE'])
@@ -76,8 +84,16 @@ def delete_agent_relation():
     ret = {'success': False}
     # 获取参数
     relation_id = request.form.get('relation_id', type=int)
-    ret['success'] = school_agent_service.delete_relation(relation_id)
 
+    current_user = session['username']
+    
+    # 企业商务
+    if current_user["TYPE"] == "1":
+        ret['success'] = school_agent_service.delete_relation(relation_id, isSchool = False)
+    
+    else:
+        ret['success'] = school_agent_service.delete_relation(relation_id, isSchool = True)
+        
     return json.dumps(ret)
 
 
@@ -104,9 +120,10 @@ def update_agent_relation():
 
     # 企业商务
     if current_user["TYPE"] == "1":
-        pass
+        ret['success'] = school_agent_service.update_relation(relation_id, info , isSchool = False)
+
     # 高校商务
     else:
-        ret['success'] = school_agent_service.update_relation(relation_id, info)
+        ret['success'] = school_agent_service.update_relation(relation_id, info , isSchool = True)
 
     return json.dumps(ret)

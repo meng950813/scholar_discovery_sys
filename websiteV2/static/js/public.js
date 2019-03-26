@@ -146,7 +146,7 @@ $("#submit-connect").on("click",function(e){
                     clearRelationModal();
 
                     // 填充新内容到列表中
-                    creatAndUpdateRecord(info,$(`#relation_list tr[data-index=${info.id}]`))
+                    creatAndUpdateRecord(info,$(`#relation_list tr[data-index=${info.id}]`));
                 }
                 else{
                     showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
@@ -271,24 +271,33 @@ function clearRelationModal(){
 
 
 /**
- * 
- * @param {object} info 
- */
-/**
  * 在联系列表里插入 / 修改 一条新的联系记录
  * @param {*} info 用于填充的数据
  * @param {*} $update_target 修改的目标元素 ==> 将修改后的内容插入其中
  */
 function creatAndUpdateRecord(info, $update_target = undefined){
     let relaton_item_obj  = {
-        "SCHOOL_NAME" : info.level_one,
-        "COLLEGE_NAME" : info.level_two,
-        "TEACHER_NAME" : info.contract_name
+        "id" : info.id,
+        "level_one" : info.level_one,
+        "level_two" : info.level_two,
+        "contract_name" : info.contract_name
     };
 
     // 若关系表不为空
     if(GRAPH_DATA){
-        GRAPH_DATA.push(relaton_item_obj);
+        // 若本次操作为修改,则需要覆盖修改内容
+        if($update_target){
+            for(let index = 0 ; index < GRAPH_DATA.length ; index++){
+                if(GRAPH_DATA[index].ID == info.id){
+                    GRAPH_DATA.splice(index,1,relaton_item_obj);
+                    break;
+                }
+            }
+        }
+        // 否则直接添加新节点
+        else{
+            GRAPH_DATA.push(relaton_item_obj);
+        }
     }
     // 创建
     else{
@@ -379,7 +388,7 @@ function deleteRelationNode(id){
     // 确定被删元素的下标
     for(var index = 0 ; index < GRAPH_DATA.length; index++){
         
-        if(GRAPH_DATA[index].ID == id){
+        if(GRAPH_DATA[index].id == id){
             // 删除元素
             GRAPH_DATA.splice(index,1);
 
