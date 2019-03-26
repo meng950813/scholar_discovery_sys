@@ -3,7 +3,7 @@
 {% block title %}首页{% endblock %}
 
 {% block head %}
-    <link href="../static/css/index.css" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 
@@ -11,7 +11,7 @@
     <!-- 搜索区 -->
     <div id="search-container" class="search-area container">
         <div class="imglog">
-            <img src="../static/images/Polaris.png" />
+            <img src="{{ url_for('static', filename='images/Polaris.png') }}" />
         </div>
 
         <form  role="search" class="navbar-form search-form text-center">
@@ -21,12 +21,11 @@
                 <input type="text" id="simple-input"  placeholder="搜索" class="form-control">
 
                 <ul id="hot-key-list" class="hot-key" style="padding-left:0px;">
-                    <li data='123'> 计算机 </li>
-                    <li data='123'> 玻璃 </li>
+                    <li data='123'> 神经网络 </li>
+                    <li data='123'> 机器学习 </li>
                     <li data='123'> 人工智能 </li>
                     <li data='123'> 数据挖掘 </li>
-                    <li data='123'> 人工智能 </li>
-                    <li data='123'> 数据挖掘 </li>
+                    <li data='123'> 深度学习 </li>
                 </ul>
 
 
