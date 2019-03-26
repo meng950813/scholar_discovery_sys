@@ -71,6 +71,10 @@ def map():
 def detail():
     """测试详情页的路由函数"""
     return render_template('detail.html')
+@app.route('/bar')
+def bar():
+    """测试柱状图的路由函数"""
+    return render_template('bar.html')
 
 
 if __name__ == '__main__':

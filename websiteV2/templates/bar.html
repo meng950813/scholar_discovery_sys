@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>横向图</title>
+    <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/d3.my_common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bar_graph.js') }}"></script>
+</head>
+<body>
+    <svg width="900" height="600"></svg>
+</body>
+<script>
+    let svg = d3.select('svg');
+    let xText = ['东南大学', '南京大学', '浙江大学'];
+    let dataset = [3, 6, 9, 2, 7, 5, 6, 4, 5];
+    let categories = [
+        {name: '重点实验室', color: '#5d89a7'},
+        {name: '重点学科', color: '#a8c9ff'},
+        {name: '院士', color: '#7fbdc4'},
+        ];
+    let json_data = {dataset: dataset, categories: categories};
+    let barGraph = new HorizontalBarGraph(svg, xText);
+
+    barGraph.setData(json_data);
+</script>
+</html>
