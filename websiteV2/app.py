@@ -61,12 +61,6 @@ def school():
     return render_template('school.html')
 
 
-@app.route('/word_cloud')
-def word_cloud():
-    """测试词云的路由函数"""
-    return render_template('wordcloud.html')
-
-
 @app.route('/map')
 def map():
     """测试地图v2的路由函数"""

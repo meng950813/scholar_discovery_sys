@@ -158,7 +158,7 @@ class SchoolAgentService:
 
             # 若该键名不在 mapping 中, 跳过该键
             if not key in mapping:
-                print("参数有误,无法转换")
+                # print("参数有误,无法转换")
                 # return False
                 continue
 
