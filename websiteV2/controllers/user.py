@@ -36,7 +36,6 @@ def do_login():
     name = request.form['username']
     pwd = request.form['password']
 
-    # TODO 添加 session 部分
     result = user_service.dologin(name, pwd)
     if "error" in result:
         # 请求失败
@@ -44,12 +43,14 @@ def do_login():
 
     session["username"] = result
 
+    # 登陆成功，重定向显示页
+    return redirect(url_for("index"))
     # print(result)
     
-    # TODO 根据用户身份重定向
-    if result["TYPE"] == "1":
-        return redirect(url_for("agent.govern_personal"))
-    return redirect(url_for("agent.school_personal"))
+    # # 根据用户身份重定向
+    # if result["TYPE"] == "1":
+    #     return redirect(url_for("agent.govern_personal"))
+    # return redirect(url_for("agent.school_personal"))
 
 
 @user_blueprint.route('/login')

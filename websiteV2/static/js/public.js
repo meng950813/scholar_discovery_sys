@@ -146,7 +146,7 @@ $("#submit-connect").on("click",function(e){
                     clearRelationModal();
 
                     // 填充新内容到列表中
-                    creatAndUpdateRecord(info,$(`#relation_list tr[data-index=${info.id}]`));
+                    createAndUpdateRecord(info,$(`#relation_list tr[data-index=${info.id}]`));
                 }
                 else{
                     showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
@@ -178,7 +178,7 @@ $("#submit-connect").on("click",function(e){
     
                     info['id'] = data.id;
                     // 在关系表格中添加一条数据 & 重新生成关系网络
-                    creatAndUpdateRecord(info);
+                    createAndUpdateRecord(info);
                 }
                 else{
                     showAlert("操作失败，请稍后再试",ALERT_TYPE.error);
@@ -275,7 +275,7 @@ function clearRelationModal(){
  * @param {*} info 用于填充的数据
  * @param {*} $update_target 修改的目标元素 ==> 将修改后的内容插入其中
  */
-function creatAndUpdateRecord(info, $update_target = undefined){
+function createAndUpdateRecord(info, $update_target = undefined){
     let relaton_item_obj  = {
         "id" : info.id,
         "level_one" : info.level_one,
@@ -328,7 +328,16 @@ function creatAndUpdateRecord(info, $update_target = undefined){
 
     // $update_target 为空则将新数据 插入到第一行
     else{
-        $("#relation_list tr:first").before(tr_start + content + tr_end);
+        let tbody = $("#relation_list");
+
+        // 若已存在 tr 标签，将新元素插入原有 tr 之前
+        if(tbody.children("tr").length){
+            tbody.children("tr:first").before(tr_start + content + tr_end);
+        }
+        // 否则直接插入新元素
+        else{
+            tbody.html(tr_start + content + tr_end);
+        }
     }
     
 }
