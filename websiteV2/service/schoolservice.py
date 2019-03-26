@@ -24,7 +24,7 @@ class SchoolService:
         results = school_dao.get_position_by_names(school_names)
         schools = {}
         for result in results:
-            name = result['SCHOOL_NAME']
+            name = result['NAME']
             position = result['POSITION']
             # 切割出经纬度
             arr = position.split(',')

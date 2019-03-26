@@ -28,20 +28,15 @@ def school_address():
     :return: {school: [], college: [}
     """
     keyword = request.form.get('keyword')
-    # 限定输出的个数为10个
-    max_count = 10
     # 查询
     data = query.do_query(keyword, {})
     results = query.prints_for_school(data, None)
     # 保存所有的学校名称
     school_names = []
-    # 规范化名称
+    # 规范化
     special_cities = ['北京', '天津', '上海', '重庆']
     for result in results:
-        if result['province'] in special_cities:
-            result['province'] += '市'
-        else:
-            result['province'] += '省'
+        result['province'] += '市' if result['province'] in special_cities else '省'
         # 转换成map.js需要的格式
         result['school'] = result.pop('school_name')
         result['address'] = ['中国', result.pop('province'), result.pop('city')]
@@ -54,7 +49,35 @@ def school_address():
     for result in results:
         result.update(schools[result['school']])
 
-    return json.dumps(results[:max_count])
+    return json.dumps(results)
+
+
+@api_blueprint.route('/school/addressV2', methods=['POST'])
+def get_school_address_by_keywords():
+    """
+    根据关键字获取满足条件的学校 并返回满足条件的排名好的学校
+    :return: 不限制数量
+    """
+    keyword = request.form.get('keyword')
+    maximum = request.form.get('maximum', type=int)
+    # 查询
+    data = query.do_query(keyword, {})
+    results = query.prints_for_school(data, None)
+    # 保存所有的学校名称
+    school_names = []
+    # 规范化
+    special_cities = ['北京', '天津', '上海', '重庆']
+    for result in results:
+        result['province'] += '市' if result['province'] in special_cities else '省'
+
+        school_names.append(result['school_name'])
+    # 查询数据库获得所有的学校的经纬度
+    schools = school_service.get_position_by_names(school_names)
+    # 整合数据
+    for result in results:
+        result.update(schools[result['school_name']])
+
+    return json.dumps(results[:maximum])
 
 
 @api_blueprint.route('/mapdata/<path:filename>')

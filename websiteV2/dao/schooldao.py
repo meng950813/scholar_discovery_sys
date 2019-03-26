@@ -14,7 +14,7 @@ class SchoolDao:
         :param school_names: 学校名数组
         :return: 学校名对应的经纬度
         """
-        string = 'select SCHOOL_NAME,POSITION from es_institution where SCHOOL_NAME IN(%s) and POSITION is not null group by SCHOOL_NAME'
+        string = 'select NAME,POSITION from es_school where NAME in (%s)'
         sql = string % (','.join(['?' for name in school_names]))
         # 调用语句
         results = db.select(sql, *school_names)
