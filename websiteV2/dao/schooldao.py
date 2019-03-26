@@ -50,6 +50,20 @@ class SchoolDao:
         results = db.select(sql, school_id, *institution_ids)
         return results
 
+    def get_total_colleges_by_names(self, school_names, keys=None):
+        """
+        获取n个学校的所有学院信息
+        :param school_names:
+        :param keys 选取的关键字
+        :return: 学校学院数组
+        """
+        string = "select %s from es_institution where SCHOOL_NAME in (%s)" \
+                 % (','.join(keys) if keys is not None else '*', '%s')
+        sql = string % (','.join(['?' for name in school_names]))
+        # 获取
+        results = db.select(sql, *school_names)
+        return results
+
 
 school_dao = SchoolDao()
 
@@ -62,10 +76,11 @@ if __name__ == '__main__':
     # 需要预先调用，且只调用一次
     db.create_engine(**DB_CONFIG)
 
-    print(school_dao.get_position_by_names(['清华大学', '北京大学']))
-    print(school_dao.get_teachers_by_school(17134, 557))
-    institutions = school_dao.get_institutions_by_ids(17134, [547, 548])
-    # institutions = school_dao.get_institutions_by_ids(17134, [547, 548], ['ID', 'SCHOOL_ID'])
-    for institution in institutions:
-        print(institution)
+    # print(school_dao.get_position_by_names(['清华大学', '北京大学']))
+    # print(school_dao.get_teachers_by_school(17134, 557))
+    # institutions = school_dao.get_institutions_by_ids(17134, [547, 548])
+    # # institutions = school_dao.get_institutions_by_ids(17134, [547, 548], ['ID', 'SCHOOL_ID'])
+    # for institution in institutions:
+    #     print(institution)
+    print(school_dao.get_total_colleges_by_names(['大连理工大学', '东南大学']))
 

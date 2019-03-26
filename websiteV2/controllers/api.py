@@ -80,6 +80,19 @@ def get_school_address_by_keywords():
     return json.dumps(results[:maximum])
 
 
+@api_blueprint.route('/school/scholar_number', methods=['POST'])
+def get_school_scholar_number():
+    """
+    根据学校名获取学校的各个学者的数量，并返回
+    :return:
+    """
+    # 获取学校名数组
+    school_names = request.form.getlist('school_names[]')
+    # 获取数据
+    results = school_service.get_total_scholars_by_schools(school_names)
+    return json.dumps(results)
+
+
 @api_blueprint.route('/mapdata/<path:filename>')
 def get_mapdata(filename):
     """

@@ -73,6 +73,24 @@ function onTagClicking(tag, datum, index){
         let schools = datum['schools'];
         //TODO:在此处进行操作
         console.log(cityName, schools);
+        //TODO:默认获取第一个学校名称
+        let school_name = schools[0].name;
+        //异步回调获得数据
+        $.ajax({
+            url: 'api/school/scholar_number',
+            data: {school_names: [school_name]},
+            dataType: 'json',
+            type: 'POST',
+        }).done(function (data) {
+            //TODO:默认获取第一个学校
+            let school = data[school_name];
+            let dataset = [];
+            for (let i in scholar_keys){
+                let key = scholar_keys[i];
+                dataset.push(school[key]);
+            }
+            verticalGraph.setData(dataset);
+        });
     }
 }
 /**
@@ -119,3 +137,9 @@ $.ajax({
         console.log('未发现匹配的高校');
     }
 });
+//竖柱状图
+let verticalSvg = d3.select('#school-chart');
+let xTexts = [ "重点实验室", "重点学科","院士","长江学者","杰出青年" ];
+var scholar_keys = ['key_laboratory', 'key_subject', 'academician', 'changjiang', 'outstanding'];
+let verticalGraph = new VerticalBarGraph(verticalSvg, xTexts);
+

@@ -70,6 +70,36 @@ class SchoolService:
 
         return data
 
+    def get_total_scholars_by_schools(self, school_names):
+        """
+        获取学校的所有学者，以及种类
+        :param school_names: 学校名称
+        :return:
+        """
+        #                      重点学科   重点实验室  院士                长江学者    杰出青年
+        keys = ['SCHOOL_NAME', 'NKD_NUM', 'SKL_NUM', 'ACADEMICIAN_NUM', 'CJSP_NUM', 'OUTSTANDING_NUM']
+        trans_keys = ['key_subject', 'key_laboratory', 'academician', 'changjiang', 'outstanding']
+        results = school_dao.get_total_colleges_by_names(school_names, keys)
+        # 聚合，并设置成字典
+        schools = {}
+        for result in results:
+            # 获取学校
+            school_name = result['SCHOOL_NAME']
+            if school_name not in schools:
+                schools[school_name] = {}
+            school = schools[school_name]
+            # 设置数目
+            for i in range(1, len(keys)):
+                key = keys[i]
+                trans_key = trans_keys[i - 1]
+                number = result[key] if result[key] is not None else 0
+                # 添加键
+                if trans_key not in school:
+                    school[trans_key] = 0
+                school[trans_key] += number
+
+        return schools
+
     def normalization_institution(self, institution):
         """
         对学院的信息进行标准化，如把出生日期转为年龄
@@ -98,6 +128,8 @@ if __name__ == '__main__':
     # print(school_service.get_teachers_by_school(17134))
     # print(school_service.get_teachers_by_school(17134, 557))
 
-    institutions = school_service.get_institutions_by_ids(17134, [547, 548])
-    for _, institution in institutions.items():
-        print(institution)
+    # institutions = school_service.get_institutions_by_ids(17134, [547, 548])
+    # for _, institution in institutions.items():
+    #     print(institution)
+    print(school_dao.get_total_colleges_by_names(['东南大学', '清华大学']))
+    print(school_service.get_total_scholars_by_schools(['东南大学', '清华大学']))
