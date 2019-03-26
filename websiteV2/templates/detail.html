@@ -1,0 +1,118 @@
+{% extends 'template.html' %}
+
+{% block title %}专家详情{% endblock %}
+
+{% block head %}
+    <link href="{{ url_for('static', filename='css/detail.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row row-area">
+            <div class="col-sm-3 col-md-2 col-lg-2 img-container">
+                <img src="{{ url_for('static', filename='images/001.jpg') }}" alt="">
+            </div>
+            <div class="col-sm-9 col-md-10 col-lg-10 scholar-info">
+                <!-- 内容 -->
+                <div class="scholar-name"> <strong> <a href="#" > 某人</a>  </strong> </div>
+                <div class="scholar-depart">南京大学 ， 计算机学院 </div>
+                <div class="scholar-tags">
+                    <span>40岁</span>
+                    <span>院士</span>
+                    <span>教授</span>
+                </div>
+                <div class="scholar-depart">
+                    邮箱：123@1234.com
+                </div>
+            </div>
+        </div>
+
+        <!-- 词云 -->
+        <div class="row row-area justify-content-center">
+            <svg id="word-cloud" class="col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2" height=100 style="background:#333"></svg>
+        </div>
+
+        <!-- 关系网 -->
+        <div class="row row-area justify-content-center">
+            <svg id="relation-net" class="col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2" height=100 style="background:gray"></svg>
+        </div>
+
+        <!-- 成果：论文，项目，专利 -->
+        <div class="row row-area" style="border-bottom:none">
+            <ul class="nav nav-tabs">
+                <li class="active" >
+                    <a href="#paper-list" data-toggle="tab"> 
+                        <i class="glyphicon glyphicon-book"></i> 论文成果(3)</a>
+                </li>
+                <li>
+                    <a href="#project-list" data-toggle="tab">
+                        <i class="glyphicon glyphicon-tasks"></i> 科研项目(3)</a>
+                </li>
+                <li>
+                    <a href="#patent-list" data-toggle="tab">
+                        <i class="glyphicon glyphicon-hdd"></i> 发明专利(3)</a>
+                </li>
+            </ul>
+        <div class="tab-content">
+            <ul class="tab-pane fade in active" id="paper-list">
+                <li>
+                    <div class="inline-block">
+                        <i class="glyphicon glyphicon-book"></i> 测绘工程专业摄影测量学实验教学改革探索
+                    </div>
+                    <div class="inline-block">
+                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
+                    </div>
+                </li>
+                <li> <div class="inline-block">
+                        <i class="glyphicon glyphicon-book"></i> 测绘工程专业摄影测量学实验教学改革探索
+                    </div>
+                    <div class="inline-block">
+                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
+                    </div>
+                </li>
+                <li> <div class="inline-block">
+                        <i class="glyphicon glyphicon-book"></i> 测绘工程专业摄影测量学实验教学改革探索
+                    </div>
+                    <div class="inline-block">
+                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
+                    </div>
+                </li>
+            </ul>
+            <ul class="tab-pane fade in" id="project-list">
+                <li>
+                    <div class="inline-block">
+                        <i class="glyphicon glyphicon-tasks"></i> 测绘工程专业摄影测量学实验教学改革探索
+                    </div>
+                    <div class="inline-block">
+                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
+                    </div>
+                </li>
+                <li>
+                    <div class="inline-block">
+                        <i class="glyphicon glyphicon-tasks"></i> 测绘工程专业摄影测量学实验教学改革探索
+                    </div>
+                    <div class="inline-block">
+                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
+                    </div>
+                </li>
+            </ul>
+            <ul class="tab-pane fade in" id="patent-list">
+                <li>
+                    <div class="inline-block">
+                        <i class="glyphicon glyphicon-hdd"></i> 测绘工程专业摄影测量学实验教学改革探索
+                    </div>
+                    <div class="inline-block">
+                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+<script>
+    
+</script>
+</html>

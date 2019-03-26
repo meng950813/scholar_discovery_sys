@@ -1,0 +1,88 @@
+/* by chen */
+.row-area{
+    border-bottom: 1px dotted grey;
+    padding: 20px 0;
+}
+
+
+.img-container{
+    text-align: center;
+}
+.img-container img{
+    border-radius: 50%;
+    width: 120px; 
+    height: 120px; 
+}
+
+.scholar-depart{
+    line-height: 30px;
+}
+
+.scholar-name{
+    font-size: 24px;
+    line-height: 40px;
+}
+
+.scholar-tags span{
+    display: inline-block;
+    padding: 0 10px;
+    margin: 5px 0;
+    border-left: 1px solid gray; 
+}
+.scholar-tags span:first-child{
+    border-left: none;
+}
+
+
+
+ul.tab-pane{
+    padding:10px; 
+}
+
+ul.tab-pane li{
+    margin: 10px 0;
+    font-size: 14px; 
+    padding: 10px 0 10px 10px;
+    
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    -ms-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+
+    -webkit-transition: all 0.4s ease-out;
+    -moz-transition: all 0.4s ease-out;
+    -ms-transition: all 0.4s ease-out;
+    -o-transition: all 0.4s ease-out;
+    transition: all 0.4s ease-out;
+}
+
+ul.tab-pane li:hover{
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    -ms-box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    -o-box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+}
+
+ul.tab-pane li  i{
+    color: #ffcc62;
+    margin-right: 10px;
+}
+
+ul.tab-pane li  span{
+    display: inline-block;
+    margin-right: 10px;
+}
+
+
+.inline-block{
+    display: inline-block;
+    margin-right: 20px;
+}
+
+
+
+
+
+
