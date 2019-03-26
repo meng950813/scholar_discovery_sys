@@ -79,7 +79,7 @@ class VerticalBarGraph{
                 return that.height - that.margin.top - that.margin.bottom - that.yScale(d);
             });
         //添加文字
-        let fontSize = 1;
+        let fontSize = 5;
         group.append('text')
             .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")")
             .attr("x", function(d,i){
@@ -89,7 +89,7 @@ class VerticalBarGraph{
                 return that.yScale(d) - 25;
             })
             .attr("dx",function(d){
-                let len = String(d);
+                let len = String(d).length;
                 return (that.xScale.bandwidth() - rectPadding - fontSize * len)/2;
             })
             .attr("dy",20)

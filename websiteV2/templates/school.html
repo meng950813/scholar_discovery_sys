@@ -120,8 +120,8 @@
     <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/d3.my_common.js') }}"></script>
     <script src="{{ url_for('static', filename='js/map02.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/map_govern.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bar_graph.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/govern_index.js') }}"></script>
 
     <script>
         $(".map-change").on("click",function(e){
@@ -131,13 +131,6 @@
         })
         // let bodyHeight = document.body.clientHeight;
         // $(".outer").height(bodyHeight / 2  - 70 ) ;
-    </script>
-    <script type="text/javascript">
-        let svg = d3.select('#school-chart');
-        let xTexts = [ "重点实验室", "重点学科","院士","长江学者","杰出青年" ];
-        let verticalGraph = new VerticalBarGraph(svg, xTexts);
-
-        verticalGraph.setData([7, 12, 16, 9, 3]);
     </script>
 </body>
 </html>

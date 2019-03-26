@@ -72,25 +72,8 @@ function onTagClicking(tag, datum, index){
         let cityName = datum['city'];
         let schools = datum['schools'];
         //TODO:在此处进行操作
-        console.log(cityName, schools);
-        //TODO:默认获取第一个学校名称
-        let school_name = schools[0].name;
-        //异步回调获得数据
-        $.ajax({
-            url: 'api/school/scholar_number',
-            data: {school_names: [school_name]},
-            dataType: 'json',
-            type: 'POST',
-        }).done(function (data) {
-            //TODO:默认获取第一个学校
-            let school = data[school_name];
-            let dataset = [];
-            for (let i in scholar_keys){
-                let key = scholar_keys[i];
-                dataset.push(school[key]);
-            }
-            verticalGraph.setData(dataset);
-        });
+        //console.log(cityName, schools);
+        loadAndShowVerticalBarGraph(schools);
     }
 }
 /**
@@ -110,6 +93,31 @@ function getToolTip(type, datum){
     return html;
 }
 
+/**
+ * 加载并展示竖柱状图，可以在以后添加数据缓存
+ * @param schools [{name: '清华大学'}]
+ */
+function loadAndShowVerticalBarGraph(schools){
+    //TODO:默认获取第一个学校名称
+    let school_name = schools[0].name;
+    //异步回调获得数据
+    $.ajax({
+        url: 'api/school/scholar_number',
+        data: {school_names: [school_name]},
+        dataType: 'json',
+        type: 'POST',
+    }).done(function (data) {
+        //TODO:默认获取第一个学校
+        let school = data[school_name];
+        let dataset = [];
+        //映射，获取每一列对应的值
+        for (let i in scholar_keys){
+            let key = scholar_keys[i];
+            dataset.push(school[key]);
+        }
+        verticalGraph.setData(dataset);
+    });
+}
 
 //main
 let mapSvg = d3.select('#map');
