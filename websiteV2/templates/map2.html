@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>d3-地图v2</title>
+    <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='resources/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/map02.js') }}"></script>
+    <style>
+        #tooltip {
+            background:rgba(0,0,0,0.9);
+            position: absolute;
+            text-align: center;
+            margin: 10px;
+            border:1px solid grey;
+            pointer-events: none;
+            border-radius:5px;
+            font-size:12px;
+            width:auto;
+            padding:4px;
+            color:white;
+            opacity:0;
+        }
+        #sample{
+            fill: none;
+            stroke: brown;
+            stroke-width: 2;
+        }
+    </style>
+</head>
+<body>
+    <svg width="800" height="600"></svg>
+</body>
+<script type="text/javascript">
+    let svg = d3.select('svg');
+
+    let tags = [
+        {longitude: 120.986014, latitude: 31.386424, color: '#2b81ff'},//昆山
+        {longitude: 118.961649, latitude: 32.126631},//东南大学
+        {longitude: 116.342122, latitude: 39.999281},//清华大学
+        {longitude: 114.363195, latitude: 30.533765}, //华中科技大学
+        {longitude: 120.148047, latitude: 30.280491}, //浙大
+        ];
+    //let tags = [{longitude:120.986014, latitude: 31.386424}];
+    let hotData = {'江苏省': {float: 1}, '北京市': {float: 0.8}, '湖北省': {float: 0.4}, '浙江省': {float: 0.2}};
+    let chinaMap = new ChinaMap2(svg);
+    //chinaMap.show(['中国', '江苏省']);
+    //默认显示中国地图
+    chinaMap.show();
+    //设置标记点
+    chinaMap.setTags(tags);
+    //设置热力图
+    chinaMap.setHotSpotData(hotData);
+</script>
+</html>
