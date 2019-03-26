@@ -27,7 +27,7 @@ class Subject:
         self.basepath = path
         self.path = os.path.join(path, 'querydata', code, 'k' + str(k))
         # 词的索引 wordIndex
-        self.lmindex = pickle.load(open(os.path.join(self.path, 'wordIndex'),'rb'))
+        self.lmindex = pickle.load(open(os.path.join(self.path, 'wordIndex'), 'rb'))
         # word和topic的关系
         self.ldaword = pickle.load(open(os.path.join(self.path, 'wordToTopic'), 'rb'))
         # 教师和topic的关系
@@ -104,10 +104,6 @@ class Subject:
         rank = {}
         # wd是res的key,代表词，res[wd]还是字典，代表词对应的老师及其对该词的值，r是res[wd]中的key,代表老师id
         exp_list = [r for wd in res.keys() for r in res[wd]]
-        for wd in lda.keys():
-            for r in lda[wd]:
-                exp_list.append(r)
-
         exp_list = set(exp_list)
         if 'col' in exp_list:
             # 教师名单，所以去掉cof
@@ -131,8 +127,6 @@ class Subject:
             for wd in lda:
                 if wd not in res and r in lda[wd]:
                     rank[r] *= lda[wd][r]
-                else:
-                    rank[r] *= 10e-6
             if self.pagerank.get(r):
                 rank[r] *= self.pagerank[r] * self.id_name[r]["total"]
         return rank
@@ -182,21 +176,23 @@ class Query:
         self.subs = subs
         # {teacher_id1:{id:xx,name:xxx},...}
         path = 'G:/w_project/scholar_discovery_sys/query'
-        self.id_name = pickle.load(open(os.path.join(path,'querydata','teacherName'), 'rb'))
-        self.institution_info = pickle.load(open(os.path.join(path,'querydata','institutionName'), 'rb'))
-        self.school_info =pickle.load(open(os.path.join(path,'querydata','SchoolName'), 'rb'))
+        self.id_name = pickle.load(open(os.path.join(path, 'querydata', 'teacherName'), 'rb'))
+        self.institution_info = pickle.load(open(os.path.join(path, 'querydata', 'institutionName'), 'rb'))
+        self.school_info = pickle.load(open(os.path.join(path, 'querydata', 'SchoolName'), 'rb'))
         # self.Subject {code1:Subject(sub1),sode2:Subject2(sub2)}
 
-        self.Subject = {sub['code']: Subject(sub, self.id_name,path) for sub in self.subs}
+        self.Subject = {sub['code']: Subject(sub, self.id_name, path) for sub in self.subs}
         self.stop = []
-        stopword = [line.strip() for line in open(os.path.join(path,'querydata','stopwords.txt'), encoding='utf-8').readlines()]
-        stopword1 = [line.strip() for line in open(os.path.join(path,'querydata','stop_word_4.txt'), encoding='utf-8').readlines()]
+        stopword = [line.strip() for line in
+                    open(os.path.join(path, 'querydata', 'stopwords.txt'), encoding='utf-8').readlines()]
+        stopword1 = [line.strip() for line in
+                     open(os.path.join(path, 'querydata', 'stop_word_4.txt'), encoding='utf-8').readlines()]
         stopwords = [i.split(':')[0] for i in stopword1]
         self.stop.extend(stopword)
         self.stop.extend(stopwords)
         self.fill = ['vn', 'n', 'nr', 'nr1', 'nr2', 'nrj', 'nrf', 'ns', 'nsf',
                      'nt', 'nz', 'nl', 'ng']
-        jieba.load_userdict(os.path.join(path,'querydata','userdict.txt'))
+        jieba.load_userdict(os.path.join(path, 'querydata', 'userdict.txt'))
 
     def prints(self, result):
         '''
@@ -250,12 +246,14 @@ class Query:
                 schoolName = self.institution_info[institution_id]['SCHOOL_NAME']
                 # 打印所查学校的院系
                 if schoolName == school:
-                    query_result.append((schoolName, self.institution_info[institution_id]['NAME'],institution_rank[institution_id]))
+                    query_result.append(
+                        (schoolName, self.institution_info[institution_id]['NAME'], institution_rank[institution_id]))
         else:
             for institution_id in institution_rank:
                 schoolName = self.institution_info[institution_id]['SCHOOL_NAME']
                 # print(schoolName + self.institution_info[institution_id]['NAME'] + str(institution_rank[institution_id]))
-                query_result.append((schoolName, self.institution_info[institution_id]['NAME'],institution_rank[institution_id]))
+                query_result.append(
+                    (schoolName, self.institution_info[institution_id]['NAME'], institution_rank[institution_id]))
         return query_result
 
     def prints_for_school(self, result, city=None):
@@ -346,8 +344,6 @@ class Query:
         return result
 
 
-
-
 def queryForTeacher(words, institution_id='1526'):
     '''
     搜索教师
@@ -377,6 +373,7 @@ subject = [
     {"code": '0830', "k": 18}, {"code": '0831', "k": 10}, {"code": '0832', "k": 12}]
 
 query = Query(subject)
+
 
 def query_all(range, words, limit=None):
     '''
@@ -411,7 +408,7 @@ def query_all(range, words, limit=None):
 
 if __name__ == '__main__':
     """
-    
+
     """
     result_info = query_all('学校', '发动机')
     print(result_info)
