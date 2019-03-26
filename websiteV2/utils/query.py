@@ -178,7 +178,7 @@ class Query:
 
         self.Subject = {sub['code']: Subject(sub, self.id_name,path) for sub in self.subs}
         self.stop = []
-        stopword = [line.strip() for line in open(os.path.join(path,'querydata','stopwords.txt'), encoding='utf-8').readlines()]
+        stopword = [line.strip() for line in open(os.path.join(path,'querydata','StopWords.txt'), encoding='utf-8').readlines()]
         stopword1 = [line.strip() for line in open(os.path.join(path,'querydata','stop_word_4.txt'), encoding='utf-8').readlines()]
         stopwords = [i.split(':')[0] for i in stopword1]
         self.stop.extend(stopword)
