@@ -67,5 +67,11 @@ def map():
     return render_template('map2.html')
 
 
+@app.route('/bar')
+def bar():
+    """测试柱状图的路由函数"""
+    return render_template('bar.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
