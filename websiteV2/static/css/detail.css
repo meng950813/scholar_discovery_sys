@@ -5,13 +5,18 @@
 }
 
 
-.img-container{
-    text-align: center;
-}
-.img-container img{
+
+
+#image{
+    text-align:center;
+    width:100px;
+    height:100px;
+    margin-left: 30px;
     border-radius: 50%;
-    width: 120px; 
-    height: 120px; 
+    background-color: #00a0e9;
+    font-size: 40px;
+    color: white;
+    line-height: 100px;
 }
 
 .scholar-depart{

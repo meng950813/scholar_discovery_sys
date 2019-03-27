@@ -59,13 +59,18 @@ def relation():
 
 @app.route('/school', methods=['GET', 'POST'])
 def school():
-    """测试学校使用的路由函数"""
-    if request.method == 'GET':
-        keyword = request.args.get('simple-input')
-    elif request.method == 'POST':
-        keyword = request.form.get('simple-input')
-    return render_template('school.html', keyword=keyword)
-
+    """没有登录点击搜索跳转到登录界面"""
+    user = session.get("username")
+    print(user)
+    if user:
+        """测试学校使用的路由函数"""
+        if request.method == 'GET':
+            keyword = request.args.get('simple-input')
+        elif request.method == 'POST':
+            keyword = request.form.get('simple-input')
+        return render_template('school.html', keyword=keyword,user=user)
+    else:
+        return render_template("components/login.html")
 
 @app.route('/map')
 def map():
@@ -75,6 +80,7 @@ def map():
 
 @app.route('/detail/<int:teacher_id>')
 def detail(teacher_id):
+    user = session.get("username")
     """测试详情页的路由函数"""
     school_name = request.args.get('school_name')
     college_name = request.args.get('college_name')
@@ -91,7 +97,8 @@ def detail(teacher_id):
                            school_name=school_name,
                            college_name=college_name,
                            info=info,
-                           papers=papers)
+                           papers=papers,
+                           user=user)
 
 
 @app.route('/bar')
@@ -101,4 +108,5 @@ def bar():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.jinja_env.auto_reload = True
+    app.run("0.0.0.0", debug=True)
