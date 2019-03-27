@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, request
 import logging
 from controllers.api import api_blueprint
 from controllers.user import user_blueprint
@@ -7,6 +7,7 @@ from controllers.agent import agent_blueprint
 from utils import db
 from config import DB_CONFIG
 from config import SESSION_KEY
+from service.teacherservice import teacher_service
 
 app = Flask(__name__)
 app.register_blueprint(api_blueprint)
@@ -67,10 +68,22 @@ def map():
     return render_template('map2.html')
 
 
-@app.route('/detail')
-def detail():
+@app.route('/detail/<int:teacher_id>')
+def detail(teacher_id):
     """测试详情页的路由函数"""
-    return render_template('detail.html')
+    school_name = request.args.get('school_name')
+    college_name = request.args.get('college_name')
+    # 获取老师的信息
+    info = teacher_service.get_teacher_info_by_id(teacher_id)
+    # 获取论文
+    papers = teacher_service.get_papers_by_id(teacher_id)
+    return render_template('detail.html',
+                           school_name=school_name,
+                           college_name=college_name,
+                           info=info,
+                           papers=papers)
+
+
 @app.route('/bar')
 def bar():
     """测试柱状图的路由函数"""

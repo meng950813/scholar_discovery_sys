@@ -14,27 +14,38 @@
             </div>
             <div class="col-sm-9 col-md-10 col-lg-10 scholar-info">
                 <!-- 内容 -->
-                <div class="scholar-name"> <strong> <a href="#" > 某人</a>  </strong> </div>
-                <div class="scholar-depart">南京大学 ， 计算机学院 </div>
+                <div class="scholar-name"> <strong> <a href="#" > {{ info['name'] }}</a>  </strong> </div>
+                <div class="scholar-depart">{{ school_name }} - {{ college_name }}</div>
                 <div class="scholar-tags">
-                    <span>40岁</span>
-                    <span>院士</span>
-                    <span>教授</span>
+                    {% if info['yearsold'] %}
+                        <span>{{ info['yearsold'] }}</span>
+                    {% endif %}
+                    {% if info['title'] %}
+                        <span>{{ info['title'] }}</span>
+                    {% endif %}
+                    {% if info['OUTYOUTH'] %}
+                        <span>杰出青年</span>
+                    {% endif %}
+                    {% if info['CHANGJIANG'] %}
+                        <span>长江学者</span>
+                    {% endif %}
                 </div>
                 <div class="scholar-depart">
-                    邮箱：123@1234.com
+                    {% if info['email'] %}
+                        邮箱：{{ info['email'] }}
+                    {% endif %}
                 </div>
             </div>
         </div>
 
         <!-- 词云 -->
         <div class="row row-area justify-content-center">
-            <svg id="word-cloud" class="col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2" height=100 style="background:#333"></svg>
+            <svg id="word-cloud" class="col-sm-12 col-md-10 col-lg-12" width="1200" height="400" ></svg>
         </div>
 
         <!-- 关系网 -->
         <div class="row row-area justify-content-center">
-            <svg id="relation-net" class="col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2" height=100 style="background:gray"></svg>
+            <svg id="relation-net" class="col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2" width="900" height="400"></svg>
         </div>
 
         <!-- 成果：论文，项目，专利 -->
@@ -42,77 +53,72 @@
             <ul class="nav nav-tabs">
                 <li class="active" >
                     <a href="#paper-list" data-toggle="tab"> 
-                        <i class="glyphicon glyphicon-book"></i> 论文成果(3)</a>
+                        <i class="glyphicon glyphicon-book"></i> 论文成果({{ papers | length }})</a>
                 </li>
                 <li>
                     <a href="#project-list" data-toggle="tab">
-                        <i class="glyphicon glyphicon-tasks"></i> 科研项目(3)</a>
+                        <i class="glyphicon glyphicon-tasks"></i> 科研项目(0)</a>
                 </li>
                 <li>
                     <a href="#patent-list" data-toggle="tab">
-                        <i class="glyphicon glyphicon-hdd"></i> 发明专利(3)</a>
+                        <i class="glyphicon glyphicon-hdd"></i> 发明专利(0)</a>
                 </li>
             </ul>
         <div class="tab-content">
             <ul class="tab-pane fade in active" id="paper-list">
-                <li>
-                    <div class="inline-block">
-                        <i class="glyphicon glyphicon-book"></i> 测绘工程专业摄影测量学实验教学改革探索
-                    </div>
-                    <div class="inline-block">
-                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
-                    </div>
-                </li>
+                {% for paper in papers %}
                 <li> <div class="inline-block">
-                        <i class="glyphicon glyphicon-book"></i> 测绘工程专业摄影测量学实验教学改革探索
+                        <i class="glyphicon glyphicon-book"></i> 《{{ paper['name'] }}》
                     </div>
                     <div class="inline-block">
-                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
+                        <span>发表自{{ paper['org'] }}</span>   引用次数：<span>{{ paper['cited_num'] }}</span>
                     </div>
                 </li>
-                <li> <div class="inline-block">
-                        <i class="glyphicon glyphicon-book"></i> 测绘工程专业摄影测量学实验教学改革探索
-                    </div>
-                    <div class="inline-block">
-                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
-                    </div>
-                </li>
+                {% endfor %}
             </ul>
             <ul class="tab-pane fade in" id="project-list">
-                <li>
-                    <div class="inline-block">
-                        <i class="glyphicon glyphicon-tasks"></i> 测绘工程专业摄影测量学实验教学改革探索
-                    </div>
-                    <div class="inline-block">
-                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
-                    </div>
-                </li>
-                <li>
-                    <div class="inline-block">
-                        <i class="glyphicon glyphicon-tasks"></i> 测绘工程专业摄影测量学实验教学改革探索
-                    </div>
-                    <div class="inline-block">
-                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
-                    </div>
-                </li>
             </ul>
             <ul class="tab-pane fade in" id="patent-list">
-                <li>
-                    <div class="inline-block">
-                        <i class="glyphicon glyphicon-hdd"></i> 测绘工程专业摄影测量学实验教学改革探索
-                    </div>
-                    <div class="inline-block">
-                        期刊：<span>《测绘通报》</span>   引用次数：<span>947</span>  作者：<span>袁隆平</span>    
-                    </div>
-                </li>
             </ul>
         </div>
 
         </div>
     </div>
 {% endblock %}
+{% block script %}
+    <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/wordcloud.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/relation.js') }}"></script>
+<script type="text/javascript">
+    //处理词云
+    let fields = {{ info['fields'] | safe}};
+    let data = [];
+    //转换成词云需要的格式
+    for (let key in fields){
+        let value = fields[key];
+        data.push({text: key, size: value * 100 * 6});
+    }
+    let wordCloud = new WordCloud(d3.select('#word-cloud'));
+    wordCloud.setData(data);
+    //关系图
+    let teacher_id = {{ info['id'] }};
+    let relationGraph = new RelationGraph(d3.select('#relation-net'));
+    //异步调用
 
-<script>
-    
+    $.ajax({
+        url: '/api/teacher/relation',
+        type: 'POST',
+        data: {"teacher_id": teacher_id},
+        dataType: 'json',
+        success: function (json_data) {
+            if (json_data.nodes.length > 0)
+                relationGraph.setData(json_data);
+            else
+                console.log('detail，该老师暂时没有关系图');
+        }
+    });
 </script>
+{% endblock %}
+
 </html>

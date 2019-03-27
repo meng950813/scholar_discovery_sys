@@ -56,6 +56,18 @@ class TeacherDao:
 
         return results
 
+    def get_papers_by_id(self, teacher_id, keys=None):
+        """
+        根据老师id获取他的所有论文
+        :param teacher_id: 老师的id
+        :param keys:
+        :return:
+        """
+        sql = "select %s from eds_paper_clean where author_id=?" % \
+                 (','.join(keys) if keys is not None else '*')
+        results = db.select(sql, teacher_id)
+        return results
+
 
 teacher_dao = TeacherDao()
 
@@ -83,4 +95,6 @@ if __name__ == '__main__':
     # 获取所有学术头衔
     total_categories = teacher_dao.get_total_academic_titles()
     print(total_categories)
+
+    print(teacher_dao.get_papers_by_id(100874))
 

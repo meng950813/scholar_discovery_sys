@@ -9,6 +9,12 @@ import time
 
 
 class TeacherService:
+
+    def __init__(self):
+        self.teacher_info_mapping = {
+            'ID': 'id', 'NAME': 'name', 'TITLE': 'title', 'FIELDS': 'fields', 'EMAIL': 'email'
+        }
+
     @staticmethod
     def get_relations_by_ids(id_list):
         """
@@ -39,6 +45,12 @@ class TeacherService:
             teachers[teacher_id] = result
         return teachers
 
+    def get_teacher_info_by_id(self, teacher_id):
+        keys = ['ID', 'NAME', 'TITLE', 'EMAIL', 'FIELDS', 'ACADEMICIAN', 'OUTYOUTH', 'CHANGJIANG']
+        result = teacher_dao.get_teachers_by_ids([teacher_id], keys=keys)[0]
+        info = self.normalization_teacher(result, False)
+        return info
+
     def get_teachers_grouping_institutions(self, id_list, keys=None, elimination=None):
         """
         根据老师的id数组获取老师并按学校和学院进行分组
@@ -63,8 +75,7 @@ class TeacherService:
                 school[institution_id]['teachers'] = []
             # 过滤老师
             if elimination is None or elimination(teacher) is False:
-                teacher['YEAROLD'] = None
-                self.normalization_teacher(teacher)
+                teacher = self.normalization_teacher(teacher, True)
                 school[institution_id]['teachers'].append(teacher)
 
         return results
@@ -88,20 +99,41 @@ class TeacherService:
 
         return total_titles
 
-    def normalization_teacher(self, teacher):
+    def get_papers_by_id(self, teacher_id):
+        """
+        获取老师的所有论文数组
+        :param teacher_id: 老师id
+        :return: 论文信息数组
+        """
+        keys = ['name', 'org', 'year', 'cited_num']
+        results = teacher_dao.get_papers_by_id(teacher_id, keys=keys)
+        return results
+
+    def normalization_teacher(self, teacher, isFieldList=True):
         """
         对老师的信息进行标准化，如把出生日期转为年龄
         :param teacher: 老师的信息字典
+        :param isFieldList: 老师关键字是否只有值
         :return: 转换好的老师信息，和参数teacher相同
         """
+        info = {}
         for key, value in teacher.items():
+            trans_key = self.teacher_info_mapping.get(key, None)
             # 转换领域
             if key == 'FIELDS' and value is not None:
                 fields = value.replace("\'", "\"")
-                teacher[key] = tuple(json.loads(fields).keys())
+                if isFieldList:
+                    info[trans_key] = tuple(json.loads(fields).keys())
+                else:
+                    info[trans_key] = fields
             elif key == 'BIRTHYEAR' and value is not None:
-                teacher['YEAROLD'] = time.localtime(time.time()).tm_year - int(teacher['BIRTHYEAR'])
-        return teacher
+                info['yearsold'] = time.localtime(time.time()).tm_year - int(teacher['BIRTHYEAR'])
+            elif trans_key is not None:
+                info[trans_key] = teacher[key]
+            else:
+                info[key] = teacher[key]
+
+        return info
 
 
 teacher_service = TeacherService()
@@ -128,3 +160,5 @@ if __name__ == '__main__':
     id_arr = [159822, 159729, 159835, 159805, 159742, 159842, 159739, 159808, 159737, 159828, 99181, 99236, 99318, 99329, 99304, 99234, 99252, 99259]
     tkeys = ['ID', 'NAME', 'TITLE', 'SCHOOL_ID', 'INSTITUTION_ID', 'BIRTHYEAR', 'FIELDS', 'ACADEMICIAN', 'OUTYOUTH', 'CHANGJIANG']
     print(teacher_service.get_teachers_grouping_institutions(id_arr, tkeys, lambda t: t['FIELDS'] is None))
+    print(teacher_service.get_teacher_info_by_id(73932))
+    print(teacher_service.get_papers_by_id(100874))
