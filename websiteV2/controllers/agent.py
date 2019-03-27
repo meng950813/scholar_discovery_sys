@@ -25,17 +25,16 @@ def search():
 
     data = api.get_teachers_by_school(school_name, keyword)
     # 学者个数
-    number = 0
+    number = data['number']
     # 学院信息
     institutions = data['institutions']
-    for name, values in institutions.items():
-        if len(values["teachers"]) > 3:
-            number = number + 3
-        else:
-            number = number + len(values["teachers"])
     # 渲染，并传递参数
-    return render_template('./components/schoolScholar.html', user=session.get('username'), keyword=keyword,
-                           number=number, intstitutions=institutions)
+    return render_template('./components/schoolScholar.html',
+                           user=session.get('username'),
+                           keyword=keyword,
+                           number=number,
+                           intstitutions=institutions,
+                           school_name=school_name)
 
 
 @agent_blueprint.route("/governPersonal")

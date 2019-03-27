@@ -198,11 +198,12 @@ def institution_relation():
     return json.dumps(data)
 
 
-def get_teachers_by_school(school_name, keyword):
+def get_teachers_by_school(school_name, keyword, limit_teacher_num=3):
     """
     根据学校名和关键字获得该学校的相关的所有老师，并按照学院进行聚合
     :param school_name: 学校名
     :param keyword: 关键字
+    :param limit_teacher_num: 限制的老师数目 默认为三个
     :return: dict
     """
     # 查询
@@ -227,14 +228,20 @@ def get_teachers_by_school(school_name, keyword):
         keys = ['ID', 'NAME', 'TITLE', 'SCHOOL_ID', 'INSTITUTION_ID', 'BIRTHYEAR', 'FIELDS', 'ACADEMICIAN', 'OUTYOUTH', 'CHANGJIANG']
         data = teacher_service.get_teachers_grouping_institutions(teacher_ids, keys, lambda t: t['FIELDS'] is None)
         # 获取学院信息
-        infos = school_service.get_institutions_by_ids(school_id, id_institutions.keys(), institution_keys) if len(id_institutions) > 0 else {}
+        infos = school_service.get_institutions_by_ids(school_id, id_institutions.keys(), institution_keys) \
+            if len(id_institutions) > 0 else {}
         # 获取学校
         school = data[school_id]
         # 转换学院id=> 学院名
         for institution_id, values in school.items():
             if isinstance(institution_id, int):
                 institution_name = id_institutions[institution_id]
-                teacher_count += len(values['teachers'])
+                # 限制老师数量
+                if len(values['teachers']) > limit_teacher_num:
+                    values['teachers'] = values['teachers'][:limit_teacher_num]
+                    teacher_count += limit_teacher_num
+                else:
+                    teacher_count += len(values['teachers'])
                 school[institution_name] = {'teachers': school.pop(institution_id)['teachers'], 'info': infos[institution_id]}
     return {
              'number': teacher_count,
