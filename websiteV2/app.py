@@ -44,10 +44,10 @@ def index():
 
     if user:
         if user["TYPE"] == "1":
-            return render_template("index.html", user=user)
+            return render_template("business_search.html", user=user)
         else:
             return render_template("schoolBasic.html", user=user)
-    return render_template("index.html")
+    return render_template("business_search.html")
 
 
 @app.route('/relation')
@@ -56,10 +56,14 @@ def relation():
     return render_template('relation.html')
 
 
-@app.route('/school')
+@app.route('/school', methods=['GET', 'POST'])
 def school():
     """测试学校使用的路由函数"""
-    return render_template('school.html')
+    if request.method == 'GET':
+        keyword = request.args.get('simple-input')
+    elif request.method == 'POST':
+        keyword = request.form.get('simple-input')
+    return render_template('school.html', keyword=keyword)
 
 
 @app.route('/map')

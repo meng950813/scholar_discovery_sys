@@ -265,22 +265,25 @@ chinaMap.getToolTipHTMLHook = getToolTip;
 //异步回调获得数据
 $.ajax({
     url: 'api/school/addressV2',
-    data: {'keyword': '计算机', maximum: 5},
+    data: {'keyword': d3.select('#search-keyword').text(), maximum: 5},
     dataType: 'json',
     type: 'POST',
 }).done(function (data) {
-    console.log(data);
-    let handled_data = handle_school_data(data);
-    let hot_data = handled_data['hot_data'];
-    let tag_data = handled_data['tag_data'];
-    //tag_data.push({longitude: 120.986014, latitude: 31.386424, color: '#2b81ff'});
-    chinaMap.setHotSpotData(hot_data);
-    chinaMap.setTags(tag_data);
-    if(data == null){
+    //没有搜到合适的学校
+    if (data.length > 0)
+    {
+        console.log(data);
+        let handled_data = handle_school_data(data);
+        let hot_data = handled_data['hot_data'];
+        let tag_data = handled_data['tag_data'];
+        //tag_data.push({longitude: 120.986014, latitude: 31.386424, color: '#2b81ff'});
+        chinaMap.setHotSpotData(hot_data);
+        chinaMap.setTags(tag_data);
+        //获取学校的具体信息，即学者数量,并保存到全局变量中
+        getSchoolsInfo(data);
+    }else{
         console.log('未发现匹配的高校');
     }
-    //获取学校的具体信息，即学者数量,并保存到全局变量中
-    getSchoolsInfo(data);
 });
 /////////////////////////////////////
 
@@ -314,7 +317,3 @@ $("#school-list").on("click", function(e){
         drawSchoolChart($target.attr("data-name"));
     }
 });
-
-
-//关系图
-let relationGraph = new RelationGraph(d3.select('#relation-chart'));

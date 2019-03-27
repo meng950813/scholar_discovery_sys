@@ -80,6 +80,7 @@ class SchoolService:
         keys = ['SCHOOL_NAME', 'NKD_NUM', 'SKL_NUM', 'ACADEMICIAN_NUM', 'CJSP_NUM', 'OUTSTANDING_NUM']
         trans_keys = ['key_subject', 'key_laboratory', 'academician', 'changjiang', 'outstanding']
         results = school_dao.get_total_colleges_by_names(school_names, keys)
+        results = results if results is not None else []
         # 聚合，并设置成字典
         schools = {}
         for result in results:
