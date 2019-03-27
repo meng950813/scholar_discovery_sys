@@ -12,7 +12,7 @@ class TeacherService:
 
     def __init__(self):
         self.teacher_info_mapping = {
-            'ID': 'id', 'NAME': 'name', 'TITLE': 'title', 'FIELDS': 'fields', 'EMAIL': 'email'
+            'ID': 'id', 'NAME': 'name', 'FIELDS': 'fields', 'EMAIL': 'email'
         }
 
     @staticmethod
@@ -39,10 +39,7 @@ class TeacherService:
         teachers = {}
         for result in results:
             teacher_id = result['ID']
-            result.pop('ID')
-            # 设置title
-            result['TITLE'] = result['TITLE'] if (result['TITLE'] is not None and len(result['TITLE']) > 0) else '未知'
-            teachers[teacher_id] = result
+            teachers[teacher_id] = self.normalization_teacher(result)
         return teachers
 
     def get_teacher_info_by_id(self, teacher_id):
@@ -50,35 +47,6 @@ class TeacherService:
         result = teacher_dao.get_teachers_by_ids([teacher_id], keys=keys)[0]
         info = self.normalization_teacher(result, False)
         return info
-
-    def get_teachers_grouping_institutions(self, id_list, keys=None, elimination=None):
-        """
-        根据老师的id数组获取老师并按学校和学院进行分组
-        :param id_list: 老师的id数组
-        :param keys: 要获取的键数组
-        :param elimination: 过滤函数 返回True则过滤该老师
-        :return: 以学校和学院划分好的老师信息
-        """
-        teachers = teacher_dao.get_teachers_by_ids(id_list, keys=keys)
-        results = {}
-        # 按照学校、学院对老师进行分组
-        for teacher in teachers:
-            school_id = teacher['SCHOOL_ID']
-            institution_id = teacher['INSTITUTION_ID']
-            # 学校
-            if school_id not in results:
-                results[school_id] = {}
-            school = results[school_id]
-            # 学院
-            if institution_id not in school:
-                school[institution_id] = {}
-                school[institution_id]['teachers'] = []
-            # 过滤老师
-            if elimination is None or elimination(teacher) is False:
-                teacher = self.normalization_teacher(teacher, True)
-                school[institution_id]['teachers'].append(teacher)
-
-        return results
 
     def get_academic_titles_by_ids(self, id_list):
         """
@@ -105,7 +73,7 @@ class TeacherService:
         :param teacher_id: 老师id
         :return: 论文信息数组
         """
-        keys = ['name', 'org', 'year', 'cited_num']
+        keys = ['name', 'org', 'year', 'cited_num', 'author']
         results = teacher_dao.get_papers_by_id(teacher_id, keys=keys)
         return results
 
@@ -126,6 +94,8 @@ class TeacherService:
                     info[trans_key] = tuple(json.loads(fields).keys())
                 else:
                     info[trans_key] = fields
+            elif key == 'TITLE':
+                info['title'] = value if (value is not None and len(value) > 0) else '未知'
             elif key == 'BIRTHYEAR' and value is not None:
                 info['yearsold'] = time.localtime(time.time()).tm_year - int(teacher['BIRTHYEAR'])
             elif trans_key is not None:

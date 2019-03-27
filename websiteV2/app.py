@@ -1,5 +1,6 @@
 from flask import Flask, render_template, session, request
 import logging
+import json
 from controllers.api import api_blueprint
 from controllers.user import user_blueprint
 from controllers.api_agent import api_agent_blueprint
@@ -79,8 +80,13 @@ def detail(teacher_id):
     college_name = request.args.get('college_name')
     # 获取老师的信息
     info = teacher_service.get_teacher_info_by_id(teacher_id)
+    if info['fields'] is None:
+        info['fields'] = {}
     # 获取论文
     papers = teacher_service.get_papers_by_id(teacher_id)
+    for paper in papers:
+        authors = json.loads(paper.pop('author'))
+        paper['partners'] = [author['name'] for author in authors]
     return render_template('detail.html',
                            school_name=school_name,
                            college_name=college_name,

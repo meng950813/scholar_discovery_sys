@@ -72,6 +72,12 @@
                     </div>
                     <div class="inline-block">
                         <span>发表自{{ paper['org'] }}</span>   引用次数：<span>{{ paper['cited_num'] }}</span>
+                        作者:
+                        <span>
+                        {% for partner in paper['partners'] %}
+                            {{ partner }}
+                        {% endfor %}
+                        </span>
                     </div>
                 </li>
                 {% endfor %}

@@ -47,7 +47,7 @@
                 {% endif %}
                 <div class="scholar">
                     <ul class="search-person">
-                        {%  for teacher in values['teachers'][0:3] %}
+                        {%  for teacher in values['teachers'] %}
                             {% if teacher['fields'] %}
                         <li>
                             <div class="row">
@@ -60,7 +60,7 @@
                                         {% if teacher['yearsold'] %}
                                             <li>{{ teacher['yearsold'] }}岁</li>
                                         {% endif %}
-                                        {% if teacher['title'] %}
+                                        {% if teacher['title'] != '未知'%}
                                             <li>{{ teacher['title'] }}</li>
                                         {% endif %}
                                         {% if teacher['ACADEMICIAN'] == 1 %}

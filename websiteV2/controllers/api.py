@@ -224,26 +224,31 @@ def get_teachers_by_school(school_name, keyword, limit_teacher_num=3):
         # 保存老师id
         teacher_ids.append(result['teacher_id'])
     # 查表获取老师的信息
+    colleges = {}
     if len(teacher_ids) > 0:
         keys = ['ID', 'NAME', 'TITLE', 'SCHOOL_ID', 'INSTITUTION_ID', 'BIRTHYEAR', 'FIELDS', 'ACADEMICIAN', 'OUTYOUTH', 'CHANGJIANG']
-        data = teacher_service.get_teachers_grouping_institutions(teacher_ids, keys, lambda t: t['FIELDS'] is None)
+        teachers = teacher_service.get_teachers_by_ids(teacher_ids, keys)
         # 获取学院信息
         infos = school_service.get_institutions_by_ids(school_id, id_institutions.keys(), institution_keys) \
             if len(id_institutions) > 0 else {}
-        # 获取学校
-        school = data[school_id]
-        # 转换学院id=> 学院名
-        for institution_id, values in school.items():
-            if isinstance(institution_id, int):
-                institution_name = id_institutions[institution_id]
-                # 限制老师数量
-                if len(values['teachers']) > limit_teacher_num:
-                    values['teachers'] = values['teachers'][:limit_teacher_num]
-                    teacher_count += limit_teacher_num
-                else:
-                    teacher_count += len(values['teachers'])
-                school[institution_name] = {'teachers': school.pop(institution_id)['teachers'], 'info': infos[institution_id]}
+        for result in results:
+            college_name = result['institution_name']
+            college_id = result['institution_id']
+            teacher_id = result['teacher_id']
+
+            if college_name not in colleges:
+                colleges[college_name] = {'teachers': [], 'info': infos[college_id]}
+            # 添加学者
+            length = len(colleges[college_name]['teachers'])
+            if length < limit_teacher_num:
+                teacher = teachers[teacher_id]
+                if teacher['fields'] is None:
+                    continue
+                # 添加老师
+                colleges[college_name]['teachers'].append(teacher)
+                length += 1
+                teacher_count += 1
     return {
              'number': teacher_count,
-             'institutions': school,
+             'institutions': colleges,
     }
