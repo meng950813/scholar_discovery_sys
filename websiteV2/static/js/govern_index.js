@@ -125,6 +125,7 @@ function getToolTip(type, datum){
 function getSchoolsInfo(schools) { 
     let school_name_arr = [];
     for(let i in schools){
+        console.log(schools[i]['school_name']);
         school_name_arr.push(schools[i]['school_name']);
     }
 
@@ -135,16 +136,17 @@ function getSchoolsInfo(schools) {
         dataType: 'json',
         type: 'POST',
     }).done(function (data) {
-        // 保存学校间的对比数据(一维数组) & 学校名(一维数组)
-        let school_compare_data = [], school_name_list = [];
+        // 保存学校间的对比数据(一维数组)
+        let school_compare_data = [];
 
         // 遍历全部学校， 将学校信息按 school_keys 顺序化
-        for(let school_name in data){
+        for(let i = 0; i < school_name_arr.length ; i++){
+            let school_name = school_name_arr[i];
             
             let school = data[school_name];
+
             // 数据暂存数组
             let temp_data_set = [];
-
 
             //映射，获取每一列对应的值
             for (let i in scholar_keys){
@@ -157,8 +159,6 @@ function getSchoolsInfo(schools) {
             }
             // 将学校的数据保存到全局变量
             SCHOOLS_INFO[school_name] = temp_data_set;
-            // 保存学校名
-            school_name_list.push(school_name);
         }
         //TODO:默认选中第一个tag,
         chinaMap.group.select('#tag').select('g').select('path').each(function (d, i) {
@@ -166,7 +166,7 @@ function getSchoolsInfo(schools) {
         });
         
         // 绘制对比图
-        drawSchoolCompareChart(school_name_list,school_compare_data);
+        drawSchoolCompareChart(school_name_arr,school_compare_data);
     });
 
 }
