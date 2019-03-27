@@ -9,26 +9,22 @@
 {% block main %}
     <div  class="container outer">
         <div class="row">
-            <div class="col-sm-7 col-md-8 col-lg-8 bk_red">
+            <div class="col-sm-7 col-md-8 col-lg-8 map-container">
                 <svg id="map" width="800" height="500"></svg>
             </div>
             <div class="col-sm-5 col-md-4 col-lg-4 info-area">
-                <div class="bk_gray">
-                    <h4>与  <strong>“高速数字处理和超高速数据输出接口电路设计”</strong> 相关的 <strong>5</strong> 所高校分布</h4>
+                <div class="relation-container">
+                    <h4 id="search-key">与  <strong>“高速数字处理和超高速数据输出接口电路设计”</strong> 相关的 <strong>5</strong> 所高校分布</h4>
                     
 
-                    <div>位于 <b>湖北</b>  的高校 </div>
-                    <div class="require">
-                        <!-- <a class="btn btn-default map-change" data-src="../static/images/map.png">南京大学 </a> -->
-                        <!-- <a class="btn btn-default map-change" data-src="../static/images/map_blue.png">东南大学</a> -->
-                        <!-- <a class="btn btn-default map-change" data-src="../static/images/map_white_no_number.png">清华大学</a> -->
-                        <!-- <a class="btn btn-default map-change" data-src="../static/images/map_blue_2.png">浙江大学</a> -->
-                        <a class="btn btn-default map-change" data-src="../static/images/map_brown.png">华中科技大学</a>
+                    <div>位于 <b id="city-name">湖北</b>  的高校 </div>
+                    <div class="require" id="school-list">
+                        <a class="btn btn-default">华中科技大学</a>
                     </div>
 
                     <div class="btn btn-block btn-default" data-toggle="modal" data-target="#schoolCompareModal"> 显示综合对比图 </div>
                    
-                    <h4>华中科技大学 实力图</h4>
+                    <h4> <b id="school-name">华中科技大学</b>实力图</h4>
                     <svg id="school-chart" width="300" height="200">
                     </svg>
                     
@@ -38,12 +34,13 @@
 
     
 
-        <div class="row row_bottom">
-            <div class="col-sm-7 col-md-8 col-lg-8 bk_red">
-                <img id="map-img" class="img-responsive center block" src="../static/images/school_realtion.png" alt="">
+        <div class="row row-bottom">
+            <div class="col-sm-7 col-md-8 col-lg-8">
+                <!-- <img id="map-img" class="img-responsive center block" src="../static/images/school_realtion.png" alt=""> -->
+                <svg id="relation-chart" width=700 height=250></svg>
             </div>
             <div class="col-sm-5 col-md-4 col-lg-4">
-                <div class="bk_gray">
+                <div class="relation-container relation-person">
                     <h3>高校商务信息</h3>
                     <table class="table table-striped table-bordered">
                         <tr>
@@ -102,16 +99,6 @@
     <script src="{{ url_for('static', filename='js/map02.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bar_graph.js') }}"></script>
     <script src="{{ url_for('static', filename='js/govern_index.js') }}"></script>
-    
-    <script>
-        $(".map-change").on("click",function(e){
-            e.preventDefault();
-            $("#map-img").attr("src",$(e.target).attr("data-src"))
-
-        })
-        // let bodyHeight = document.body.clientHeight;
-        // $(".outer").height(bodyHeight / 2  - 70 ) ;
-    </script>
 
 {% endblock %} 
 
