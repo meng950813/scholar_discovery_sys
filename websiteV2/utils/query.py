@@ -373,7 +373,8 @@ class Query:
                         'institution_name': self.institution_info[institution_id]['NAME'],
                         'institution_id': institution_id,
                         'school_name':self.institution_info[institution_id]['SCHOOL_NAME'],
-                        'school_id': self.id_name[teacher_id]['SCHOOL_ID']
+                        'school_id': self.id_name[teacher_id]['SCHOOL_ID'],
+                        'score': teacher_info1[1]
                     })
 
         return teacher_info_true
