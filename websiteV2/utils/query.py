@@ -154,7 +154,7 @@ class Subject:
         level = math.pow(10e-6, len(words) + 1)
         rank = self.cal_rank(temp_res, temp_lda, cof)
         sortrk = sorted(rank.items(), key=lambda item: item[1], reverse=True)
-        result = [(r[0], r[1]) for r in sortrk if r[1] > level]
+        result = [(r[0], r[1]) for r in sortrk ]
         return result
 
 
