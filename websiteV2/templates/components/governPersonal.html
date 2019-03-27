@@ -4,10 +4,29 @@
 
 {% block main %}
 <div class="container">
-    <h3>关系网络</h3>
+    
+    <form class="form form-inline">
+        <div class="input-group"><h3>关系网络</h3></div>
+        <div class="input-group float-right h3">
+            <a href="/index" class="btn btn-default"><i class="glyphicon glyphicon-search"></i> 去找高校</a>
+        </div>
+    </form>
+
     <svg class="social-net" width="900" height="600"></svg>
 
-    <h3>联系列表</h3>
+    <form class="form form-inline">
+        <div class="input-group"><h3>联系列表</h3></div>
+        <div class="input-group float-right h3 margin-left-20">
+            <span id="create-relation" class="btn btn-default"> <i class="glyphicon glyphicon-plus"></i> 创建联系人</span>
+        </div>    
+        <div class="input-group float-right h3">
+            <input id="search-name-input" type="text" class="form-control" placeholder="搜索联系人">
+            <span id="search-name" class="input-group-addon glyphicon glyphicon-search"></span> 
+        </div>
+        <div id="reset-search" class="input-group float-right h3" style="display:none">
+                <span class="btn btn-default"><i class="glyphicon glyphicon-repeat"></i> 重置搜索</span>
+            </div>
+    </form>
     
     <table class="table table-hover">
         <thead class="thead-dark">
@@ -27,6 +46,61 @@
     </table>
 </div>
 
+
+<!-- 添加联系人模态框 -->
+<div class="modal fade" id="addContractModal">
+    <div class="container">
+        
+        <button type="button" class="close"  data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+        
+        <div class="page-header">
+            <h2 class="text-center" id="operation-title">添加联系人信息</h2>
+        </div>
+        <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="name_level_one" class="col-sm-2 control-label">企业名</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name_level_one" placeholder="请输入企业名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name_level_two" class="col-sm-2 control-label">部门名</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name_level_two" placeholder="请输入部门名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contract_name" class="col-sm-2 control-label">联系人</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="contract_name" placeholder="请输入联系人姓名">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="link_method" class="col-sm-2 control-label">联系方式</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="link_method" placeholder="电话/邮箱">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="remark" class="col-sm-2 control-label">备 &nbsp; 注</label>
+                    <div class="col-sm-10">
+                        <textarea name="remark" maxlength="80" id="remark" rows="5" placeholder="备注信息，最长80字"></textarea>
+                    </div>
+                </div>
+                    
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button id="submit-connect" class="btn btn-info btn-block">确认提交</button>
+                    </div>
+                </div>
+            
+            
+            <input type="hidden" id="modify-relation-id">
+        </form>
+    </div>
+
+</div>
 
 <!-- 确定删除关系的模态框 -->
 <div class="modal fade" id="delRelationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

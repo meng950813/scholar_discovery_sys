@@ -101,13 +101,6 @@ table.table{
 	max-height: 200px;
 }
 
-.btn-yellow{
-	background: #fff50d;
-}
-.btn-red{
-	background: #ff0100;
-}
-
 .container .modal-dialog{
     width: 100%;
 }

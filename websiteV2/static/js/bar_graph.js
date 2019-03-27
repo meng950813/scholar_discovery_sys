@@ -86,7 +86,7 @@ class VerticalBarGraph{
         group.append('text')
             .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")")
             .attr("x", function(d,i){
-                return that.xScale(i) + rectPadding/2;
+                return that.xScale(i) + rectPadding/2 - 4;
             } )
             .attr("y",function(d){
                 return that.yScale(d) - 25;
