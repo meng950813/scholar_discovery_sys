@@ -147,6 +147,8 @@ class HorizontalBarGraph{
             .attr("class","axis")
             .attr('id', 'yAxis')
             .call(this.yAxis);
+        //更改文本显示大小
+        this.group.select('#yAxis').attr('font-size', '14');
         //矩形
         this.group.append('g')
             .attr('id', 'rects');
