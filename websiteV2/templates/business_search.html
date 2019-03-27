@@ -1,0 +1,32 @@
+{% extends 'template.html' %}
+{% block title %}个人中心{% endblock %}
+
+{%  block head %}
+    <link href="../static/css/index.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block main %}
+    <div id='app'>
+        <div class="search-area container">
+
+            <div class="imglog">
+                <img src="../static/images/Polaris.png" />
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <form  action="/school"  method="GET" class="navbar-form search-form text-center" onsubmit="return checkForm1(this);">
+                    <div  class="form-group">
+                            <input type="text" id="simple-input" name="simple-input" placeholder="请输入关键字" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn_color" >搜索</button>
+                </form>
+            </div>
+
+        </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='js/public.js') }}" ></script>
+{% endblock %}
