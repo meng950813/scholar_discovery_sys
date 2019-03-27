@@ -115,7 +115,7 @@ class HorizontalBarGraph{
         this.width = this.svg.attr('width');
         this.height = this.svg.attr('height');
         //画布周边的空白
-        this.margin = {left:80, right:30, top:80, bottom:20};
+        this.margin = {left:120, right:80, top:80, bottom:40};
         //所有的控件都在同一个group中
         this.group = this.svg.append('g')
             .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")");
@@ -245,9 +245,9 @@ class HorizontalBarGraph{
             .attr('y', 32)
             .text(d => d.name)
             .attr('fill', (d) => d.color);
-        //添加可点击函数
-        group.on('click', function (datum, index) {
-            that.clickCategoryCallback(datum, index);
-        });
+        // //添加可点击函数
+        // group.on('click', function (datum, index) {
+        //     that.clickCategoryCallback(datum, index);
+        // });
     }
 }

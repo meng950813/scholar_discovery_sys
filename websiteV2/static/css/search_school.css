@@ -107,3 +107,7 @@ table.table{
 .btn-red{
 	background: #ff0100;
 }
+
+.container .modal-dialog{
+    width: 100%;
+}
