@@ -138,5 +138,18 @@ footer .copyright {
 
 /* 联系人列表中的宽度设置 */
 #relation_list > tr > td{
-	min-width: 140px;
+	min-width: 135px;
+}
+
+.float-right{
+	float: right;
+}
+
+.margin-left-20{
+	margin-left: 20px;
+}
+
+#search-name{
+	cursor: pointer;
+	margin-right: 40px;
 }

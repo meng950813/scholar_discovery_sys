@@ -104,19 +104,15 @@ $("#submit-connect").on("click",function(e){
     let not_empty_target_JQ_list = [$("#name_level_one"),$("#name_level_two"), $("#contract_name"),$("#link_method")];
 
     let info = {
-        // "level_one" : $("#name_level_one").val(),
         "level_one" : not_empty_target_JQ_list[0].val(),
-        // "level_two" : $("#name_level_two").val(),
         "level_two" : not_empty_target_JQ_list[1].val(),
-        // "contract_name" : $("#contract_name").val(),
         "contract_name" : not_empty_target_JQ_list[2].val(),
-        // "link_method" : $("#link_method").val(),
         "link_method" : not_empty_target_JQ_list[3].val(),
         "remark" : $("#remark").val(),
         "create_time" : (new Date()).Format("yyyy-MM-dd hh:mm:ss")
 
     };
-    // TODO checkout is there any empty
+    
     if (checkRelationFormEmpty(not_empty_target_JQ_list) ){
         console.log("checkRelationFormEmpty is true");
         return false;
@@ -128,7 +124,6 @@ $("#submit-connect").on("click",function(e){
         
         info['id'] = parseInt($("#modify-relation-id").val());
         
-        console.log("#modify-relation-id",info);
         $.ajax({
             "url" : "/api/agent/relation",
             "type" : "PUT",
@@ -204,6 +199,9 @@ $("#relation_list").on("click",function(e){
         // 向模态框中填充数据
         fillModifyDataToModal($target.parent().parent());
 
+        // 修改模态窗标题
+        $("#operation-title").text("修改联系人信息");
+        
         // 显示模态窗
         toggleModal("addContractModal");
     }
@@ -423,6 +421,51 @@ function reloadRelationGraph(){
 /////////////////////// end of relation operation model //////////////////////////////
 
 
+/////////////////////// start of search relation model //////////////////////////////
+// 点击添加联系人按钮
+$("#create-relation").on("click",function () { 
+    // 修改标题
+    $("#operation-title").text("添加联系人信息");
+
+    // 显示模态框
+    toggleModal("addContractModal");
+});
+
+// 确定搜索联系人
+$("#search-name").on("click",function(){
+    // 目前只通过联系人名搜索
+    // TODO 匹配到的内容高亮显示？
+
+    let name = $("#search-name-input").val();
+    
+    // 若内容不为空。查找匹配内容
+    if(name){
+        $("#relation_list").children().each(function(i,item) { 
+            let content = item.textContent;
+            
+            // 若在所有内容中匹配不到，隐藏本条记录
+            if(!content.match(name)){
+                $(item).hide();
+            }
+        });
+        // 显示重置按钮
+        $("#reset-search").show();
+    }
+});
+
+// 点击重置搜索按钮的响应函数
+$("#reset-search").on("click",function() { 
+
+    // 显示子元素
+    $("#relation_list").children().show();
+    // 清空输入框
+    $("#search-name-input").val("");
+    // 隐藏自身
+    $(this).hide();
+}.bind(this));
+
+/////////////////////// end of search relation model //////////////////////////////
+
 
 /////////////////////// start of public model //////////////////////////////
 /**
@@ -460,12 +503,6 @@ function hideAlert(){
         showAlert("请输入正确的账户或密码", ALERT_TYPE.error);
     }
 })();
-
-
-/**
- * 显示 / 隐藏 模态窗
- * @param {string} mod_id 
- */
 
  /**
   * 显示 / 隐藏 模态窗
