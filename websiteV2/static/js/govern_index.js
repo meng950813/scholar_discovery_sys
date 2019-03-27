@@ -87,8 +87,7 @@ function handle_school_data(json_data) {
  */
 function onTagClicking(tag, datum, index){
     //标记点点击回调函数
-    let ret = chinaMap.tagClicking(tag, datum, index);
-    console.log(ret,tag,datum,index);
+    let ret = chinaMap.tagClicking(tag);
     if (ret){
         let cityName = datum['city'];
         let schools = datum['schools'];
@@ -170,8 +169,10 @@ function getSchoolsInfo(schools) {
             
             SCHOOLS_INFO[school_name] = data_set;
         }
-        
-        // 
+        //TODO:默认选中第一个tag,
+        chinaMap.group.select('#tag').select('g').select('path').each(function (d, i) {
+            onTagClicking(this, d, i);
+        });
     });
 
 }
@@ -261,9 +262,8 @@ $.ajax({
     if(data == null){
         console.log('未发现匹配的高校');
     }
-
+    //获取学校的具体信息，即学者数量,并保存到全局变量中
     getSchoolsInfo(data);
-
 });
 /////////////////////////////////////
 
@@ -286,4 +286,8 @@ $("#school-list").on("click", function(e){
         // 显示学校实力图
         showSchoolChart($target.attr("data-name"));
     }
-})
+});
+
+
+//关系图
+let relationGraph = new RelationGraph(d3.select('#relation-chart'));

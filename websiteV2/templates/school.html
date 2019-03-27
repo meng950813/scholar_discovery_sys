@@ -4,6 +4,22 @@
 
 {% block head %}
     <link href="{{ url_for('static', filename='css/search_school.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        #tooltip {
+            background:rgba(0,0,0,0.9);
+            position: absolute;
+            text-align: center;
+            margin: 10px;
+            border:1px solid grey;
+            pointer-events: none;
+            border-radius:5px;
+            font-size:12px;
+            width:auto;
+            padding:4px;
+            color:white;
+            opacity:0;
+        }
+    </style>
 {% endblock %}
 
 {% block main %}
@@ -99,6 +115,7 @@
     <script src="{{ url_for('static', filename='js/map02.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bar_graph.js') }}"></script>
     <script src="{{ url_for('static', filename='js/govern_index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/relation.js') }}"></script>
 
 {% endblock %} 
 

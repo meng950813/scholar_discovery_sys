@@ -143,7 +143,7 @@ class ChinaMap2 {
      * @param index tag所在的索引
      */
     onTagClicking(tag, datum, index){
-        let ret = this.tagClicking(tag, datum, index);
+        let ret = this.tagClicking(tag);
     }
 
     /**
@@ -388,17 +388,16 @@ class ChinaMap2 {
     /**
      * 鼠标点击标记点回调函数，更改了该点的颜色
      * @param tag d3可使用的对象
-     * @param datum 标记对应的数据
-     * @param index 标记所在的索引
      * @return {boolean} 切换选中点成功时则返回true，否则返回false
      */
-    tagClicking(tag, datum, index){
+    tagClicking(tag){
         //选中了同一个,不进行操作
         if (this.selectedTag != null && this.selectedTag == tag)
             return false;
         if (this.selectedTag != null)
             d3.select(this.selectedTag).attr('fill', '#FF0000');
         this.selectedTag = tag;
+        console.log(this.selectedTag);
         d3.select(this.selectedTag).attr('fill', '#2b81ff');
 
         return true;
