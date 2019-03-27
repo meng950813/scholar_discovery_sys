@@ -12,6 +12,9 @@
 
     // 设置 关系图 的宽高
     $("#relation-chart").attr("width", map_width).attr("height" , $(".relation-person").height())
+
+    // 设置 对比图 宽高
+    $("#school-compare").attr("width" , $(".container").width() - 150 ).attr("height",$(".outer").height() - 180);
 })();
 
 
@@ -115,32 +118,6 @@ function getToolTip(type, datum){
     return html;
 }
 
-/**
- * 加载并展示竖柱状图，可以在以后添加数据缓存
- * @param schools [{name: '清华大学'}]
- */
-function loadAndShowVerticalBarGraph(schools){
-    //TODO:默认获取第一个学校名称
-    let school_name = schools[0].name;
-    //异步回调获得数据
-    $.ajax({
-        url: 'api/school/scholar_number',
-        data: {school_names: [school_name]},
-        dataType: 'json',
-        type: 'POST',
-    }).done(function (data) {
-        //TODO:默认获取第一个学校
-        let school = data[school_name];
-        let dataset = [];
-        //映射，获取每一列对应的值
-        for (let i in scholar_keys){
-            let key = scholar_keys[i];
-            dataset.push(school[key]);
-        }
-        verticalGraph.setData(dataset);
-    });
-}
-
 
 /**
  * 获取高校信息，加入全局变量
@@ -159,19 +136,34 @@ function getSchoolsInfo(schools) {
         dataType: 'json',
         type: 'POST',
     }).done(function (data) {
+        // 保存学校间的对比数据(一维数组) & 学校名(一维数组)
+        let school_compare_data = [], school_name_list = [];
+
         // 遍历全部学校， 将学校信息按 school_keys 顺序化
         for(let school_name in data){
+            
             let school = data[school_name];
-            let data_set = [];
+            // 数据暂存数组
+            let temp_data_set = [];
+
+
             //映射，获取每一列对应的值
             for (let i in scholar_keys){
-                data_set.push(school[scholar_keys[i]])
+                temp_data_set.push(school[scholar_keys[i]]);
+
+                // 保存需要对比的参数(重点实验室，重点学科，院士数)
+                if(i < 3){
+                    school_compare_data.push(school[scholar_keys[i]]);
+                }
             }
-            
-            SCHOOLS_INFO[school_name] = data_set;
+            // 将学校的数据保存到全局变量
+            SCHOOLS_INFO[school_name] = temp_data_set;
+            // 保存学校名
+            school_name_list.push(school_name);
         }
         
-        // 
+        // 绘制对比图
+        drawSchoolCompareChart(school_name_list,school_compare_data);
     });
 
 }
@@ -191,7 +183,9 @@ function showSchoolInfo(city,schools){
     // 设置城市名
     $("#city-name").text(city);
 
+    // 保存生成的 tag html文件
     let school_btn_list = "";
+
     // 设置学校 tag
     for(let i in schools){
         let school_name = schools[i].name;
@@ -204,29 +198,49 @@ function showSchoolInfo(city,schools){
     
     $("#school-list").html(school_btn_list);
 
-    showSchoolChart(schools[0].name);
+    drawSchoolChart(schools[0].name);
 }
 
 /**
  * 展示某一学校的信息的图表
  * @param {string} school_name 学校名
  */
-function showSchoolChart(school_name){
+function drawSchoolChart(school_name){
     if(! school_name in SCHOOLS_INFO){
         // console.log("");
-        showAlert("错误的学校名" , ALERT_TYPE.error);
+        showAlert("错误的高校名" , ALERT_TYPE.error);
         return false;
     }
     // 设置学校名
     $("#school-name").text(school_name);
     
-    console.log(school_name);
+    // console.log(school_name);
 
-    console.log(SCHOOLS_INFO[school_name]);
+    // console.log(SCHOOLS_INFO[school_name]);
     // 展示学校实力图
     verticalGraph.setData(SCHOOLS_INFO[school_name]);
 }
 
+
+/**
+ * 绘制学校关系对比图
+ * @param {array} school_name_list 学校名列表
+ * @param {array} school_data 学校间数据
+ */
+function drawSchoolCompareChart(school_name_list,school_data){
+    let svg = d3.select("#school-compare");
+    
+    console.log(school_name_list);
+
+    compareGraph = new HorizontalBarGraph(svg,school_name_list);
+    
+    // 配置数据及样式
+    let json_data = {dataset : school_data, categories : categories};
+
+    console.log(json_data);
+    // 填充数据，绘图
+    compareGraph.setData(json_data);
+}
 
 
 //main
@@ -238,6 +252,7 @@ let SCHOOLS_INFO = [];
 
 //默认显示中国地图
 chinaMap.show();
+
 //设置tag点击回调函数
 chinaMap.onTagClicking = onTagClicking;
 chinaMap.getToolTipHTMLHook = getToolTip;
@@ -272,7 +287,17 @@ $.ajax({
 let verticalSvg = d3.select('#school-chart');
 let xTexts = [ "重点实验室", "重点学科","院士","长江学者","杰出青年" ];
 var scholar_keys = ['key_laboratory', 'key_subject', 'academician', 'changjiang', 'outstanding'];
+
+let categories = [
+    {name: '重点实验室', color: '#5d89a7'},
+    {name: '重点学科', color: '#a8c9ff'},
+    {name: '院士', color: '#7fbdc4'},
+];
+
+// 绘制学校实力图 下标
 let verticalGraph = new VerticalBarGraph(verticalSvg, xTexts);
+// 绘制学校对比图的对象
+let compareGraph = undefined;
 
 
 // 添加 btn 点击事件
@@ -284,6 +309,6 @@ $("#school-list").on("click", function(e){
     if($target.hasClass("btn") && !$target.hasClass("active")){
         $target.addClass("active").siblings(".active").removeClass("active");
         // 显示学校实力图
-        showSchoolChart($target.attr("data-name"));
+        drawSchoolChart($target.attr("data-name"));
     }
 })
