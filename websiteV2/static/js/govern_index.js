@@ -125,7 +125,6 @@ function getToolTip(type, datum){
 function getSchoolsInfo(schools) { 
     let school_name_arr = [];
     for(let i in schools){
-        console.log(schools[i]['school_name']);
         school_name_arr.push(schools[i]['school_name']);
     }
 
@@ -233,14 +232,11 @@ function drawSchoolChart(school_name){
 function drawSchoolCompareChart(school_name_list,school_data){
     let svg = d3.select("#school-compare");
     
-    console.log(school_name_list);
-
     compareGraph = new HorizontalBarGraph(svg,school_name_list);
     
     // 配置数据及样式
     let json_data = {dataset : school_data, categories : categories};
 
-    console.log(json_data);
     // 填充数据，绘图
     compareGraph.setData(json_data);
 }

@@ -397,7 +397,6 @@ class ChinaMap2 {
         if (this.selectedTag != null)
             d3.select(this.selectedTag).attr('fill', '#FF0000');
         this.selectedTag = tag;
-        console.log(this.selectedTag);
         d3.select(this.selectedTag).attr('fill', '#2b81ff');
 
         return true;

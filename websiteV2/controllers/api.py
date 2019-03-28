@@ -140,35 +140,6 @@ def get_mapdata_by_mapping(name):
     return get_mapdata(filename)
 
 
-@api_blueprint.route('/teacher/relation', methods=['POST'])
-def teacher_relation():
-    """
-    获取个人与其他人的关系,请求格式如下
-        url: '/api/person/relation',
-        type: 'POST',
-        data: {teacher_id: 137950},
-        dataType: 'json'
-    :return: 返回RelationGraph类所需要的json
-    """
-    # 获取老师id
-    teacher_id = request.form.get('teacher_id', type=int)
-    # 获取该老师的所有联系
-    relations = teacher_service.get_relations_by_ids(teacher_id)
-    # 获取有联系的老师的所有老师的ID数组
-    teacher_id_set = set([relation['teacher2_id'] for relation in relations])
-    teacher_id_set.add(teacher_id)
-    # 获取所有老师
-    teachers = teacher_service.get_teachers_by_ids(teacher_id_set, ['ID', 'NAME', 'TITLE'])
-    # 获取老师的头衔，如果有的话
-    academic_titles = teacher_service.get_academic_titles_by_ids(teacher_id_set)
-    # 总的学术头衔
-    total_categories = ['未知', '副教授', '教授']
-    total_categories.extend(teacher_service.get_total_academic_titles())
-    # 获取d3.js封装的RelationGraph所需的数据格式
-    data = utils.relation.handle_relations(teachers, relations, academic_titles, total_categories)
-    return json.dumps(data)
-
-
 @api_blueprint.route('/institution/relation', methods=['POST'])
 def institution_relation():
     """

@@ -52,12 +52,6 @@ def index():
     return render_template("business_search.html")
 
 
-@app.route('/relation')
-def relation():
-    """测试关系图使用的路由函数"""
-    return render_template('relation.html')
-
-
 @app.route('/school', methods=['GET', 'POST'])
 def school():
     """没有登录点击搜索跳转到登录界面"""
@@ -72,11 +66,6 @@ def school():
         return render_template('school.html', keyword=keyword,user=user)
     else:
         return render_template("components/login.html")
-
-@app.route('/map')
-def map():
-    """测试地图v2的路由函数"""
-    return render_template('map2.html')
 
 
 @app.route('/detail/<int:teacher_id>', methods=['GET', 'POST'])
@@ -105,7 +94,6 @@ def detail(teacher_id):
         paper_md5_list.append(paper['paper_md5'])
     # 查询数据库
     partners = teacher_service.get_paper_partners_by_md5(paper_md5_list)
-    print(partners)
     return render_template('detail.html',
                            school_name=school_name,
                            college_name=college_name,
@@ -113,12 +101,6 @@ def detail(teacher_id):
                            papers=papers,
                            user=user,
                            partners=partners)
-
-
-@app.route('/bar')
-def bar():
-    """测试柱状图的路由函数"""
-    return render_template('bar.html')
 
 
 if __name__ == '__main__':
