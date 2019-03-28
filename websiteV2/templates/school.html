@@ -110,9 +110,9 @@
     <script src="{{ url_for('static', filename='js/relation.js') }}"></script>
     <script src="{{ url_for('static', filename='js/govern_index.js') }}"></script>
     <script type="text/javascript">
-    //获取传来的数据，并设置
+    //获取传来的数据，并设置学校位置
     let data = {{ schools | safe }};
-    setSchoolData(data);
+    setSchoolAddressData(data);
     </script>
 
 {% endblock %} 

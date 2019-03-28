@@ -258,7 +258,11 @@ chinaMap.getToolTipHTMLHook = getToolTip;
 
 
 ////////////////////////////////////
-function setSchoolData(data){
+/**
+ * 根据学校的位置数据来设置地图的标记和热力图
+ * @param data 学校的位置数据
+ */
+function setSchoolAddressData(data){
     //没有搜到合适的学校
     if (data.length > 0)
     {
