@@ -113,6 +113,8 @@ class ChinaMap2 {
         this.hotSpotData = null;
         //暂时存储当前选中的标记
         this.selectedTag = null;
+        //暂时存储当前选中索引
+        this.selectIndex = null;
     }
 
 
@@ -162,6 +164,23 @@ class ChinaMap2 {
         this.selectedTag = null;
         //加载并显示地图
         this.loadAndShowMap(key);
+    }
+
+    selectTag(index){
+        //地图未加载成功，则延迟设置热力图
+        let that = this;
+        if (!this.isLoadingData){
+            this.selectIndex = index;
+            return ;
+        }
+        let g =this.group.select('#tag').selectAll('g').filter(function (d, i) {
+            return i == index;
+        });
+        if (g != null){
+            g.select('path').each(function (d, i) {
+                that.onTagClicking(this, d, i);
+            });
+        }
     }
 
     /**
@@ -284,6 +303,11 @@ class ChinaMap2 {
         if (this.hotSpotData){
             this.setHotSpotData(this.hotSpotData);
             this.hotSpotData = null;
+        }
+        //选中标记
+        if (this.selectIndex){
+            this.selectedTag(this.selectIndex);
+            this.selectIndex = null;
         }
     }
 

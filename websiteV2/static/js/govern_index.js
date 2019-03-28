@@ -162,11 +162,9 @@ function getSchoolsInfo(schools) {
             // 将学校的数据保存到全局变量
             SCHOOLS_INFO[school_name] = temp_data_set;
         }
-        //TODO:默认选中第一个tag,
-        chinaMap.group.select('#tag').select('g').select('path').each(function (d, i) {
-            onTagClicking(this, d, i);
-        });
-        
+        //默认选中第一个tag
+        chinaMap.selectTag(0);
+
         // 绘制对比图
         drawSchoolCompareChart(school_name_arr,school_compare_data);
     });
