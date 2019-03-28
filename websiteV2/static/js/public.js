@@ -104,15 +104,15 @@ $("#submit-connect").on("click",function(e){
     let not_empty_target_JQ_list = [$("#name_level_one"),$("#name_level_two"), $("#contract_name"),$("#link_method")];
 
     let info = {
-        "level_one" : not_empty_target_JQ_list[0].val(),
-        "level_two" : not_empty_target_JQ_list[1].val(),
-        "contract_name" : not_empty_target_JQ_list[2].val(),
-        "link_method" : not_empty_target_JQ_list[3].val(),
-        "remark" : $("#remark").val(),
+        "level_one" : not_empty_target_JQ_list[0].val().trim(),
+        "level_two" : not_empty_target_JQ_list[1].val().trim(),
+        "contract_name" : not_empty_target_JQ_list[2].val().trim(),
+        "link_method" : not_empty_target_JQ_list[3].val().trim(),
+        "remark" : $("#remark").val().trim(),
         "create_time" : (new Date()).Format("yyyy-MM-dd hh:mm:ss")
 
     };
-    
+        
     if (checkRelationFormEmpty(not_empty_target_JQ_list) ){
         console.log("checkRelationFormEmpty is true");
         return false;
@@ -140,6 +140,7 @@ $("#submit-connect").on("click",function(e){
                     // 清空模态框中输入内容
                     clearRelationModal();
 
+                    console.log("this is updata method", info);
                     // 填充新内容到列表中
                     createAndUpdateRecord(info,$(`#relation_list tr[data-index=${info.id}]`));
                 }
@@ -285,8 +286,11 @@ function createAndUpdateRecord(info, $update_target = undefined){
     if(GRAPH_DATA){
         // 若本次操作为修改,则需要覆盖修改内容
         if($update_target){
+            // 遍历 GRAPH_DATA 中所有元素 ==> 所有联系人信息
             for(let index = 0 ; index < GRAPH_DATA.length ; index++){
-                if(GRAPH_DATA[index].ID == info.id){
+                // 找出修改的元素,并替换之
+                if(GRAPH_DATA[index].id == info.id){
+                    
                     GRAPH_DATA.splice(index,1,relaton_item_obj);
                     break;
                 }
