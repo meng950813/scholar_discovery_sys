@@ -136,8 +136,7 @@
 
     let url = '/api/agent/relation';
     //获取用户名
-    let username = d3.select('#username');
-    let self = {"name": username.text()};
+    let self = {"name": "我"};
 
     let svg = d3.select('.social-net');
     let relationGraph = new RelationGraph(svg);
