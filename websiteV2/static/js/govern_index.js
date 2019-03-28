@@ -72,7 +72,7 @@ function handle_school_data(json_data) {
         let tag = {"city": name, latitude:schools[0].latitude, longitude: schools[0].longitude, schools: []};
         for (let i = 0; i < schools.length; i++){
             let school = schools[i];
-            tag['schools'].push({name: school['school_name']});
+            tag['schools'].push({name: school['school_name'], school_id: school['school_id']});
         }
         tags.push(tag);
     }
@@ -96,6 +96,9 @@ function onTagClicking(tag, datum, index){
         let schools = datum['schools'];
         
         showSchoolInfo(cityName,schools);
+        //TODO:选中节点时尝试请求数据
+        console.log(datum);
+        requestRelationData(datum.schools[0].school_id, datum.schools[0].name);
     }
 }
 
@@ -297,6 +300,87 @@ let categories = [
 let verticalGraph = new VerticalBarGraph(verticalSvg, xTexts);
 // 绘制学校对比图的对象
 let compareGraph = undefined;
+//绘制政府商务和校商关系图
+let relationGraph = new RelationGraph(d3.select('#relation-chart'));
+relationGraph.clickNodeHook = clickNodeHook;
+
+/**
+ * 请求数据，并渲染关系图
+ * @param school_id 学校id
+ * @param school_name 学校名称
+ */
+function requestRelationData(school_id, school_name){
+    console.log('start getting relation data', school_id, school_name);
+    //异步回调获得数据
+    $.ajax({
+        url: 'api/school/agent',
+        data: {school_id: school_id},
+        dataType: 'json',
+        type: 'POST',
+    }).done(function (data) {
+        //生成关系图
+        let self = {id: USER_ID, name: USER_NAME};
+        let handled_data = handle_agent_relations(self, data, school_name);
+        relationGraph.setData(handled_data);
+    });
+}
+/**
+ * 钩子函数 点击节点后的动作
+ * @param node 节点
+ * @param datum 节点对应的数据
+ */
+function clickNodeHook(node, datum){
+    //点击的是校商自己，则不做操作
+    if (datum.name == USER_NAME)
+        return;
+    //TODO:更改商务信息
+    console.log(datum);
+}
+
+/**
+ * 处理老师和和伙伴的关系
+ * @param self {id: id, name: name} 个人信息
+ * @param json_data 数组
+ * @param school_name 学校名
+ */
+function handle_agent_relations(self, json_data, school_name) {
+    //每个类别所对应的颜色
+    let colors = ["#ee6a50", "#4f94cd", "#daa520", "#0000ff", "#8fbc8f", "#5d478b", "#528b8b", "#483d8b", "#3a5fcd"];
+    //种类
+    let kinds = [self.name, school_name];
+    let nodes = [];
+    let links = [];
+    //添加个人节点
+    nodes.push({category: 0, name: self.name, "id": self.id});
+
+    for (let i = 0; i < json_data.length; i++){
+        let datum = json_data[i];
+        //尝试添加节点
+        nodes.push({
+            category: 1,
+            'name': datum['name'],
+            'email': datum['email'],
+            'telephone': datum['telephone'],
+            'mail_address': datum['mail_address'],
+            'school_name': school_name,
+        });
+        //尝试添加联系
+        let link = {source: 0, target: nodes.length - 1};
+        links.push(link);
+    }
+    //添加类别 类别名称和对应的颜色
+    let categories = [];
+    for (let i = 0; i < kinds.length; i++){
+        let kind = kinds[i];
+        let color = colors[i % colors.length];
+        categories.push({name: kind, color: color});
+    }
+    return {
+        "categories": categories,
+        "nodes": nodes,
+        "links": links,
+    };
+}
 
 
 // 添加 btn 点击事件

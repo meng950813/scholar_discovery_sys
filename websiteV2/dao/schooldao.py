@@ -14,7 +14,7 @@ class SchoolDao:
         :param school_names: 学校名数组
         :return: 学校名对应的经纬度
         """
-        string = 'select NAME,POSITION from es_school where NAME in (%s)'
+        string = 'select ID,NAME,POSITION from es_school where NAME in (%s)'
         sql = string % (','.join(['?' for name in school_names]))
         # 调用语句
         results = db.select(sql, *school_names)
@@ -64,6 +64,20 @@ class SchoolDao:
         results = db.select(sql, *school_names)
         return results
 
+    def get_agents_by_school_id(self, school_id, mapping=None):
+        """
+        根据学校名获取该学校的代理
+        :param school_id: 学校id
+        :param mapping: 要获得的键值对的映射
+        :return: 代理信息数组
+        """
+        string = "select %s from sys_school_agent, sys_user where SCHOOL_ID = ? and sys_school_agent.STATUS = 1 and sys_school_agent.U_ID = sys_user.ID and  sys_user.STATUS = 1"
+        keys = ['%s as %s' % (k, v) for k, v in mapping.items()]
+        sql = string % (','.join(keys) if keys is not None else '*')
+
+        results = db.select(sql, school_id)
+        return results
+
 
 school_dao = SchoolDao()
 
@@ -82,5 +96,6 @@ if __name__ == '__main__':
     # # institutions = school_dao.get_institutions_by_ids(17134, [547, 548], ['ID', 'SCHOOL_ID'])
     # for institution in institutions:
     #     print(institution)
-    print(school_dao.get_total_colleges_by_names(['大连理工大学', '东南大学']))
+    # print(school_dao.get_total_colleges_by_names(['大连理工大学', '东南大学']))
+    print(school_dao.get_agents_by_school_id(19374))
 
