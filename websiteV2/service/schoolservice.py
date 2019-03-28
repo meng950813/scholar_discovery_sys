@@ -28,7 +28,7 @@ class SchoolService:
             position = result['POSITION']
             # 切割出经纬度
             arr = position.split(',')
-            schools[name] = {'longitude': float(arr[0]), 'latitude': float(arr[1])}
+            schools[name] = {'school_id': result['ID'], 'longitude': float(arr[0]), 'latitude': float(arr[1])}
 
         return schools
 
@@ -114,6 +114,16 @@ class SchoolService:
             return {'school': results[0]['SCHOOL_NAME'], 'college_name': results[0]['NAME']}
         return None
 
+    def get_agents_by_school_id(self, school_id):
+        """
+        根据学校名获取该学校的代理
+        :param school_id: 学校id
+        :return: 代理信息数组
+        """
+        mapping = {'NAME': 'name', 'MAIL_ADDRESS': 'mail_address', 'TEL_NUMBER': 'telephone', 'EMAIL': 'email'}
+        results = school_dao.get_agents_by_school_id(school_id, mapping)
+        return results
+
     def normalization_institution(self, institution):
         """
         对学院的信息进行标准化，如把出生日期转为年龄
@@ -145,5 +155,6 @@ if __name__ == '__main__':
     # institutions = school_service.get_institutions_by_ids(17134, [547, 548])
     # for _, institution in institutions.items():
     #     print(institution)
-    print(school_service.get_total_scholars_by_schools(['东南大学', '清华大学']))
-    print(school_service.get_institution_name(17134, 547))
+    # print(school_service.get_total_scholars_by_schools(['东南大学', '清华大学']))
+    # print(school_service.get_institution_name(17134, 547))
+    print(school_service.get_agents_by_school_id(19374))

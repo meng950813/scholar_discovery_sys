@@ -64,6 +64,19 @@ def get_school_scholar_number():
     return json.dumps(results)
 
 
+@api_blueprint.route('/school/agent', methods=['POST'])
+def get_agents_by_school_id():
+    """
+    根据学校id获取该学校的所有代理
+    :return:
+    """
+    school_id = request.form.get('school_id', type=int)
+    results = school_service.get_agents_by_school_id(school_id)
+    results = results if len(results) > 0 else []
+
+    return json.dumps(results)
+
+
 @api_blueprint.route('/mapdata/<path:filename>')
 def get_mapdata(filename):
     """

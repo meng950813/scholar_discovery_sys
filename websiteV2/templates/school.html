@@ -112,6 +112,8 @@
     <script type="text/javascript">
     //获取传来的数据，并设置学校位置
     let data = {{ schools | safe }};
+    USER_ID = {{ user['ID'] }};
+    USER_NAME = "{{ user['NAME'] }}";
     setSchoolAddressData(data);
     </script>
 
