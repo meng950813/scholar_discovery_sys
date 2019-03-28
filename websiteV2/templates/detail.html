@@ -18,9 +18,9 @@
                 <div class="scholar-depart">{{ school_name }} - {{ college_name }}</div>
                 <div class="scholar-tags">
                     {% if info['yearsold'] %}
-                        <span>{{ info['yearsold'] }}</span>
+                        <span>{{ info['yearsold'] }}岁</span>
                     {% endif %}
-                    {% if info['title'] %}
+                    {% if info['title'] != '未知' %}
                         <span>{{ info['title'] }}</span>
                     {% endif %}
                     {% if info['OUTYOUTH'] %}
@@ -35,6 +35,11 @@
                         邮箱：{{ info['email'] }}
                     {% endif %}
                 </div>
+                {% if info['eduexp'] %}
+                <div class="scholar-depart">
+                教育背景：{{ info['eduexp'] }}
+                </div>
+                {% endif %}
             </div>
         </div>
 
@@ -96,35 +101,15 @@
     <script src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
     <script src="{{ url_for('static', filename='js/wordcloud.js') }}"></script>
     <script src="{{ url_for('static', filename='js/relation.js') }}"></script>
-<script type="text/javascript">
-    //处理词云
-    let fields = {{ info['fields'] | safe}};
-    let data = [];
-    //转换成词云需要的格式
-    for (let key in fields){
-        let value = fields[key];
-        data.push({text: key, size: value * 100 * 6});
-    }
-    let wordCloud = new WordCloud(d3.select('#word-cloud'));
-    wordCloud.setData(data);
-    //关系图
-    let teacher_id = {{ info['id'] }};
-    let relationGraph = new RelationGraph(d3.select('#relation-net'));
-    //异步调用
-
-    $.ajax({
-        url: '/api/teacher/relation',
-        type: 'POST',
-        data: {"teacher_id": teacher_id},
-        dataType: 'json',
-        success: function (json_data) {
-            if (json_data.nodes.length > 0)
-                relationGraph.setData(json_data);
-            else
-                console.log('detail，该老师暂时没有关系图');
-        }
-    });
-</script>
+    <script type="text/javascript">
+        //处理词云
+        let FIELDS = {{ info['fields'] | safe}};
+        //获取合伙人
+        let PARTNERS = {{ partners | safe}};
+        let TEACHER_ID = {{ info['id'] }};
+        let TEACHER_NAME = "{{ info['name'] }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/teacher_detail.js') }}"></script>
 {% endblock %}
 
 </html>

@@ -86,19 +86,24 @@ def detail(teacher_id):
     college_name = request.args.get('college_name')
     # 获取老师的信息
     info = teacher_service.get_teacher_info_by_id(teacher_id)
-    if info['fields'] is None:
-        info['fields'] = {}
     # 获取论文
     papers = teacher_service.get_papers_by_id(teacher_id)
+    # 获取论文的md5
+    paper_md5_list = []
     for paper in papers:
         authors = json.loads(paper.pop('author'))
         paper['partners'] = [author['name'] for author in authors]
+        paper_md5_list.append(paper['paper_md5'])
+    # 查询数据库
+    partners = teacher_service.get_paper_partners_by_md5(paper_md5_list)
+    print(partners)
     return render_template('detail.html',
                            school_name=school_name,
                            college_name=college_name,
                            info=info,
                            papers=papers,
-                           user=user)
+                           user=user,
+                           partners=partners)
 
 
 @app.route('/bar')
