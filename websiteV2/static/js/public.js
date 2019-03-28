@@ -427,6 +427,9 @@ $("#create-relation").on("click",function () {
     // 修改标题
     $("#operation-title").text("添加联系人信息");
 
+    // 清理模态框中输入内容
+    clearRelationModal();
+
     // 显示模态框
     toggleModal("addContractModal");
 });
@@ -455,13 +458,13 @@ $("#search-name").on("click",function(){
 
 // 点击重置搜索按钮的响应函数
 $("#reset-search").on("click",function() { 
-
+    
     // 显示子元素
     $("#relation_list").children().show();
     // 清空输入框
     $("#search-name-input").val("");
     // 隐藏自身
-    $(this).hide();
+    $("#reset-search").hide();
 }.bind(this));
 
 /////////////////////// end of search relation model //////////////////////////////
