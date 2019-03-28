@@ -305,7 +305,7 @@ class ChinaMap2 {
             this.hotSpotData = null;
         }
         //选中标记
-        if (this.selectIndex){
+        if (this.selectIndex != null){
             this.selectTag(this.selectIndex);
             this.selectIndex = null;
         }
