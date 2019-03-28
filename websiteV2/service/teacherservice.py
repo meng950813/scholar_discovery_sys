@@ -12,7 +12,8 @@ class TeacherService:
 
     def __init__(self):
         self.teacher_info_mapping = {
-            'ID': 'id', 'NAME': 'name', 'FIELDS': 'fields', 'EMAIL': 'email', 'EDUEXP': 'eduexp'
+            'ID': 'id', 'NAME': 'name', 'FIELDS': 'fields', 'EMAIL': 'email', 'EDUEXP': 'eduexp',
+            'SCHOOL_ID': 'school_id', 'INSTITUTION_ID': 'institution_id'
         }
 
     @staticmethod
@@ -83,7 +84,7 @@ class TeacherService:
         :param md5_list: md5数组，它是论文标题的对应
         :return: 有过合作的合伙人
         """
-        keys = ['ID', 'NAME', 'TITLE', 'SCHOOL_ID', 'ACADEMICIAN', 'OUTYOUTH', 'CHANGJIANG']
+        keys = ['ID', 'NAME', 'TITLE', 'SCHOOL_ID', 'INSTITUTION_ID', 'ACADEMICIAN', 'OUTYOUTH', 'CHANGJIANG']
         results = teacher_dao.get_paper_partners_by_md5(md5_list, keys)
         # 转换成键值对的形式
         teachers = []

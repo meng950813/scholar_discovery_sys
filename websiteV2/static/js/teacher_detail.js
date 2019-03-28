@@ -19,10 +19,10 @@ function contains(array, key, value){
  * @param link 联系 {source:0, target: 1}
  * @return {number} 若有，则返回对应的索引；否则返回-1
  */
-function containsLink(links, link) {
+function containslink(links, link) {
     for (let i = 0; i < links.length; i++){
-        let L = links[i];
-        if (L.source == link.source && L.target == link.target){
+        let l = links[i];
+        if (l.source == link.source && l.target == link.target){
             return i;
         }
     }
@@ -35,13 +35,13 @@ function containsLink(links, link) {
  */
 function handle_partner_relations(self, json_data) {
     //每个类别所对应的颜色
-    let colors = ["#EE6A50", "#4F94CD", "#DAA520", "#0000FF", "#8FBC8F", "#5D478B", "#528B8B", "#483D8B", "#3A5FCD"];
+    let colors = ["#ee6a50", "#4f94cd", "#daa520", "#0000ff", "#8fbc8f", "#5d478b", "#528b8b", "#483d8b", "#3a5fcd"];
     //种类
     let kinds = [self.name];
     let nodes = [];
     let links = [];
     //添加个人节点
-    nodes.push({category: 0, name: self.name});
+    nodes.push({category: 0, name: self.name, "id": self.id});
 
     for (let i = 0; i < json_data.length; i++){
         let datum = json_data[i];
@@ -49,9 +49,9 @@ function handle_partner_relations(self, json_data) {
         if (datum['name'] == self.name)
             continue;
         //设置职称
-        let academician = datum['ACADEMICIAN'];
-        let outyouth = datum['OUTYOUTH'];
-        let changjiang = datum['CHANGJIANG'];
+        let academician = datum['academician'];
+        let outyouth = datum['outyouth'];
+        let changjiang = datum['changjiang'];
         if (academician)
             kind = '院士';
         else if (changjiang)
@@ -67,20 +67,26 @@ function handle_partner_relations(self, json_data) {
             index = kinds.length - 1;
         }
         //尝试添加节点
-        let nodeIndex = contains(nodes, 'name', datum['name']);
+        let nodeindex = contains(nodes, 'name', datum['name']);
         //不存在对应的点，则添加
-        if (nodeIndex == -1){
-            nodes.push({category: index, 'name': datum['name']});
-            nodeIndex = nodes.length - 1;
+        if (nodeindex == -1){
+            nodes.push({
+                category: index,
+                'name': datum['name'],
+                'id': datum['id'],
+                'school_id': datum['school_id'],
+                'college_id': datum['institution_id']
+            });
+            nodeindex = nodes.length - 1;
         }
         //尝试添加联系
-        let link = {source: 0, target: nodeIndex, width: 1};
-        let linkIndex = containsLink(links, link);
+        let link = {source: 0, target: nodeindex, width: 1};
+        let linkindex = containslink(links, link);
         //不存在，则添加
-        if (linkIndex == -1){
+        if (linkindex == -1){
             links.push(link);
         }else{
-            links[linkIndex].width += 1;
+            links[linkindex].width += 1;
         }
     }
     let categories = [];
@@ -95,6 +101,46 @@ function handle_partner_relations(self, json_data) {
         "nodes": nodes,
         "links": links,
     };
+}
+
+function post(url, parameters) {
+    //创建form表单
+    let temp_form = document.createElement('form');
+    temp_form.action = url;
+    //打开一个新的页面
+    temp_form.target = '_blank';
+    temp_form.method = 'post';
+    temp_form.style.display = 'none';
+    //添加参数
+    for (let item in parameters){
+        let opt = document.createElement('textarea');
+        opt.name = item;
+        opt.value = parameters[item];
+
+        temp_form.appendChild(opt);
+    }
+    document.body.appendChild(temp_form);
+    //提交数据
+    temp_form.submit();
+}
+
+/**
+ * 钩子函数 点击节点后的动作
+ * @param node 节点
+ * @param datum 节点对应的数据
+ */
+function clickNodeHook(node, datum){
+    //点击的为本主页的老师，不进行跳转
+    if (datum.id == TEACHER_ID)
+        return;
+    //尝试跳转
+    console.log(datum);
+    let params = {'school_id': datum['school_id'], 'college_id': datum['college_id']};
+    let url = '/detail/' + datum.id;
+    console.log(params);
+    console.log(url);
+    //发送表单
+    post(url, params);
 }
 
 //main
@@ -112,4 +158,5 @@ let self = {'id': TEACHER_ID, 'name': TEACHER_NAME};
 //设置关系图
 let relationGraph = new RelationGraph(d3.select('#relation-net'));
 let handled_data = handle_partner_relations(self, PARTNERS);
+relationGraph.clickNodeHook = clickNodeHook;
 relationGraph.setData(handled_data);

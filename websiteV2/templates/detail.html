@@ -108,6 +108,7 @@
         let PARTNERS = {{ partners | safe}};
         let TEACHER_ID = {{ info['id'] }};
         let TEACHER_NAME = "{{ info['name'] }}";
+        console.log(PARTNERS);
     </script>
     <script src="{{ url_for('static', filename='js/teacher_detail.js') }}"></script>
 {% endblock %}

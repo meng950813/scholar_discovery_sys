@@ -101,6 +101,19 @@ class SchoolService:
 
         return schools
 
+    def get_institution_name(self, school_id, institution_id):
+        """
+        根据学校id和学院id获取学校名称和学院名称
+        :param school_id: 学校id
+        :param institution_id: 学院id
+        :return:学校名和学院名
+        """
+        keys = ['NAME', 'SCHOOL_NAME']
+        results = school_dao.get_institutions_by_ids(school_id, [institution_id], keys)
+        if results is not None and len(results) > 0:
+            return {'school': results[0]['SCHOOL_NAME'], 'college_name': results[0]['NAME']}
+        return None
+
     def normalization_institution(self, institution):
         """
         对学院的信息进行标准化，如把出生日期转为年龄
@@ -132,5 +145,5 @@ if __name__ == '__main__':
     # institutions = school_service.get_institutions_by_ids(17134, [547, 548])
     # for _, institution in institutions.items():
     #     print(institution)
-    print(school_dao.get_total_colleges_by_names(['东南大学', '清华大学']))
     print(school_service.get_total_scholars_by_schools(['东南大学', '清华大学']))
+    print(school_service.get_institution_name(17134, 547))

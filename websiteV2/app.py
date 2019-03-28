@@ -9,6 +9,7 @@ from utils import db
 from config import DB_CONFIG
 from config import SESSION_KEY
 from service.teacherservice import teacher_service
+from service.schoolservice import school_service
 
 app = Flask(__name__)
 app.register_blueprint(api_blueprint)
@@ -78,12 +79,20 @@ def map():
     return render_template('map2.html')
 
 
-@app.route('/detail/<int:teacher_id>')
+@app.route('/detail/<int:teacher_id>', methods=['GET', 'POST'])
 def detail(teacher_id):
     user = session.get("username")
     """测试详情页的路由函数"""
-    school_name = request.args.get('school_name')
-    college_name = request.args.get('college_name')
+    if request.method == 'GET':
+        school_name = request.args.get('school_name')
+        college_name = request.args.get('college_name')
+    elif request.method == 'POST':
+        # 查表获取学校和学院名称
+        school_id = request.form.get('school_id', type=int)
+        college_id = request.form.get('college_id', type=int)
+        info = school_service.get_institution_name(school_id, college_id)
+        school_name = info['school']
+        college_name = info['college_name']
     # 获取老师的信息
     info = teacher_service.get_teacher_info_by_id(teacher_id)
     # 获取论文
