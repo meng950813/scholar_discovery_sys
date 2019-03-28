@@ -258,13 +258,7 @@ chinaMap.getToolTipHTMLHook = getToolTip;
 
 
 ////////////////////////////////////
-//异步回调获得数据
-$.ajax({
-    url: 'api/school/addressV2',
-    data: {'keyword': d3.select('#search-keyword').text(), maximum: 5},
-    dataType: 'json',
-    type: 'POST',
-}).done(function (data) {
+function setSchoolData(data){
     //没有搜到合适的学校
     if (data.length > 0)
     {
@@ -280,7 +274,7 @@ $.ajax({
     }else{
         console.log('未发现匹配的高校');
     }
-});
+}
 /////////////////////////////////////
 
 

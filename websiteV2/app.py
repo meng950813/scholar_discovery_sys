@@ -10,6 +10,8 @@ from config import DB_CONFIG
 from config import SESSION_KEY
 from service.teacherservice import teacher_service
 from service.schoolservice import school_service
+from controllers.user import login_required
+import controllers.api
 
 app = Flask(__name__)
 app.register_blueprint(api_blueprint)
@@ -53,19 +55,19 @@ def index():
 
 
 @app.route('/school', methods=['GET', 'POST'])
+@login_required
 def school():
     """没有登录点击搜索跳转到登录界面"""
     user = session.get("username")
-    print(user)
-    if user:
-        """测试学校使用的路由函数"""
-        if request.method == 'GET':
-            keyword = request.args.get('simple-input')
-        elif request.method == 'POST':
-            keyword = request.form.get('simple-input')
-        return render_template('school.html', keyword=keyword,user=user)
-    else:
-        return render_template("components/login.html")
+    keyword = None
+    """测试学校使用的路由函数"""
+    if request.method == 'GET':
+        keyword = request.args.get('simple-input')
+    elif request.method == 'POST':
+        keyword = request.form.get('simple-input')
+    # 根据关键字获取对应的学校
+    schools = controllers.api.get_school_address_by_keywords(keyword, 5)
+    return render_template('school.html', schools=schools, keyword=keyword,user=user)
 
 
 @app.route('/detail/<int:teacher_id>', methods=['GET', 'POST'])
