@@ -306,7 +306,7 @@ class ChinaMap2 {
         }
         //选中标记
         if (this.selectIndex){
-            this.selectedTag(this.selectIndex);
+            this.selectTag(this.selectIndex);
             this.selectIndex = null;
         }
     }
