@@ -65,7 +65,7 @@ function handle_school_data(json_data) {
         }
     }//end for
     //获得标记
-    console.log(cities);
+    // console.log(cities);
     for (let name in cities){
         let schools = cities[name];
         //TODO: 暂时只获取学校的位置
@@ -97,7 +97,7 @@ function onTagClicking(tag, datum, index){
         
         showSchoolInfo(cityName,schools);
         //TODO:选中节点时尝试请求数据
-        console.log(datum);
+        // console.log(datum);
         requestRelationData(datum.schools[0].school_id, datum.schools[0].name);
     }
 }
@@ -219,9 +219,6 @@ function drawSchoolChart(school_name){
     // 设置学校名
     $("#school-name").text(school_name);
     
-    // console.log(school_name);
-
-    // console.log(SCHOOLS_INFO[school_name]);
     // 展示学校实力图
     verticalGraph.setData(SCHOOLS_INFO[school_name]);
 }
@@ -251,6 +248,8 @@ let chinaMap = new ChinaMap2(mapSvg, 40);
 
 // 全局变量，用于保存学校数据
 let SCHOOLS_INFO = [];
+// 全局变量, 用于保存高校商务的信息
+let AGENT_INFO = [];
 
 //默认显示中国地图
 chinaMap.show();
@@ -267,9 +266,8 @@ chinaMap.getToolTipHTMLHook = getToolTip;
  */
 function setSchoolAddressData(data){
     //没有搜到合适的学校
-    if (data.length > 0)
-    {
-        console.log(data);
+    if (data.length > 0){
+        // console.log(data);
         let handled_data = handle_school_data(data);
         let hot_data = handled_data['hot_data'];
         let tag_data = handled_data['tag_data'];
@@ -310,19 +308,39 @@ relationGraph.clickNodeHook = clickNodeHook;
  * @param school_name 学校名称
  */
 function requestRelationData(school_id, school_name){
-    console.log('start getting relation data', school_id, school_name);
-    //异步回调获得数据
-    $.ajax({
-        url: 'api/school/agent',
-        data: {school_id: school_id},
-        dataType: 'json',
-        type: 'POST',
-    }).done(function (data) {
-        //生成关系图
-        let self = {id: USER_ID, name: USER_NAME};
-        let handled_data = handle_agent_relations(self, data, school_name);
+
+    if(school_name in AGENT_INFO){
+        // console.log("data repeat");
+        let school_info = AGENT_INFO[school_name];
+        let handled_data = handle_agent_relations(school_info.self, school_info.data, school_info.data[0].school_name);
         relationGraph.setData(handled_data);
-    });
+        show_agent_info(school_info.data[0]);
+    }
+    else{
+        //异步回调获得数据
+        $.ajax({
+            url: 'api/school/agent',
+            data: {school_id: school_id},
+            dataType: 'json',
+            type: 'POST',
+        }).done(function (data) {
+            // console.log(data);
+            //生成关系图
+            let self = {id: USER_ID, name: USER_NAME};
+            let handled_data = handle_agent_relations(self, data, school_name);
+
+            relationGraph.setData(handled_data);
+            
+            data[0]["school_name"] = school_name;
+
+            show_agent_info(data[0]);
+
+            AGENT_INFO[school_name] = {
+                "self" : self,
+                "data" : data
+            };
+        });
+    }
 }
 /**
  * 钩子函数 点击节点后的动作
@@ -333,9 +351,22 @@ function clickNodeHook(node, datum){
     //点击的是校商自己，则不做操作
     if (datum.name == USER_NAME)
         return;
-    //TODO:更改商务信息
-    console.log(datum);
+    //更改商务信息
+    show_agent_info(datum);
 }
+
+
+/**
+ * 显示高校商务信息
+ * @param {object} info 
+ */
+function show_agent_info(info) {
+    $("#agent-name").text(info.name);
+    $("#agent-org").text(info.school_name);
+    $("#agent-link").html(info.telephone + "<br>" + info.email);
+    $("#agent-mail-address").text(info.mail_address);
+}
+
 
 /**
  * 处理老师和和伙伴的关系
