@@ -26,12 +26,12 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if user %}
                         {% if user["TYPE"] == '1' %}
-                            <li  id="username"><a href="{{ url_for('agent.govern_personal') }}">个人中心</a></li>
                             <li><a href="javascript:void(0);">欢迎你， {{ user["NAME"] }}</a></li>
+                            <li  id="username"><a href="{{ url_for('agent.govern_personal') }}">个人中心</a></li>
                             <li><a href="{{ url_for('user.logout') }}">注销</a></li>
                         {% else %}
-                            <li  id="username"><a href="{{ url_for('agent.school_personal') }}">个人中心</a></li>
                             <li><a href="javascript:void(0);">欢迎你， {{ user["NAME"] }}</a></li>
+                            <li  id="username"><a href="{{ url_for('agent.school_personal') }}">个人中心</a></li>
                             <li><a href="{{ url_for('user.logout') }}">注销</a></li>
                         {% endif %}
                     {% else %}
