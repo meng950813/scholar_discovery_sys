@@ -104,14 +104,16 @@ $("#submit-connect").on("click",function(e){
     let not_empty_target_JQ_list = [$("#name_level_one"),$("#name_level_two"), $("#contract_name"),$("#link_method")];
 
     let info = {
-        "level_one" : not_empty_target_JQ_list[0].val(),
-        "level_two" : not_empty_target_JQ_list[1].val(),
-        "contract_name" : not_empty_target_JQ_list[2].val(),
-        "link_method" : not_empty_target_JQ_list[3].val(),
-        "remark" : $("#remark").val(),
+        "level_one" : not_empty_target_JQ_list[0].val().trim(),
+        "level_two" : not_empty_target_JQ_list[1].val().trim(),
+        "contract_name" : not_empty_target_JQ_list[2].val().trim(),
+        "link_method" : not_empty_target_JQ_list[3].val().trim(),
+        "remark" : $("#remark").val().trim(),
         "create_time" : (new Date()).Format("yyyy-MM-dd hh:mm:ss")
 
     };
+    
+    console.log(info);
     
     if (checkRelationFormEmpty(not_empty_target_JQ_list) ){
         console.log("checkRelationFormEmpty is true");
