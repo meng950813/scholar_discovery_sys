@@ -52,6 +52,10 @@
         <div class="row row-area justify-content-center">
             <svg id="relation-net" class="col-lg-8" width="900" height="450"></svg>
         </div>
+        <div class="row row-area justify-content-center">
+            <svg id="paper-chart" class="col-lg-6" width="500" height="100"></svg>
+            <svg id="cited-chart" class="col-lg-6" width="500" height="100"></svg>
+        </div>
 
         <!-- 成果：论文，项目，专利 -->
         <div class="row row-area" style="border-bottom:none">
@@ -101,15 +105,16 @@
     <script src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
     <script src="{{ url_for('static', filename='js/wordcloud.js') }}"></script>
     <script src="{{ url_for('static', filename='js/relation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/area_chart.js') }}"></script>
     <script type="text/javascript">
         //处理词云
         let FIELDS = {{ info['fields'] | safe}};
-        console.log("词云 's length is ", FIELDS.length);
+        console.log("词云 's length is ", FIELDS);
         //获取合伙人
         let PARTNERS = {{ partners | safe}};
         let TEACHER_ID = {{ info['id'] }};
         let TEACHER_NAME = "{{ info['name'] }}";
-        console.log(PARTNERS);
+        let PAPERS = {{ papers | safe }};
     </script>
     <script src="{{ url_for('static', filename='js/teacher_detail.js') }}"></script>
 {% endblock %}
