@@ -160,3 +160,47 @@ let relationGraph = new RelationGraph(d3.select('#relation-net'));
 let handled_data = handle_partner_relations(self, PARTNERS);
 relationGraph.clickNodeHook = clickNodeHook;
 relationGraph.setData(handled_data);
+
+//论文和发表年的一个区域图
+let paper_data = handle_papers(PAPERS);
+let paperChart = new AreaChart(d3.select('#paper-chart'));
+paperChart.setData(paper_data["paper_numbers"]);
+
+let citedChart = new AreaChart(d3.select('#cited-chart'));
+citedChart.setData(paper_data["cited_numbers"]);
+/*
+ * {name: ,value} 数组
+ */
+function handle_papers(papers) {
+    let paper_numbers = [];
+    let cited_numbers = [];
+    for (let i in papers){
+        let paper = papers[i];
+        let year = parseInt(paper.year);
+        if (isNaN(year))
+            continue;
+        let cited_num = paper.cited_num;
+        let ret = false;
+        let j = 0;
+        for (j = 0; j < paper_numbers.length; j++)
+            if (year < paper_numbers[j].name)
+                break;
+            else if (year == paper_numbers[j].name){
+                ret = true;
+                break;
+            }
+        //该年的论文数量+1
+        if (ret){
+            paper_numbers[j].value += 1;
+            cited_numbers[j].value += cited_num;
+        }else{
+            paper_numbers.splice(j, 0, {"name": year, "value": 1});
+            cited_numbers.splice(j, 0, {"name": year, "value": cited_num});
+        }
+    }//end for
+    console.log(cited_numbers);
+    return {
+        "paper_numbers": paper_numbers,
+        "cited_numbers": cited_numbers
+    };
+}
