@@ -4,6 +4,28 @@
  * desc: 显示词云的类，依赖于d3.js
  */
 
+ /**
+ * 自执行函数，用于设置 词云 + 关系图 的宽高
+ */
+(function(){
+    let width = $(".container").width();
+    let height = parseInt( width / 2 );
+
+    if(width > 900){
+        height = parseInt( width / 3 );
+    }
+
+    $("#word-cloud").attr("width", width).attr("height" , height);
+    
+    $("#relation-net").attr("width", width).attr("height" , height);
+    
+})();
+
+
+
+
+
+
 class WordCloud{
     constructor(svg){
         this.svg = svg;
