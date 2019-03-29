@@ -18,13 +18,6 @@
 }
 
 
-.search-area input{
-	height: 40px!important;
-}
-.search-area  #simple-input{
-	width: 600px;
-}
-
 .search-area .search-form{
 	padding-bottom: 0px; 
 	text-align: center;
