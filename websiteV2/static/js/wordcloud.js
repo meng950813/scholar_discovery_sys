@@ -22,9 +22,9 @@
     if(width > 720 ){
         width = width / 2;
     }
-    $("#paper-chart").attr("width", width).attr("height" , height);
+    $("#paper-chart").attr("width", width).attr("height" , height / 2);
 
-    $("#cited-chart").attr("width", width).attr("height" , height);
+    $("#cited-chart").attr("width", width).attr("height" , height / 2);
     
 })();
 
