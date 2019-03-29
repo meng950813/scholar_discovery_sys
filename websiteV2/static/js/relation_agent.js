@@ -1,4 +1,18 @@
 /**
+ * 自执行函数，用于设置 个人中心关系网络宽高
+ */
+(function(){
+    let width = $(".container").width();
+    let height = parseInt( width / 3);
+    if( width < 400){
+        height = width;
+    }
+    $(".social-net").attr("width" , width).attr("heigth" , height);
+})();
+
+
+
+/**
  * 用于判断数组中是否包含键为key，值为value的dict，若有则返回索引，没有则返回-1
  * @param array 数组，数组中包含着是字典
  * @param key 键名
