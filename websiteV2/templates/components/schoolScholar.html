@@ -6,20 +6,33 @@
 {% endblock %}
 
 {% block main %}
-    <div id="search-container" class="search-area container searched">
-        <div class="imglog">
-            <img src="../static/images/Polaris.png" />
-        </div>
-
-        <form  action="/agent/search"  method="POST" class="navbar-form search-form text-center" onsubmit="return checkForm1(this);">
-
+    <div id="search-container" class="container searched">
+        
+        <!-- <form  action="/agent/search"  method="POST" class="navbar-form search-form text-center" onsubmit="return checkForm1(this);">
+            
             <div  class="form-group">
                 <input type="text" id="simple-input" name="simple-input" placeholder="请输入关键字" class="form-control">
             </div>
             <button class="btn btn_color" type="submit" id = 'search-btn'>搜索</button>
+            
+        </form> -->
+        
+        <form id="search-form" action="/agent/search"  method="POST" class="row" onsubmit="return checkForm1(this);">
+            <div class="col-lg-1 col-lg-offset-1 col-md-1 hidden-xs" style="text-align: right;padding-right:0;">
+                <div class="imglog">
+                    <img class="img-responsive" src="../static/images/Polaris.png" />
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-11">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="simple-input" name="key"  placeholder="请输入关键字">
+                    <span  class="input-group-btn">
+                        <button type="submit" class="btn btn-default btn-search">搜索</button> 
+                    </span>
+                </div>
 
+            </div>
         </form>
-
 
     </div>
 
@@ -29,64 +42,64 @@
             {% for college_name,values in intstitutions.items()  %}
                 {% if values['teachers']|length > 0  %}
                 <li>
-                <div class="college">{{ college_name }}</div>
-                {% if values['info']['NKD_NUM'] > 0 or values['info']['SKL_NUM'] > 0 or values['info']['ACADEMICIAN_NUM'] > 0%}
-                    <div class="tags">
-                        <ul class="search-pill">
-                            {% if values['info']['NKD_NUM'] > 0 %}
-                                <li>{{ values['info']['NKD_NUM'] }}个重点学科</li>
-                            {% endif %}
-                            {% if values['info']['SKL_NUM'] > 0 %}
-                                <li>{{ values['info']['SKL_NUM'] }}个国家重点实验室</li>
-                            {% endif %}
-                            {% if values['info']['ACADEMICIAN_NUM'] > 0 %}
-                                <li>{{ values['info']['ACADEMICIAN_NUM'] }}个院士</li>
-                            {% endif %}
+                    <div class="college">{{ college_name }}</div>
+                    {% if values['info']['NKD_NUM'] > 0 or values['info']['SKL_NUM'] > 0 or values['info']['ACADEMICIAN_NUM'] > 0%}
+                        <div class="tags">
+                            <ul class="search-pill">
+                                {% if values['info']['NKD_NUM'] > 0 %}
+                                    <li>{{ values['info']['NKD_NUM'] }}个重点学科</li>
+                                {% endif %}
+                                {% if values['info']['SKL_NUM'] > 0 %}
+                                    <li>{{ values['info']['SKL_NUM'] }}个国家重点实验室</li>
+                                {% endif %}
+                                {% if values['info']['ACADEMICIAN_NUM'] > 0 %}
+                                    <li>{{ values['info']['ACADEMICIAN_NUM'] }}个院士</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <div class="scholar">
+                        <ul class="search-person">
+                            {%  for teacher in values['teachers'] %}
+                                {% if teacher['fields'] %}
+                            <li>
+                                <div class="row">
+                                    <div class="col-lg-2 col-md-3 col-sm-3  hidden-xs" style="text-align:center;">
+                                        <div id="image">{{  teacher['name'][0]}}</div>
+                                    </div>
+                                    <div class="col-lg-10 col-md-9 col-sm-9">
+                                        <a href="{{ url_for('detail', teacher_id=teacher['id'], school_name=school_name, college_name=college_name)}}">{{ teacher['name'] }}</a>
+                                        <ul class="search-perpendicular">
+                                            {% if teacher['yearsold'] %}
+                                                <li>{{ teacher['yearsold'] }}岁</li>
+                                            {% endif %}
+                                            {% if teacher['title'] != '未知'%}
+                                                <li>{{ teacher['title'] }}</li>
+                                            {% endif %}
+                                            {% if teacher['ACADEMICIAN'] == 1 %}
+                                                <li>院士</li>
+                                            {% endif %}
+                                            {% if teacher['CHANGJIANG'] == 1 %}
+                                                <li>长江学者</li>
+                                            {% endif %}
+                                            {% if teacher['OUTYOUTH'] == 1 %}
+                                                <li>杰出青年</li>
+                                            {% endif %}
+                                            <li style="border:none"></li>
+                                        </ul>
+                                        <ul class="search-pill">
+                                            {% for i in teacher['fields'][0:5] %}
+                                            <li>{{ i }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                                {% endif %}
+                            {% endfor %}
                         </ul>
                     </div>
-                {% endif %}
-                <div class="scholar">
-                    <ul class="search-person">
-                        {%  for teacher in values['teachers'] %}
-                            {% if teacher['fields'] %}
-                        <li>
-                            <div class="row">
-                                <div class="col-lg-2 col-md-3 col-sm-3" style="text-align:center;">
-                                    <div id="image">{{  teacher['name'][0]}}</div>
-                                </div>
-                                <div class="col-lg-10 col-md-9 col-sm-9">
-                                    <a href="{{ url_for('detail', teacher_id=teacher['id'], school_name=school_name, college_name=college_name)}}">{{ teacher['name'] }}</a>
-                                    <ul class="search-perpendicular">
-                                        {% if teacher['yearsold'] %}
-                                            <li>{{ teacher['yearsold'] }}岁</li>
-                                        {% endif %}
-                                        {% if teacher['title'] != '未知'%}
-                                            <li>{{ teacher['title'] }}</li>
-                                        {% endif %}
-                                        {% if teacher['ACADEMICIAN'] == 1 %}
-                                            <li>院士</li>
-                                        {% endif %}
-                                        {% if teacher['CHANGJIANG'] == 1 %}
-                                            <li>长江学者</li>
-                                        {% endif %}
-                                        {% if teacher['OUTYOUTH'] == 1 %}
-                                            <li>杰出青年</li>
-                                        {% endif %}
-                                        <li style="border:none"></li>
-                                    </ul>
-                                    <ul class="search-pill">
-                                        {% for i in teacher['fields'][0:5] %}
-                                        <li>{{ i }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                </div>
-            </li>
+                </li>
                 {% endif %}
             {% endfor %}
         </ul>

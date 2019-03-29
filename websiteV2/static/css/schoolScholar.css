@@ -1,73 +1,13 @@
-.search-area{
-    width: 900px;
-	margin:0 auto ;
-}
-
-/* 搜索区域中的 logo  */
-.search-area .imglog{
-    width: 50px;
-    height: 50px;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.search-area .imglog img{
-	display:block;
-	height:100%;
-}
-
-#search-container.searched .search-form{
-	display: inline-block!important;
-}
-#search-container.searched .search-form{
-	padding: 0;
-}
-
-.search-area input{
-	height: 40px!important;
-}
-.search-area  #simple-input{
-	width: 600px;
-}
-
-
-.search-area .search-form{
-	padding-bottom: 0px;
-	text-align: center;
-    margin-left: 10px;
-}
-.search-area .form-group{
-	position: relative;
-    margin-left: 20px;
-}
-
 /* 与 search-area 平级的 searched 类 */
-#search-container.searched > .imglog{
-	width: 50px;
-	height: 50px;
+#search-container.searched  .imglog{
+	width: 40px;
+	height: 40px;
 	display: inline-block;
-	vertical-align: top;
 }
-#search-container.searched .search-form{
-	display: inline-block!important;
-	margin-left: 10px;
-}
-#search-container.searched .search-form{
-	padding: 0;
-}
-
-.search-container{
-    border: 1px solid #000000;
-    background-color: white;
-    margin-top: 20px;
-}
-
 
 .part1{
-    /* width:750px; */
-    height: 100px;
     margin-left: 10px;
-    line-height: 100px;
+    padding: 20px 0;
     color: black;
     font-weight: bold;
     font-size: 20px;
@@ -76,17 +16,15 @@
 }
 
 .college{
-    /* width: 750px; */
-    height: 60px;
-    margin-top: 5px;
     border-bottom: 1px solid #b9b0a3;
-    line-height: 60px;
     color: black;
     font-size: 20px;
+    padding: 15px 0;
 }
 
+
+
 .tags{
-    /* width: 750px; */
     height: auto;
     margin-top: 5px;
     font-size: 18px;
@@ -96,13 +34,14 @@
 }
 
 .scholar{
-    /* width: 750px; */
-    height: auto;
     margin-top: 5px;
     padding-bottom: 10px;
     border-bottom: 2px solid #000000;
 }
 
+.container > ul > li:last-child .scholar{
+    border-bottom: none;
+}
 
 
 ul li{
@@ -127,42 +66,6 @@ ul.search-person>li:hover{
     -webkit-box-shadow:0px 0px 0px #FFFFFF, 0px 5px 5px #F0F0F0;
     box-shadow:0px 0px 0px #FFFFFF, 0px 5px 5px #F0F0F0;
     cursor: auto;
-}
-
-/* .search-container {
-    width:900px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #fff;
-} */
-
-.search-head{
-    padding-top:20px;
-}
-.search-head p{
-    font-size:18px;
-    font-weight:600;
-}
-
-.search-neck p{
-    font-size:16px;
-    font-weight:550;
-    padding-left:55px;
-}
-
-.search-neck ul{
-    padding-left:85px
-}
-
-.search-li{
-    border-bottom: 1px solid transparent;
-    border-color: #888888;
-    margin-top:none;
-}
-
-.search-li:last-child{
-    border-bottom:none;
-    margin-top:none;
 }
 
 
@@ -201,9 +104,6 @@ ul.search-perpendicular li:last-child{
     border-right:none;
 }
 
-ul.search-line{
-    margin-top:5px;
-}
 
 ul.search-person{
     padding-left: 0;
@@ -223,29 +123,10 @@ ul.search-person>li:last-child{
 ul.search-person p{
     font-size:16px;
     font-weight:600;
-
 }
 
-ul.search-more{
-    margin-bottom: 10px;
-    margin-left: 46px;
-    width: 878px;
-    line-height:25px;
+@media (max-width: 600px) {
+    ul{
+        padding-left: 5px!important; 
+    }    
 }
-
-ul.search-more>li{
-    margin-bottom: 10px;
-}
-
-ul.search-more div{
-    font-size:16px;
-}
-
-ul.search-more li{
-    margin-left:10px;
-}
-
-ul.search-text{
-    margin-left:15px;
-}
-
