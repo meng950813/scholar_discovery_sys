@@ -105,12 +105,15 @@ class TeacherService:
         for key, value in teacher.items():
             trans_key = self.teacher_info_mapping.get(key, None)
             # 转换领域
-            if key == 'FIELDS' and value is not None:
-                fields = value.replace("\'", "\"")
-                if isFieldList:
-                    info[trans_key] = tuple(json.loads(fields).keys())
+            if key == 'FIELDS':
+                if value is not None:
+                    fields = value.replace("\'", "\"")
+                    if isFieldList:
+                        info[trans_key] = tuple(json.loads(fields).keys())
+                    else:
+                        info[trans_key] = fields
                 else:
-                    info[trans_key] = fields
+                    info[trans_key] = []
             elif key == 'TITLE':
                 info['title'] = value if (value is not None and len(value) > 0) else '未知'
             elif key == 'BIRTHYEAR' and value is not None:

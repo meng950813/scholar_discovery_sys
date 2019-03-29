@@ -104,6 +104,7 @@
     <script type="text/javascript">
         //处理词云
         let FIELDS = {{ info['fields'] | safe}};
+        console.log("词云 's length is ", FIELDS.length);
         //获取合伙人
         let PARTNERS = {{ partners | safe}};
         let TEACHER_ID = {{ info['id'] }};
