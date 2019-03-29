@@ -62,9 +62,9 @@ def school():
     keyword = None
     """测试学校使用的路由函数"""
     if request.method == 'GET':
-        keyword = request.args.get('simple-input')
+        keyword = request.args.get('key')
     elif request.method == 'POST':
-        keyword = request.form.get('simple-input')
+        keyword = request.form.get('key')
     # 根据关键字获取对应的学校
     schools = controllers.api.get_school_address_by_keywords(keyword, 5)
     return render_template('school.html', schools=schools, keyword=keyword,user=user)
