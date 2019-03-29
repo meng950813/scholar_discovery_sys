@@ -21,7 +21,7 @@ def school_basic():
 @agent_blueprint.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
-    keyword = request.form.get("simple-input")
+    keyword = request.form.get("key")
     school_name = '南京大学'
 
     data = api.get_teachers_by_school(school_name, keyword)
