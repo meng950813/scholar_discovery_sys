@@ -28,6 +28,10 @@ ul li{
 	padding: 2px;
 }
 
+#search-form .btn-search{
+	background: #00d3d4;
+	color: #fff;
+}
 
 /* footer */
 footer { 
