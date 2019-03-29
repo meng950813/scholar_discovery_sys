@@ -5,7 +5,7 @@
  */
 
  /**
- * 自执行函数，用于设置 词云 + 关系图 的宽高
+ * 自执行函数，用于设置 词云 + 关系图 + 的宽高
  */
 (function(){
     let width = $(".container").width();
@@ -18,6 +18,13 @@
     $("#word-cloud").attr("width", width).attr("height" , height);
     
     $("#relation-net").attr("width", width).attr("height" , height);
+
+    if(width > 720 ){
+        width = width / 2;
+    }
+    $("#paper-chart").attr("width", width).attr("height" , height);
+
+    $("#cited-chart").attr("width", width).attr("height" , height);
     
 })();
 
