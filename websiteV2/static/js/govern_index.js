@@ -7,8 +7,12 @@
     $("#school-chart").attr("width", $(".relation-container").width())
     
     let map_width = $(".map-container").width();
-    // 设置 地图 的宽高
-    $("#map").attr("width" , map_width).attr("height" , $(".relation-container").height());
+    
+    let map_height = $(".relation-container").height();
+    if( map_height > 200){
+        // 设置 地图 的宽高
+        $("#map").attr("width" , map_width).attr("height" , map_height);
+    }
 
     // 设置 关系图 的宽高
     $("#relation-chart").attr("width", map_width).attr("height" , $(".relation-person").height())
