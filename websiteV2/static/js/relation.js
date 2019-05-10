@@ -96,6 +96,16 @@ class RelationGraph{
         this.links_map = [];
         //提示框
         this.tooltip = d3.select('body').append('div').attr('id', 'tooltip');
+        //节点大小范围
+        this.minNodeRadius = 10;
+        this.maxNodeRadius = 30;
+        //联系长度范围
+        this.minLineWidth = 2;
+        this.maxLineWidth = 8;
+        //常显示标签名
+        this.alwaysShowingLabels = false;
+        //字体大小
+        this.fontSize = 15;
     }
 
     /**
@@ -112,9 +122,9 @@ class RelationGraph{
         this.links_map = [];
         let that = this;
         //标准化节点大小
-        this.normalizeNodes();
+        this.normalizeNodes(this.minNodeRadius, this.maxNodeRadius);
         //标准化联系宽度
-        this.normalizeLinks();
+        this.normalizeLinks(this.minLineWidth, this.maxLineWidth);
         //绑定力导向图对应的数据
         this.simulation.nodes(this.nodes)
             .force('link', d3.forceLink(this.links).distance(this.getDistanceHook))
@@ -136,6 +146,41 @@ class RelationGraph{
         this.simulation.alpha(1).restart();
     }
 
+    /**
+     * 设置节点的半径大小，需要在setData前调用才有效
+     * @param minNodeRadius 最小节点半径
+     * @param maxNodeRadius 最大节点半径
+     */
+    setNodeRadiusScope(minNodeRadius, maxNodeRadius){
+        this.minNodeRadius = minNodeRadius;
+        this.maxNodeRadius = maxNodeRadius;
+    }
+
+    /**
+     * 设置线宽度，需要在setData前调用才有效
+     * @param minLineWidth 最小线宽度
+     * @param maxLineWidth 最大线宽度
+     */
+    setLineWidthScope(minLineWidth, maxLineWidth){
+        this.minLineWidth = minLineWidth;
+        this.maxLineWidth = maxLineWidth;
+    }
+
+    /**
+     * 是否常显示文本标签内容
+     * @param visible 默认为false
+     */
+    setAlwaysShowingLabel(visible){
+        this.alwaysShowingLabels = visible;
+    }
+
+    /**
+     * 设置字体大小 不会立即生效
+     * @param fontSize 字体大小
+     */
+    setFontSize(fontSize){
+        this.fontSize = fontSize;
+    }
     /**
      * 钩子函数 返回联系的长度
      * @param datum 该联系对应的数据
@@ -319,7 +364,6 @@ class RelationGraph{
         if (this.labels_group == null){
             this.labels_group = this.group.append('g').attr('id', 'labels');
         }
-        let that = this;
         let texts =this.labels_group.selectAll('text');
         //绑定数据后，不同类型，不同操作
         let update = texts.data(this.nodes);
@@ -330,12 +374,15 @@ class RelationGraph{
         update.exit().remove();
 
         function updateLabels(labels, that) {
-        let fontSize = 15;
+        let display = 'none';
+        if (that.alwaysShowingLabels)
+            display = "inline";
+
         labels.attr('fill', 'white')
-                .attr('display', 'none')
-                .attr('dx', d => -d.name.length * fontSize / 2)
-                .attr('dy', fontSize / 4)
-                .attr('font-size', fontSize)
+                .attr('display', display)
+                .attr('dx', d => -d.name.length * that.fontSize / 2)
+                .attr('dy', that.fontSize / 4)
+                .attr('font-size', that.fontSize)
                 .attr('stroke-width', 0.5)
                 .attr('stroke', d => that.categories[d.category].color)
                 .text(d => d.name)
@@ -657,7 +704,9 @@ class RelationGraph{
             return d.source.name == node_name || d.target.name == node_name;
         });
         //显示文本
-        this.setVisibleOfLabels(true, d => temp_nodes.has(d.name));
+        if (!this.alwaysShowingLabels){
+            this.setVisibleOfLabels(true, d => temp_nodes.has(d.name));
+        }
     }
 
     /**
@@ -673,7 +722,9 @@ class RelationGraph{
         this.setWidthOfLinks(function (d) {
             return d.width;
         });
-        this.setVisibleOfLabels(false);
+        if (!this.alwaysShowingLabels){
+            this.setVisibleOfLabels(false);
+        }
     }
 
     mouseOver2Link(datum){
@@ -689,9 +740,11 @@ class RelationGraph{
         //加宽连线
         this.setWidthOfLinks(this.getEmphasisLinkWidthHook, d => d == datum);
         //显示有联系的节点的文本
-        this.setVisibleOfLabels(true, function (d) {
-            return d.name == datum.source.name || d.name == datum.target.name;
-        })
+        if (!this.alwaysShowingLabels){
+            this.setVisibleOfLabels(true, function (d) {
+                return d.name == datum.source.name || d.name == datum.target.name;
+            });
+        }
     }
 
     /**
