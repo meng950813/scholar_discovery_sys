@@ -105,6 +105,11 @@ def detail(teacher_id):
                            partners=partners)
 
 
+@app.route('/relation')
+def relation_test():
+    return render_template("relation.html")
+
+
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.run("0.0.0.0", debug=True)

@@ -26,17 +26,17 @@ def handle_relations(teachers, relations, academic_titles, total_categories):
     id_index_map = {}
     # 学术头衔会覆盖原有的头衔
     for title_row in academic_titles:
-        teachers[title_row['TEACHER_ID']]['title'] = title_row['HONOR']
+        teachers[title_row['TEACHER_ID']]['TITLE'] = title_row['HONOR']
     # 获取老师关系 并保证为无向图
     for relation in relations:
         teacher2_id = relation['teacher2_id']
         if teacher2_id not in teachers.keys():
             continue
         teacher_id = relation['teacher1_id']
-        teacher_name = teachers[teacher_id].get('name')
-        teacher_title = teachers[teacher_id].get('title')
+        teacher_name = teachers[teacher_id].get('NAME')
+        teacher_title = teachers[teacher_id].get('TITLE')
         teacher2_name = relation['teacher2_name']
-        teacher2_title = teachers[teacher2_id].get('title')
+        teacher2_title = teachers[teacher2_id].get('TITLE')
         # 合作论文次数
         paper_num = relation['paper_num']
         # 不添加自己到自己的边
