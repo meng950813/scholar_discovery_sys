@@ -5,7 +5,7 @@
  *  */
 
 // 弹出窗类型
-const ALERT_TYPE = {
+var ALERT_TYPE = {
     "info" : "info",
     "error" : "error",
     "warning" : "warning",

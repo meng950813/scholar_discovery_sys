@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}-专家发现系统</title>
     <link href="{{ url_for('static',filename='css/public.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{{ url_for('static',filename='resources/bootstrap3/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='resources/bootstrap3/css/bootstrap.css') }}" />
     
     <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/x-icon" />
 
@@ -17,12 +17,22 @@
     <header role="navigation" class="navbar navbar-default">
         <nav class="container">
             <div class="navbar-header">
+
+                <!-- .navbar-toggle样式用于toggle收缩的内容，即nav-collapse collapse样式所在元素 -->
+                <!-- 保证在窄屏时要显示的图标样式（固定写法）-->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
                 <a href="/" id="logo" class="navbar-brand">
                     <img src="{{ url_for('static',filename='images/logo-new.png') }}"/>
                 </a>
             </div>
 
-            <div class="collapse navbar-collapse">
+            <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     {% if user %}
                         {% if user["TYPE"] == '1' %}

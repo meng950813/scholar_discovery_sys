@@ -5,13 +5,15 @@
 }
 
 
-
+.img-container{
+    text-align: center
+}
 
 #image{
     text-align:center;
     width:100px;
     height:100px;
-    margin-left: 30px;
+    margin: 0 auto;
     border-radius: 50%;
     background-color: #00a0e9;
     font-size: 40px;
@@ -85,9 +87,3 @@ ul.tab-pane li  span{
     display: inline-block;
     margin-right: 20px;
 }
-
-
-
-
-
-

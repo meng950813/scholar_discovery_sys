@@ -28,6 +28,10 @@ ul li{
 	padding: 2px;
 }
 
+#search-form .btn-search{
+	background: #00d3d4;
+	color: #fff;
+}
 
 /* footer */
 footer { 
@@ -71,6 +75,7 @@ footer .copyright {
 	
 	border-radius: 10px;
 	opacity: 0;
+	z-index: -9999;
 	transition: opacity 0.4s;
 	-moz-transition: opacity 0.4s;
 	-webkit-transition: opacity 0.4s;
@@ -78,6 +83,7 @@ footer .copyright {
 
 .show-opacity{
 	opacity: 1;
+	z-index: 9999;
 }
 
 .alert-container > .alert{

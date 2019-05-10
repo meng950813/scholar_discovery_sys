@@ -192,21 +192,22 @@ def get_teachers_by_school(school_name, keyword, limit_teacher_num=3):
             college_id = result['institution_id']
             teacher_id = result['teacher_id']
             score = result['score']
-
-            if college_name not in colleges:
-                colleges[college_name] = {'teachers': [], 'info': infos[college_id],'scores':0}
+            # 尝试获取学者个数
+            length = len(colleges[college_name]['teachers']) if college_name in colleges else 0
             # 添加学者
-            length = len(colleges[college_name]['teachers'])
             if length < limit_teacher_num:
                 teacher = teachers[teacher_id]
-                if teacher['fields'] is None:
+                if teacher['fields'] is None or len(teacher['fields']) == 0:
                     continue
+
+                if college_name not in colleges:
+                    colleges[college_name] = {'teachers': [], 'info': infos[college_id],'scores':0}
                 # 添加老师
                 colleges[college_name]['teachers'].append(teacher)
                 colleges[college_name]['scores'] += result['score']
                 length += 1
                 teacher_count += 1
-    #院系按所展示的人得分排序
+    # 院系按所展示的人得分排序
     colleges = dict(sorted(colleges.items(),key=lambda x:x[1]['scores'],reverse=True))
 
     return {
