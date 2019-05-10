@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>横向图</title>
+    <script src="{{ url_for('static',filename='resources/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/relation.js') }}"></script>
+</head>
+<body>
+    <svg width="1300" height="900"></svg>
+    <button onclick="save2png()">保存为图片</button>
+</body>
+<script>
+    let svg = d3.select('svg');
+    let relationGraph = new RelationGraph(svg);
+    relationGraph.setNodeRadiusScope(10, 10);
+    relationGraph.setLineWidthScope(1, 1);
+    relationGraph.getDistanceHook = function(datum, index){
+        return datum.level * 10 + 40;
+    };
+    relationGraph.setAlwaysShowingLabel(true);
+    relationGraph.setFontSize(20);
+    //异步获取数据
+    $.ajax({
+        url: '/api/institution/relation',
+        type: 'POST',
+        dataType: 'json',
+        data: {school_id: 17326, institution_id: 780},
+        success: loadDataSuccess,
+    });
+    function loadDataSuccess(json_data) {
+        GRAPH_DATA = json_data;
+        relationGraph.setData(json_data);
+    }
+    function save2png() {
+        let svg = d3.select("svg");
+        let width = Number(svg.attr("width"));
+        let height = Number(svg.attr("height"));
+        let serializer = new XMLSerializer();
+        let source = "<?xml version=\"1.0\" standalone=\"no\"?>" + serializer.serializeToString(svg.node());
+
+        let image = new Image();
+        image.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+        let canvas = document.createElement("canvas");
+
+        canvas.width = width;
+        canvas.height = height;
+        let context = canvas.getContext("2d");
+        context.fillStyle = "#fff";
+        context.fillRect(0, 0, width, height);
+
+        image.onload = function () {
+            context.drawImage(image, 0, 0);
+            let a = document.createElement("a");
+            a.download = "name.png";
+            a.href = canvas.toDataURL("image/png");
+            a.click();
+        };
+        context.drawImage(image, 0, 0);
+    }
+</script>
+</html>
