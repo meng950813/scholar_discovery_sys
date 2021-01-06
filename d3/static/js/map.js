@@ -8,7 +8,6 @@ function getCenter(features) {
     //最大经度和纬度
     let longitudeMax = 0;
     let latitudeMax = 0;
-    
     features.forEach(function (e) {
         let a = d3.geoBounds(e);
         if (a[0][0] <longitudeMin)
@@ -208,8 +207,9 @@ class ChinaMap{
         //加载文件
         else{
             d3.json(filename).then(function (jsondata) {
-                that.loadedData[filename] = jsondata;
-                success(jsondata);
+                let geoJson = jsondata['geoJson']
+                that.loadedData[filename] = geoJson;
+                success(geoJson);
             });
         }
     }

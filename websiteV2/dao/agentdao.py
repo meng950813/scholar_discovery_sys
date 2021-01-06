@@ -79,18 +79,3 @@ class SchoolAgentDao:
 
 school_agent_dao = SchoolAgentDao()
 
-if __name__ == '__main__':
-    import utils.db as db
-    from config import DB_CONFIG
-    import logging
-
-    logging.basicConfig(level=logging.DEBUG)
-    # 需要预先调用，且只调用一次
-    db.create_engine(**DB_CONFIG)
-
-    # 查询语句
-    # print(school_agent_dao.get_relations_by_id(100000))
-
-    # 测试更新语句函数
-    row_count = school_agent_dao.update_relation(15, {'TEACHER_ID': 100})
-    print(row_count)

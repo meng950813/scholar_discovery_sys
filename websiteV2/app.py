@@ -7,7 +7,6 @@ from controllers.api_agent import api_agent_blueprint
 from controllers.agent import agent_blueprint
 from utils import db
 from config import DB_CONFIG
-from config import SESSION_KEY
 from service.teacherservice import teacher_service
 from service.schoolservice import school_service
 from controllers.user import login_required
@@ -24,7 +23,7 @@ logging.basicConfig(level=logging.DEBUG)
 # 需要预先调用，且只调用一次
 db.create_engine(**DB_CONFIG)
 
-app.secret_key = SESSION_KEY
+app.secret_key = "secret key"
 """
 # TODO 使用 redis 进行 session 共享
 app.config['SESSION_TYPE'] = 'redis'  # session类型为redis
